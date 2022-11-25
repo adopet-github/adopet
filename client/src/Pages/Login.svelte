@@ -3,6 +3,7 @@
   import Password from '../Components/Inputs/Password.svelte';
   import GoogleIcon from '../assets/icons/google-icon.svg';
   import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
+  import { Link } from 'svelte-navigator';
   let email = '';
   let password = '';
 
@@ -37,6 +38,12 @@
         <Password confirmation={false} bind:value={password} />
         <button type="submit">Login</button>
       </form>
+      <p>
+        Don't have an account?
+        <Link to="/register">
+          <strong>Register</strong>
+        </Link>
+      </p>
     </div>
   </div>
 </RouteTransition>
@@ -51,7 +58,11 @@
   }
 
   .form-container {
-    background-color: black;
+    color: black;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15.2px);
+    -webkit-backdrop-filter: blur(15.2px);
+    border: 1px solid rgba(255, 255, 255, 0.19);
     width: 500px;
     padding: 2rem 0;
     display: flex;
@@ -94,6 +105,10 @@
     gap: 10px;
     background-color: white;
     color: black;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15.2px);
+    -webkit-backdrop-filter: blur(15.2px);
+    border: 1px solid rgba(255, 255, 255, 0.19);
   }
 
   img {

@@ -4,6 +4,7 @@
   import TransitionContainer from './Components/Transitions/TransitionContainer.svelte';
   import Home from './Pages/Home.svelte';
   import Login from './Pages/Login.svelte';
+  import Onboarding from './Pages/Onboarding.svelte';
   import Register from './Pages/Register.svelte';
 </script>
 
@@ -22,6 +23,9 @@
       <TransitionContainer>
         <Register />
       </TransitionContainer>
+    </Route>
+    <Route path="onboarding">
+      <Onboarding />
     </Route>
   </Router>
 </main>
