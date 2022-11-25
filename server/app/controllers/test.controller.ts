@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Test from "../models/test.model";
+import model from "../models/test.model";
 import { MyResponse } from "../types";
 import constants from "../utils/constants";
 
@@ -8,7 +8,7 @@ const controller = {
     const response = constants.fallbackResponse as MyResponse;
 
     try {
-      const test = await Test.create({
+      const test = await model.create({
         test: 'test'
       });
 
@@ -28,7 +28,7 @@ const controller = {
     const response = constants.fallbackResponse as MyResponse;
 
     try {
-      const tests = await Test.findAll();
+      const tests = await model.findAll();
 
       response.status = constants.statusCodes.ok;
       response.message = 'Tests retrieved successfully!';

@@ -1,5 +1,9 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../db/db";
+import { cascade } from "../utils/db";
+import Adopter_Animal from "./adopter_animal.model";
+import Animal from "./animal.model";
+import User from "./user.model";
 
 const Adopter = sequelize.define('Adopter', {
   first_name: DataTypes.STRING,
@@ -10,5 +14,8 @@ const Adopter = sequelize.define('Adopter', {
   has_children: DataTypes.BOOLEAN,
   time_at_home: DataTypes.TINYINT
 });
+
+Adopter.belongsTo(User, cascade);
+Adopter.belongsToMany(Animal, {...cascade, through: Adopter_Animal});
 
 export default Adopter;
