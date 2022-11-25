@@ -23,7 +23,7 @@
 <RouteTransition direction="backward">
   <div class="container">
     <div class="form-container">
-      <h1>LOGIN</h1>
+      <h1>Login</h1>
       <button on:click={handleGoogleLogin}>
         <img src={GoogleIcon} alt="google icon" />
         <span>Login with Google </span>
@@ -49,6 +49,9 @@
 </RouteTransition>
 
 <style>
+  h1 {
+    padding: 0;
+  }
   .container {
     padding: 1rem;
     display: flex;

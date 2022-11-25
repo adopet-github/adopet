@@ -101,6 +101,9 @@
 </RouteTransition>
 
 <style>
+  h1 {
+    padding: 0;
+  }
   .container {
     padding: 1rem;
     display: flex;
