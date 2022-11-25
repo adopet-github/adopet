@@ -1,0 +1,19 @@
+FROM node:18-alpine3.15
+
+WORKDIR /app
+
+COPY package*.json ./
+
+COPY .env ./
+
+COPY tsconfig.json ./
+
+COPY . .
+
+RUN npm install
+
+RUN npm i -g ts-node
+
+EXPOSE 4000
+
+CMD npm start
