@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node app/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "eslint": "^8.28.0",
     "express": "^4.18.2",
     "sequelize": "^6.25.8"
