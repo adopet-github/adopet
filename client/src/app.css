@@ -10,6 +10,16 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+    --white: #ffffff;
+    --black: #282829;
+    --red: #D33E43;
+    --auburn: #a52327;
+    --cream: #FFF2ED;
+    --pinkish: #EBE0E0;
+    --lavender: #666370;
+    --lightgrey: #e7e7e7;
+    --grey: #797979;
 }
 
 body {

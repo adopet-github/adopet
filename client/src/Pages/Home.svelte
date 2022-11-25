@@ -83,7 +83,7 @@
     font-size: 4rem;
     position: relative;
     padding: 20px 10px;
-    color: #d33e43;
+    color: var(--red);
   }
   .content-left {
     align-items: flex-start;
