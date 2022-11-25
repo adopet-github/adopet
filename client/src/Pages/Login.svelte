@@ -9,8 +9,11 @@
 
   const handleLogin = () => {
     // check password in db
-    console.log('email:', email);
-    console.log('password:', password);
+    const credentials = {
+      email,
+      password
+    };
+    console.log(credentials);
     email = '';
     password = '';
   };
@@ -35,7 +38,7 @@
       </div>
       <form on:submit|preventDefault={handleLogin}>
         <Email bind:value={email} />
-        <Password confirmation={false} bind:value={password} />
+        <Password bind:value={password} />
         <button type="submit">Login</button>
       </form>
       <p>

@@ -11,35 +11,68 @@
   const navigate = useNavigate();
 
   let email = '';
+  let emailError: boolean;
+
   let password = '';
-  let confirmPassword = '';
+  let passwordError: boolean;
+
   let firstName = '';
+  let firstNameError: boolean;
+
   let lastName = '';
+  let lastNameError: boolean;
+
   let accountType: 'shelter' | 'adopter' = 'adopter';
+
   let shelterName = '';
+  let shelterNameError: boolean;
 
   const handleRegister = () => {
-    console.log('accountType', accountType);
-    console.log('shelter name', shelterName);
-    console.log('first name:', firstName);
-    console.log('last name:', lastName);
-    console.log('email:', email);
-    console.log('password:', password);
-    console.log('confirm password:', confirmPassword);
-
-    if (password !== confirmPassword) {
-      // error alert
-      console.log('passwords do not match');
-    } else {
-      // go to register flow
-      navigate('/onboarding');
+    if (accountType === 'shelter') {
+      if (!shelterName) {
+        shelterNameError = true;
+        shelterName = '';
+      }
     }
 
-    firstName = '';
-    lastName = '';
-    email = '';
-    password = '';
-    confirmPassword = '';
+    if (!firstName) {
+      firstNameError = true;
+      firstName = '';
+    }
+    if (!lastName) {
+      lastNameError = true;
+      lastName = '';
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      emailError = true;
+      email = '';
+    }
+    if (!password) {
+      passwordError = true;
+      password = '';
+    }
+
+    if (
+      !shelterNameError &&
+      !firstNameError &&
+      !lastNameError &&
+      !emailError &&
+      !passwordError
+    ) {
+      // is user one collection of is there a separate collection for adopter and shelter
+      const userCredentials = {
+        firstName,
+        lastName,
+        email,
+        password,
+        shelterName
+      };
+      if (accountType === 'adopter') {
+        delete userCredentials.shelterName;
+      }
+      console.log(userCredentials);
+      navigate('/onboarding');
+    }
   };
 
   const handleGoogleRegister = () => {
@@ -79,15 +112,26 @@
       {/if}
       <form on:submit|preventDefault={handleRegister}>
         {#if accountType === 'shelter'}
-          <Name bind:value={shelterName} nameType="Shelter name" />
+          <Name
+            bind:value={shelterName}
+            nameType="Shelter name"
+            bind:error={shelterNameError}
+          />
         {/if}
         <div class="names">
-          <Name nameType="First name" bind:value={firstName} />
-          <Name nameType="Last name" bind:value={lastName} />
+          <Name
+            nameType="First name"
+            bind:value={firstName}
+            bind:error={firstNameError}
+          />
+          <Name
+            nameType="Last name"
+            bind:value={lastName}
+            bind:error={lastNameError}
+          />
         </div>
-        <Email bind:value={email} />
-        <Password confirmation={false} bind:value={password} />
-        <Password confirmation={true} bind:value={confirmPassword} />
+        <Email bind:value={email} bind:error={emailError} />
+        <Password bind:value={password} bind:error={passwordError} />
         <button type="submit">Register</button>
       </form>
       <p>
@@ -127,6 +171,7 @@
     align-items: center;
     gap: 30px;
     border-radius: 1rem;
+    transition: 1s all;
   }
 
   .account-type {
@@ -200,6 +245,10 @@
     backdrop-filter: blur(15.2px);
     -webkit-backdrop-filter: blur(15.2px);
     border: 1px solid rgba(255, 255, 255, 0.19);
+  }
+
+  button:focus {
+    outline: solid 1px rgba(30, 144, 255, 0.5);
   }
 
   img {
