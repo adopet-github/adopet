@@ -11,15 +11,15 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-    --white: #ffffff;
-    --black: #282829;
-    --red: #D33E43;
-    --auburn: #a52327;
-    --cream: #FFF2ED;
-    --pinkish: #EBE0E0;
-    --lavender: #666370;
-    --lightgrey: #e7e7e7;
-    --grey: #797979;
+  --white: #ffffff;
+  --black: #282829;
+  --red: #d33e43;
+  --auburn: #a52327;
+  --cream: #fff2ed;
+  --pinkish: #ebe0e0;
+  --lavender: #666370;
+  --lightgrey: #e7e7e7;
+  --grey: #797979;
 }
 
 body {
@@ -73,6 +73,11 @@ a {
   font-size: 1.5rem;
 }
 
+.auth-input-container .error {
+  outline-offset: 1px;
+  outline: solid 2px red;
+}
+
 .auth-input {
   padding: 1rem 1rem 1rem 2.5rem;
   border-radius: 10px;
@@ -87,5 +92,5 @@ a {
 
 .auth-input:focus {
   outline-offset: 1px;
-  outline: solid 2px #757575;
+  outline: solid 2px dodgerblue;
 }

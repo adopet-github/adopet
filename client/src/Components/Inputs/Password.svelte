@@ -1,6 +1,12 @@
 <script lang="ts">
-  export let confirmation: boolean;
   export let value = '';
+  export let error = false;
+
+  const validatePassword = () => {
+    if (error && value) {
+      error = false;
+    }
+  };
 </script>
 
 <svelte:head>
@@ -12,10 +18,11 @@
 
 <div class="auth-input-container">
   <input
-    class="auth-input"
+    class="auth-input {error && 'error'}"
     type="password"
-    placeholder={confirmation ? 'Confirm password' : 'Password'}
+    placeholder="Password"
     bind:value
+    on:blur={validatePassword}
   />
   <i class="mi mi-lock" />
 </div>
