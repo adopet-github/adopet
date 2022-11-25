@@ -5,5 +5,9 @@
 
 <div class="auth-input-container">
   <input class="auth-input" type="text" placeholder={nameType} bind:value />
-  <i class="mi mi-user" />
+  {#if nameType == 'Shelter name'}
+    <i class="mi mi-home" />
+  {:else}
+    <i class="mi mi-user" />
+  {/if}
 </div>
