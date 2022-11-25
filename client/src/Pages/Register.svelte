@@ -2,40 +2,65 @@
   import Email from '../Components/Inputs/Email.svelte';
   import Password from '../Components/Inputs/Password.svelte';
   import GoogleIcon from '../assets/icons/google-icon.svg';
+  import Name from '../Components/Inputs/Name.svelte';
+  import TransitionContainer from '../Components/Transitions/TransitionContainer.svelte';
   import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
+
   let email = '';
   let password = '';
+  let confirmPassword = '';
+  let firstName = '';
+  let lastName = '';
 
-  const handleLogin = () => {
-    // check password in db
+  const handleRegister = () => {
+    console.log('first name:', firstName);
+    console.log('last name:', lastName);
     console.log('email:', email);
     console.log('password:', password);
+    console.log('confirm password:', confirmPassword);
+
+    if (password !== confirmPassword) {
+      // error alert
+      console.log('passwords do not match');
+    } else {
+      // go to register flow
+      console.log('registered');
+    }
+
+    firstName = '';
+    lastName = '';
     email = '';
     password = '';
+    confirmPassword = '';
   };
 
-  const handleGoogleLogin = () => {
-    console.log('login with google');
+  const handleGoogleRegister = () => {
+    console.log('register with google');
   };
 </script>
 
-<RouteTransition direction="backward">
+<RouteTransition direction="forward">
   <div class="container">
     <div class="form-container">
-      <h1>LOGIN</h1>
-      <button on:click={handleGoogleLogin}>
+      <h1>REGISTER</h1>
+      <button on:click={handleGoogleRegister}>
         <img src={GoogleIcon} alt="google icon" />
-        <span>Login with Google </span>
+        <span>Register with Google </span>
       </button>
       <div class="or">
         <hr />
         <h2>OR</h2>
         <hr />
       </div>
-      <form on:submit|preventDefault={handleLogin}>
+      <form on:submit|preventDefault={handleRegister}>
+        <div class="names">
+          <Name nameType="First name" bind:value={firstName} />
+          <Name nameType="Last name" bind:value={lastName} />
+        </div>
         <Email bind:value={email} />
         <Password confirmation={false} bind:value={password} />
-        <button type="submit">Login</button>
+        <Password confirmation={true} bind:value={confirmPassword} />
+        <button type="submit">Register</button>
       </form>
     </div>
   </div>
@@ -62,11 +87,17 @@
     border-radius: 1rem;
   }
 
+  .names {
+    display: flex;
+    gap: 15px;
+    width: 70%;
+  }
+
   .or {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 70%;
     gap: 15px;
   }
 

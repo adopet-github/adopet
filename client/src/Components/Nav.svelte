@@ -13,17 +13,15 @@
     </div>
   </div>
   <div class="links">
-    <a href="/" class="link">HOME</a>
-    <a href="/login" class="link">LOGIN</a>
-    <!--
-    <Link to="/">HOME</Link>
-    <Link to="/login">LOGIN</Link> -->
+    <Link to="/"><span>HOME</span></Link>
+    <Link to="/login"><span>LOGIN</span></Link>
+    <Link to="/register"><span>REGISTER</span></Link>
   </div>
 </nav>
 
 <style>
   nav {
-    height: 6vh;
+    height: 8vh;
     background: #d33e43;
     background: linear-gradient(180deg, #d33e43 0%, #a52327 100%);
     display: flex;
@@ -46,7 +44,7 @@
     position: relative;
     top: 2px;
   }
-  a {
+  span {
     padding: 15px;
   }
 </style>
