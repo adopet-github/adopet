@@ -2,12 +2,27 @@
   import dog from '../assets/imgs/flower_dog.png';
   import redCat from '../assets/imgs/red_cat.png';
   import yellowCat from '../assets/imgs/yellow_cat.png';
+
+  import Button from '../Components/Button.svelte';
+  import { useNavigate } from 'svelte-navigator';
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/login');
+  };
 </script>
 
 <div class="main-container">
   <div class="content-left">
-    <h1>Hey!</h1>
-    <p>So far, we've helped <span>218</span> <br /> pets to find a new home.</p>
+    <div class="left-text">
+      <h1>Hey!</h1>
+      <p>
+        So far, we've helped <span>218</span> <br /> pets to find a new home.
+      </p>
+      <p>Help us help more.</p>
+      <Button text={'SIGN UP'} colour={'red'} on:click={handleClick} />
+    </div>
   </div>
   <div class="content-right">
     <div class="grid-container">
@@ -52,13 +67,12 @@
 
   h1 {
     font-size: 4rem;
-    padding: 0.5rem 5rem;
+    padding-bottom: 1rem;
     align-self: flex-start;
   }
 
   p {
     position: relative;
-    padding: 0.5rem 5rem;
     font-size: 2rem;
     line-height: 3rem;
   }
@@ -72,6 +86,10 @@
   }
   .content-left {
     align-items: flex-start;
+  }
+
+  .left-text {
+    padding-left: 5rem;
   }
 
   .content-right {
