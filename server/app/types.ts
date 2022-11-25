@@ -1,7 +1,7 @@
 export type MyResponse = {
   status: number,
   message: string,
-  data: any
+  data: unknown
 }
 
 export type Test = {
