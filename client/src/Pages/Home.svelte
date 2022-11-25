@@ -21,7 +21,7 @@
         So far, we've helped <span>218</span> <br /> pets to find a new home.
       </p>
       <p>Help us help more.</p>
-      <Button text={'SIGN UP'} colour={'red'} on:click={handleClick} />
+      <Button text={'REGISTER NOW'} colour={'red'} on:click={handleClick} />
     </div>
   </div>
   <div class="content-right">
@@ -42,15 +42,15 @@
 <style>
   .main-container {
     display: flex;
-    height: 94vh;
+    height: 92vh;
     background-color: white;
     background-image: url('../assets/SVGs/red_blob_grad.svg'),
       url('../assets/SVGs/grey_blob_grad.svg'),
       url('../assets/SVGs/cream_blob_grad.svg');
     background-blend-mode: multiply;
     background-repeat: no-repeat;
-    background-position: bottom right, 0% 0%, 80% 80%;
-    background-size: 60%, 60%, 100%;
+    background-position: 100% 100%, 0% 0%, 100% 50%;
+    background-size: 1000px, 1200px, 100%;
   }
   .content-left,
   .content-right {
@@ -66,30 +66,38 @@
   }
 
   h1 {
-    font-size: 4rem;
+    margin-top: 1rem;
+    font-size: 3rem;
     padding-bottom: 1rem;
     align-self: flex-start;
   }
 
   p {
     position: relative;
-    font-size: 2rem;
-    line-height: 3rem;
+    font-size: 1.6rem;
+    line-height: 2rem;
+    white-space: nowrap;
   }
 
   span {
-    font-size: 5rem;
-    position: absolute;
-    padding-left: 20px;
-    top: -1px;
+    font-size: 4rem;
+    position: relative;
+    padding: 20px 10px;
     color: #d33e43;
   }
   .content-left {
     align-items: flex-start;
+    margin-left: 5vw;
   }
 
   .left-text {
-    padding-left: 5rem;
+    padding: 2rem;
+    background: rgba(223, 223, 223, 0.33);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.31);
   }
 
   .content-right {

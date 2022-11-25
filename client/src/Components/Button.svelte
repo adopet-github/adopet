@@ -22,7 +22,6 @@
     background: #d33e43;
     background: linear-gradient(180deg, #d33e43 0%, #a52327 100%);
     margin-top: 1rem;
-    margin-bottom: 1rem;
     padding: 20px 20px;
     width: 100%;
     border-radius: 20px;
@@ -36,7 +35,6 @@
     background: #e7e7e7;
     background: linear-gradient(180deg, #e7e7e7 0%, #afafaf 100%);
     margin-top: 1rem;
-    margin-bottom: 1rem;
     padding: 20px 20px;
     width: 100%;
     border-radius: 20px;
