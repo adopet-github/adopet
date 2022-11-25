@@ -11,6 +11,5 @@ const Image = sequelize.define('Image', {
   url: DataTypes.STRING
 });
 
-Image.belongsTo(General, cascade);
 
 export default Image;

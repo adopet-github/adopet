@@ -8,7 +8,4 @@ const Adopter_Animal = sequelize.define('Adopter_Animal', {
   is_liked: DataTypes.BOOLEAN
 });
 
-Adopter_Animal.hasMany(Adopter, cascade);
-Adopter_Animal.hasMany(Animal, cascade);
-
 export default Adopter_Animal;

@@ -9,8 +9,6 @@ const General = sequelize.define('General', {
   description: DataTypes.STRING
 });
 
-General.hasOne(User, cascade);
-General.hasOne(Animal, cascade);
-General.hasMany(Image, cascade);
+
 
 export default General;

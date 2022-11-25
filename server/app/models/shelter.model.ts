@@ -8,8 +8,6 @@ const Shelter = sequelize.define('Shelter', {
   name: DataTypes.STRING,
 });
 
-Shelter.belongsTo(User, cascade);
 
-Shelter.hasMany(Animal, cascade);
 
 export default Shelter;

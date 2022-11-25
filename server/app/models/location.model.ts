@@ -9,6 +9,6 @@ const Location = sequelize.define('Location', {
   address: DataTypes.STRING
 });
 
-Location.belongsTo(User, cascade);
+
 
 export default Location;

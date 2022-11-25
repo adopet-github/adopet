@@ -8,14 +8,13 @@ import User from "./user.model";
 const Adopter = sequelize.define('Adopter', {
   first_name: DataTypes.STRING,
   last_name: DataTypes.STRING,
-  age: DataTypes.TINYINT,
+  age: DataTypes.INTEGER,
   house_type: DataTypes.ENUM('apartment', 'villa', 'house', 'townhouse'),
   has_pets: DataTypes.BOOLEAN,
   has_children: DataTypes.BOOLEAN,
-  time_at_home: DataTypes.TINYINT
+  time_at_home: DataTypes.INTEGER
 });
 
-Adopter.belongsTo(User, cascade);
-Adopter.belongsToMany(Animal, {...cascade, through: Adopter_Animal});
+
 
 export default Adopter;

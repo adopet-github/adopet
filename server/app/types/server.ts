@@ -6,4 +6,4 @@ export type MyResponse = {
 
 export type Test = {
   test: string
-}
+} // GON BE DELETED

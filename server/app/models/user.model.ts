@@ -12,9 +12,4 @@ const User = sequelize.define('User', {
   phone_number: DataTypes.STRING
 });
 
-User.belongsTo(General, cascade);
-User.hasOne(Location, cascade);
-User.hasOne(Shelter, cascade);
-User.hasOne(Adopter, cascade);
-
 export default User;
