@@ -44,6 +44,7 @@
     color: var(--red);
     font-size: 2rem;
     padding: 0.5rem;
+    font-weight: 900;
   }
 
   span {

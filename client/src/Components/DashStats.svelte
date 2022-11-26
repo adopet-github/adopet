@@ -29,7 +29,7 @@
   }
 
   h3 {
-    color: var(--lavendar);
+    color: var(--lavender);
     font-size: 4rem;
   }
 

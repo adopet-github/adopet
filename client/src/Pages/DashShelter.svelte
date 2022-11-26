@@ -3,12 +3,13 @@
   import DashProfileCard from '../Components/DashProfileCard.svelte';
   import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';
+  import MsgListCont from '../Components/Messages/MsgListCont.svelte';
 </script>
 
 <div class="main-container">
   <div class="grid-container">
     <div class="div1">
-      <DashProfileCard />
+      <MsgListCont />
     </div>
     <div class="div2">
       <DashStats desc={'add pet'} stat={'+'} color={'red'} />
