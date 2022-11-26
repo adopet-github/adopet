@@ -1,216 +1,245 @@
-// import { Request, Response } from 'express';
-// import { MyResponse } from '../types/server';
-// import constants from '../utils/constants';
-// import {
-//   shelterSanitize
-// } from '../utils/sanitize';
-// import models, { relationships } from '../models';
-// import sequelize from '../db/db';
-// import {
-//   generateShelterUpdateBody,
-//   getShelterFromSafeBody,
-//   getUserFromSafeBody
-// } from '../utils/db';
-// import { Model } from 'sequelize';
+import { Request, Response } from 'express';
+import { MyResponse } from '../types/server';
+import constants from '../utils/constants';
+import {
+  shelterSanitize
+} from '../utils/sanitize';
+import models, { relationships } from '../models';
+import sequelize from '../db/db';
+import { Model } from 'sequelize';
+import Location from '../models/location.model';
 
-// const { General, Shelter, User } = models;
+const { General, Shelter, User } = models;
 
-// const controller = {
-//   retrieveAll: async (req: Request, res: Response) => {
-//     const response = { ...constants.fallbackResponse } as MyResponse;
+const controller = {
+  retrieveAll: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
 
-//     try {
-//       const modelResponse = await Shelter.findAll();
+    try {
+      const modelResponse = await Shelter.findAll();
 
-//       response.status = constants.statusCodes.ok;
-//       response.message = 'Shelters retrieved successfully!';
-//       response.data = modelResponse;
-//     } catch (err) {
-//       console.warn('ERROR AT SHELTER-CONTROLLER-retrieveAll: ', err);
-//     }
+      response.status = constants.statusCodes.ok;
+      response.message = 'Shelters retrieved successfully!';
+      response.data = modelResponse;
+    } catch (err) {
+      console.warn('ERROR AT SHELTER-CONTROLLER-retrieveAll: ', err);
+    }
 
-//     res.status(response.status).send(response);
-//   },
+    res.status(response.status).send(response);
+  },
 
-//   retrieveOne: async (req: Request, res: Response) => {
-//     const response = { ...constants.fallbackResponse } as MyResponse;
+  retrieveOne: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
 
-//     try {
-//       const { id } = req.params;
-//       const shelter = await Shelter.findByPk(id, {
-//         include: [
-//           {
-//             association: relationships.shelter.user,
-//             include: [relationships.user.general, relationships.user.location]
-//           },
-//           {
-//             association: relationships.shelter.animals
-//           }
-//         ]
-//       });
+    try {
+      const { id } = req.params;
+      const shelter = await Shelter.findByPk(id, {
+        include: [
+          {
+            association: relationships.shelter.user,
+            include: [relationships.user.general, relationships.user.location]
+          },
+          {
+            association: relationships.shelter.animals
+          }
+        ]
+      });
 
-//       if (shelter === null) {
-//         response.status = constants.statusCodes.notFound;
-//         response.message = `Shelter with id ${id} not found.`;
-//         throw new Error(response.message);
-//       }
+      if (shelter === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Shelter with id ${id} not found.`;
+        throw new Error(response.message);
+      }
 
-//       response.status = constants.statusCodes.ok;
-//       response.message = 'Shelter retrieved successfully!';
-//       response.data = shelter;
-//     } catch (err) {
-//       console.warn('ERROR AT SHELTER-CONTROLLER-retrieveOne: ', err);
-//     }
+      response.status = constants.statusCodes.ok;
+      response.message = 'Shelter retrieved successfully!';
+      response.data = shelter;
+    } catch (err) {
+      console.warn('ERROR AT SHELTER-CONTROLLER-retrieveOne: ', err);
+    }
 
-//     res.status(response.status).send(response);
-//   },
+    res.status(response.status).send(response);
+  },
 
-//   create: async (req: Request, res: Response) => {
-//     const response = { ...constants.fallbackResponse } as MyResponse;
-//     const { sanitizeCreate } = shelterSanitize;
+  create: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+    const { sanitizeCreate } = shelterSanitize;
 
-//     const unsafeBody = req.body;
+    const unsafeBody = req.body;
 
-//     const safeBody = sanitizeCreate(unsafeBody);
+    const safeBody = sanitizeCreate(unsafeBody);
 
-//     const transaction = await sequelize.transaction();
-//     try {
-//       const shelter = await General.create(
-//         {
-//           description: safeBody.description,
-//           user: {
-//             email: safeBody.email,
-//             password: safeBody.password,
-//             phone_number: safeBody.phone_number,
-//             shelter: {
-//               name: safeBody.name
-//             }
-//           }
-//         },
-//         {
-//           include: [
-//             {
-//               association: relationships.general.user,
-//               include: [relationships.user.shelter, relationships.user.location]
-//             }
-//           ],
-//           transaction
-//         }
-//       );
-//       await transaction.commit();
-//       response.status = constants.statusCodes.created;
-//       response.message = 'Shelter created succesfully!';
-//       response.data = shelter;
-//     } catch (err) {
-//       await transaction.rollback();
-//       console.warn('ERROR AT SHELTER-CONTROLLER-create: ', err);
-//     }
+    const transaction = await sequelize.transaction();
+    try {
+      const shelter = await General.create(
+        {
+          description: safeBody.description,
+          user: {
+            email: safeBody.email,
+            password: safeBody.password,
+            phone_number: safeBody.phone_number,
+            shelter: {
+              name: safeBody.name
+            },
+            location: {
+              latitude: safeBody.latitude,
+              longitude: safeBody.longitude,
+              address: safeBody.address
+            }
+          }
+        },
+        {
+          include: [
+            {
+              association: relationships.general.user,
+              include: [relationships.user.shelter, relationships.user.location]
+            }
+          ],
+          transaction
+        }
+      );
+      await transaction.commit();
+      response.status = constants.statusCodes.created;
+      response.message = 'Shelter created succesfully!';
+      response.data = shelter;
+    } catch (err) {
+      await transaction.rollback();
+      console.warn('ERROR AT SHELTER-CONTROLLER-create: ', err);
+    }
 
-//     res.status(response.status).send(response);
-//   },
+    res.status(response.status).send(response);
+  },
 
-//   update: async (req: Request, res: Response) => {
-//     const response = { ...constants.fallbackResponse } as MyResponse;
-//     const { sanitizeUpdate } = shelterSanitize;
+  update: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+    const { sanitizeUpdate } = shelterSanitize;
 
-//     const transaction = await sequelize.transaction();
-//     try {
-//       const { id } = req.params;
+    const transaction = await sequelize.transaction();
+    try {
+      const { id } = req.params;
 
-//       const unsafeBody = req.body;
+      const unsafeBody = req.body;
 
-//       const safeBody = sanitizeUpdate(unsafeBody);
+      const safeBody = sanitizeUpdate(unsafeBody);
 
-//       const shelter = await Shelter.findByPk(id, {
-//         include: [
-//           {
-//             association: relationships.shelter.user,
-//             include: [relationships.user.general]
-//           },
-//           {
-//             association: relationships.shelter.animals
-//           }
-//         ]
-//       });
+      const shelter = await Shelter.findByPk(id, {
+        include: [
+          {
+            association: relationships.shelter.user,
+            include: [relationships.user.general]
+          },
+          {
+            association: relationships.shelter.animals
+          }
+        ]
+      });
 
-//       if (shelter === null) {
-//         response.status = constants.statusCodes.notFound;
-//         response.message = `Shelter with id ${id} not found.`;
-//         throw new Error(response.message);
-//       }
+      if (shelter === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Shelter with id ${id} not found.`;
+        throw new Error(response.message);
+      }
 
-//       const user = await User.findByPk(
-//         (shelter as unknown as { user: { id: number } }).user.id
-//       );
-//       const general = await General.findByPk(
-//         (user as unknown as { generalId: number }).generalId
-//       );
+      const user = await User.findByPk(
+        (shelter as unknown as { user: { id: number } }).user.id, {
+          include: [relationships.user.location]
+        }
+      );
+      const general = await General.findByPk(
+        (user as unknown as { generalId: number }).generalId
+      );
+      
+      const location = await Location.findByPk(
+        (user as unknown as {location: {id: number}}).location.id
+      );
 
-//       await shelter.update(getShelterFromSafeBody(safeBody) || {}, {
-//         transaction
-//       });
+      console.log((location as unknown as {id: number}).id);
+      
 
-//       await (user as Model).update(
-//         getUserFromSafeBody(safeBody) || {},
-//         {
-//           transaction
-//         }
-//       );
+      await shelter.update({
+        name: safeBody.name
+      } || {}, {
+        transaction
+      });
 
-//       await (general as Model).update(
-//         generateShelterUpdateBody(safeBody) || {},
-//         {
-//           transaction
-//         }
-//       );
+      await (user as Model).update(
+        {
+          email: safeBody.email,
+          password: safeBody.password,
+          phone_number: safeBody.phone_number,
+        } || {},
+        {
+          transaction
+        }
+      );
 
-//       const updatedShelter = await Shelter.findByPk(id, {
-//         transaction,
-//         include: [
-//           {
-//             association: relationships.shelter.user,
-//             include: [relationships.user.general]
-//           },
-//           {
-//             association: relationships.shelter.animals
-//           }
-//         ]
-//       });
+      await (general as Model).update(
+        {
+          description: safeBody.description
+        } || {},
+        {
+          transaction
+        }
+      );
 
-//       await transaction.commit();
-//       response.status = constants.statusCodes.ok;
-//       response.message = 'Shelter updated succesfully!';
-//       response.data = updatedShelter;
-//     } catch (err) {
-//       await transaction.rollback();
-//       console.warn('ERROR AT SHELTER-CONTROLLER-update: ', err);
-//     }
+      await (location as Model).update(
+        {
+          latitude: safeBody.latitude,
+          longitude: safeBody.longitude,
+          address: safeBody.address
+        } || {},
+        {
+          transaction
+        }
+      );
 
-//     res.status(response.status).send(response);
-//   },
+      const updatedShelter = await Shelter.findByPk(id, {
+        transaction,
+        include: [
+          {
+            association: relationships.shelter.user,
+            include: [relationships.user.general, relationships.user.location]
+          },
+          {
+            association: relationships.shelter.animals
+          }
+        ]
+      });
 
-//   delete: async (req: Request, res: Response) => {
-//     const response = {...constants.fallbackResponse} as MyResponse;
+      await transaction.commit();
+      response.status = constants.statusCodes.ok;
+      response.message = 'Shelter updated succesfully!';
+      response.data = updatedShelter;
+    } catch (err) {
+      await transaction.rollback();
+      console.warn('ERROR AT SHELTER-CONTROLLER-update: ', err);
+    }
 
-//     try {
-//       const { id } = req.params;
+    res.status(response.status).send(response);
+  },
 
-//       const rowsDeleted = await Shelter.destroy({where: {id}});
+  delete: async (req: Request, res: Response) => {
+    const response = {...constants.fallbackResponse} as MyResponse;
 
-//       if (rowsDeleted === 0) {
-//         response.status = constants.statusCodes.notFound;
-//         response.message = `Shelter with id ${id} not found.`;
-//         throw new Error(response.message);
-//       }
+    try {
+      const { id } = req.params;
 
-//       response.status = constants.statusCodes.ok;
-//       response.message = 'Shelter deleted succesfully!';
-//     } catch (err) {
-//       console.warn('ERROR AT SHELTER-CONTROLLER-delete: ', err);
-//     };
+      const rowsDeleted = await Shelter.destroy({where: {id}});
 
-//     res.status(response.status).send(response);
-//   }
-// };
+      if (rowsDeleted === 0) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Shelter with id ${id} not found.`;
+        throw new Error(response.message);
+      }
 
-// export default controller;
+      response.status = constants.statusCodes.ok;
+      response.message = 'Shelter deleted succesfully!';
+    } catch (err) {
+      console.warn('ERROR AT SHELTER-CONTROLLER-delete: ', err);
+    };
+
+    res.status(response.status).send(response);
+  }
+};
+
+export default controller;

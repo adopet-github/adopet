@@ -1,5 +1,4 @@
 import { HouseTypes } from "../enums";
-import { OptionalUser } from "./models";
 
 export type AdopterBody = { 
   description: string,
@@ -32,11 +31,9 @@ export type UpdateUserSafeBody = {
   has_children: boolean | undefined,
   time_at_home: number | undefined,
   name: string | undefined,
-};
-
-export type UpdateAdopterRequestBody = {
-  description?: string,
-  user?: OptionalUser
+  longitude: number | undefined,
+  latitude: number | undefined,
+  address: string | undefined
 };
 
 export type ShelterBody = {
@@ -44,5 +41,8 @@ export type ShelterBody = {
   email: string,
   password: string,
   phone_number: string,
-  name: string
+  name: string,
+  longitude: number,
+  latitude: number,
+  address: string
 };

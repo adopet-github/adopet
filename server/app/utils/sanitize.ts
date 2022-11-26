@@ -16,11 +16,11 @@ export const adopterSanitize = {
 
 export const shelterSanitize = {
   sanitizeCreate: (unsafeBody: ShelterBody): ShelterBody => {
-    const { description, email, password, phone_number, name } = unsafeBody;
-    return { description, email, password, phone_number, name };
+    const { description, email, password, phone_number, name, latitude, longitude, address } = unsafeBody;
+    return { description, email, password, phone_number, name, latitude, longitude, address };
   },
   sanitizeUpdate: (unsafeBody: ShelterBody) => {
-    const { description, email, password, phone_number, name } = unsafeBody;
-    return (removeUndefinedKeysFromObject({ description, email, password, phone_number, name })) as UpdateUserSafeBody;
+    const { description, email, password, phone_number, name, latitude, longitude, address } = unsafeBody;
+    return (removeUndefinedKeysFromObject({ description, email, password, phone_number, name, latitude, longitude, address })) as UpdateUserSafeBody;
   }
 }
