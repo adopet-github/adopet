@@ -1,12 +1,45 @@
-<script></script>
+<script>
+  import Button from './Button.svelte';
+</script>
 
-<div class="list-item glass">this is a list item</div>
+<div class="list-item glass">
+  <div class="img-container">
+    <div class="dummy-img" />
+  </div>
+  <p>pet name</p>
+  <p>type</p>
+  <p>enquiries</p>
+  <div class="btns-container">
+    <span><Button text="View" /></span>
+    <span><Button text="X" /></span>
+  </div>
+</div>
 
 <style>
   .list-item {
     width: 100%;
-    padding: 1.5rem;
+    padding: 1rem 3rem;
     margin-top: 1rem;
     border-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .dummy-img {
+    height: 60px;
+    width: 60px;
+    border-radius: 30px;
+    background-color: var(--grey);
+  }
+
+  .btns-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btns-container > span {
+    margin-left: 10px;
   }
 </style>

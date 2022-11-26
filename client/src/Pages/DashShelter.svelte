@@ -43,7 +43,7 @@
     grid-template-rows: repeat(5, 1fr);
     grid-column-gap: 20px;
     grid-row-gap: 20px;
-    color: black;
+    color: var(--black);
   }
 
   .grid-container > div {
@@ -72,6 +72,5 @@
   }
   .div6 {
     grid-area: 2 / 3 / 6 / 7;
-    padding: 0rem;
   }
 </style>
