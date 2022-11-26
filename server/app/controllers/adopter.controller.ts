@@ -2,17 +2,12 @@ import { Request, Response } from 'express';
 import { MyResponse } from '../types/server';
 import constants from '../utils/constants';
 import {
-  sanitizeAdopterCreate,
-  sanitizeAdopterUpdate
+  adopterSanitize
 } from '../utils/sanitize';
 import models, { relationships } from '../models';
 import sequelize from '../db/db';
-import {
-  generateAdopterUpdateBody,
-  getAdopterFromSafeBody,
-  getUserFromSafeBody
-} from '../utils/db';
 import { Model } from 'sequelize';
+import Location from '../models/location.model';
 
 const { General, Adopter, User } = models;
 
@@ -42,7 +37,7 @@ const controller = {
         include: [
           {
             association: relationships.adopter.user,
-            include: [relationships.user.general]
+            include: [relationships.user.general, relationships.user.location]
           },
           {
             association: relationships.adopter.animals
@@ -68,10 +63,11 @@ const controller = {
 
   create: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
+    const { sanitizeCreate } = adopterSanitize;
 
     const unsafeBody = req.body;
 
-    const safeBody = sanitizeAdopterCreate(unsafeBody);
+    const safeBody = sanitizeCreate(unsafeBody);
 
     const transaction = await sequelize.transaction();
     try {
@@ -90,6 +86,11 @@ const controller = {
               has_pets: safeBody.has_pets,
               has_children: safeBody.has_children,
               time_at_home: safeBody.time_at_home
+            },
+            location: {
+              latitude: safeBody.latitude,
+              longitude: safeBody.longitude,
+              address: safeBody.address
             }
           }
         },
@@ -97,7 +98,7 @@ const controller = {
           include: [
             {
               association: relationships.general.user,
-              include: [relationships.user.adopter]
+              include: [relationships.user.adopter, relationships.user.location]
             }
           ],
           transaction
@@ -117,6 +118,7 @@ const controller = {
 
   update: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
+    const { sanitizeUpdate } = adopterSanitize;
 
     const transaction = await sequelize.transaction();
     try {
@@ -124,7 +126,7 @@ const controller = {
 
       const unsafeBody = req.body;
 
-      const safeBody = sanitizeAdopterUpdate(unsafeBody);
+      const safeBody = sanitizeUpdate(unsafeBody);
 
       const adopter = await Adopter.findByPk(id, {
         include: [
@@ -145,25 +147,59 @@ const controller = {
       }
 
       const user = await User.findByPk(
-        (adopter as unknown as { user: { id: number } }).user.id
+        (adopter as unknown as { user: { id: number } }).user.id, {
+          include: [relationships.user.location]
+        }
       );
       const general = await General.findByPk(
         (user as unknown as { generalId: number }).generalId
       );
+      
+      const location = await Location.findByPk(
+        (user as unknown as {location: {id: number}}).location.id
+      );
 
-      await adopter.update(getAdopterFromSafeBody(safeBody) || {}, {
+      console.log((location as unknown as {id: number}).id);
+      
+
+      await adopter.update({
+        first_name: safeBody.first_name,
+        last_name: safeBody.last_name,
+        age: safeBody.age,
+        house_type: safeBody.house_type,
+        has_pets: safeBody.has_pets,
+        has_children: safeBody.has_children,
+        time_at_home: safeBody.time_at_home
+      } || {}, {
         transaction
       });
 
       await (user as Model).update(
-        getUserFromSafeBody(safeBody) || {},
+        {
+          email: safeBody.email,
+          password: safeBody.password,
+          phone_number: safeBody.phone_number,
+        } || {},
         {
           transaction
         }
       );
 
       await (general as Model).update(
-        generateAdopterUpdateBody(safeBody) || {},
+        {
+          description: safeBody.description
+        } || {},
+        {
+          transaction
+        }
+      );
+
+      await (location as Model).update(
+        {
+          latitude: safeBody.latitude,
+          longitude: safeBody.longitude,
+          address: safeBody.address
+        } || {},
         {
           transaction
         }
@@ -174,7 +210,7 @@ const controller = {
         include: [
           {
             association: relationships.adopter.user,
-            include: [relationships.user.general]
+            include: [relationships.user.general, relationships.user.location]
           },
           {
             association: relationships.adopter.animals

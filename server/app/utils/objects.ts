@@ -3,5 +3,5 @@ export function removeUndefinedKeysFromObject (obj: {
 }) {
   for (const key of Object.keys(obj)) if (!obj[key]) delete obj[key];
 
-  return obj;
+  return Object.keys(obj).length === 0 ? undefined : obj;
 }

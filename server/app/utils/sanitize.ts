@@ -1,14 +1,26 @@
-import { AdopterBody, UpdateAdopterSafeBody } from "../types/bodies";
+import { AdopterBody, ShelterBody, UpdateUserSafeBody } from "../types/bodies";
 import { removeUndefinedKeysFromObject } from "./objects";
 
-export function sanitizeAdopterCreate (unsafeBody: AdopterBody): AdopterBody {
-  const { description, email, password, phone_number, first_name, last_name, age, house_type, has_pets, has_children, time_at_home} = unsafeBody;
+export const adopterSanitize = {
+  sanitizeCreate: (unsafeBody: AdopterBody): AdopterBody => {
+    const { description, email, password, phone_number, first_name, last_name, age, house_type, has_pets, has_children, time_at_home, latitude, longitude, address } = unsafeBody;
 
-  return { description, email, password, phone_number, first_name, last_name, age, house_type, has_pets, has_children, time_at_home}
+    return { description, email, password, phone_number, first_name, last_name, age, house_type, has_pets, has_children, time_at_home, latitude, longitude, address }
+  },
+  sanitizeUpdate: (unsafeBody: AdopterBody) => {
+    const { description, email, password, phone_number, first_name, last_name, age, house_type, has_pets, has_children, time_at_home, latitude, longitude, address } = unsafeBody;
+
+    return (removeUndefinedKeysFromObject({ description, email, password, phone_number, first_name, last_name, age, house_type, has_pets, has_children, time_at_home, latitude, longitude, address })) as UpdateUserSafeBody;
+  }
 };
 
-export function sanitizeAdopterUpdate (unsafeBody: AdopterBody) {
-  const { description, email, password, phone_number, first_name, last_name, age, house_type, has_pets, has_children, time_at_home} = unsafeBody;
-
-  return (removeUndefinedKeysFromObject({ description, email, password, phone_number, first_name, last_name, age, house_type, has_pets, has_children, time_at_home})) as UpdateAdopterSafeBody;
+export const shelterSanitize = {
+  sanitizeCreate: (unsafeBody: ShelterBody): ShelterBody => {
+    const { description, email, password, phone_number, name } = unsafeBody;
+    return { description, email, password, phone_number, name };
+  },
+  sanitizeUpdate: (unsafeBody: ShelterBody) => {
+    const { description, email, password, phone_number, name } = unsafeBody;
+    return (removeUndefinedKeysFromObject({ description, email, password, phone_number, name })) as UpdateUserSafeBody;
+  }
 }

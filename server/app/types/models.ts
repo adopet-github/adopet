@@ -5,7 +5,8 @@ export type OptionalUser = {
   email?: string,
   password?: string,
   phone_number?: string,
-  adopter?: OptionalAdopter
+  adopter?: OptionalAdopter,
+  shelter?: OptionalShelter,
 };
 
 export type OptionalAdopter = {
@@ -17,4 +18,9 @@ export type OptionalAdopter = {
   has_pets?: boolean,
   has_children?: boolean,
   time_at_home?: number,
+}
+
+export type OptionalShelter = {
+  [key: string]: unknown,
+  name?: string
 }

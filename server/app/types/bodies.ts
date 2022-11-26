@@ -13,9 +13,12 @@ export type AdopterBody = {
   has_pets: boolean,
   has_children: boolean,
   time_at_home: number,
+  longitude: number,
+  latitude: number,
+  address: string
 };
 
-export type UpdateAdopterSafeBody = {
+export type UpdateUserSafeBody = {
   [key: string]: unknown,
   description: string | undefined,
   email: string | undefined,
@@ -28,9 +31,18 @@ export type UpdateAdopterSafeBody = {
   has_pets: boolean | undefined,
   has_children: boolean | undefined,
   time_at_home: number | undefined,
+  name: string | undefined,
 };
 
 export type UpdateAdopterRequestBody = {
   description?: string,
   user?: OptionalUser
-}
+};
+
+export type ShelterBody = {
+  description: string,
+  email: string,
+  password: string,
+  phone_number: string,
+  name: string
+};
