@@ -1,15 +1,14 @@
 import { Request, Response } from 'express';
 import { MyResponse } from '../types/server';
 import constants from '../utils/constants';
-import {
-  shelterSanitize
-} from '../utils/sanitize';
+import { imageSanitize, shelterSanitize } from '../utils/sanitize';
 import models, { relationships } from '../models';
 import sequelize from '../db/db';
 import { Model } from 'sequelize';
 import Location from '../models/location.model';
+import { Image as ImageType } from '../types/models';
 
-const { General, Shelter, User } = models;
+const { General, Shelter, User, Image } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
@@ -37,7 +36,13 @@ const controller = {
         include: [
           {
             association: relationships.shelter.user,
-            include: [relationships.user.general, relationships.user.location]
+            include: [
+              {
+                association: relationships.user.general,
+                include: [relationships.general.images]
+              },
+              relationships.user.location
+            ]
           },
           {
             association: relationships.shelter.animals
@@ -141,32 +146,35 @@ const controller = {
       }
 
       const user = await User.findByPk(
-        (shelter as unknown as { user: { id: number } }).user.id, {
+        (shelter as unknown as { user: { id: number } }).user.id,
+        {
           include: [relationships.user.location]
         }
       );
       const general = await General.findByPk(
         (user as unknown as { generalId: number }).generalId
       );
-      
+
       const location = await Location.findByPk(
-        (user as unknown as {location: {id: number}}).location.id
+        (user as unknown as { location: { id: number } }).location.id
       );
 
-      console.log((location as unknown as {id: number}).id);
-      
+      console.log((location as unknown as { id: number }).id);
 
-      await shelter.update({
-        name: safeBody.name
-      } || {}, {
-        transaction
-      });
+      await shelter.update(
+        {
+          name: safeBody.name
+        } || {},
+        {
+          transaction
+        }
+      );
 
       await (user as Model).update(
         {
           email: safeBody.email,
           password: safeBody.password,
-          phone_number: safeBody.phone_number,
+          phone_number: safeBody.phone_number
         } || {},
         {
           transaction
@@ -219,12 +227,12 @@ const controller = {
   },
 
   delete: async (req: Request, res: Response) => {
-    const response = {...constants.fallbackResponse} as MyResponse;
+    const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
       const { id } = req.params;
 
-      const rowsDeleted = await Shelter.destroy({where: {id}});
+      const rowsDeleted = await Shelter.destroy({ where: { id } });
 
       if (rowsDeleted === 0) {
         response.status = constants.statusCodes.notFound;
@@ -236,8 +244,46 @@ const controller = {
       response.message = 'Shelter deleted succesfully!';
     } catch (err) {
       console.warn('ERROR AT SHELTER-CONTROLLER-delete: ', err);
-    };
+    }
 
+    res.status(response.status).send(response);
+  },
+  addManyImages: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    const { sanitizeCreate } = imageSanitize;
+
+    try {
+      const { id } = req.params;
+
+      const shelter = await Shelter.findByPk(id, {
+        include: [
+          {
+            association: relationships.shelter.user,
+            include: [relationships.user.general]
+          }
+        ]
+      });
+
+      if (shelter === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Shelter with id ${id} not found.`;
+        throw new Error(response.message);
+      }
+
+      const { images } = req.body;
+      const mappedImages = images.map((image: ImageType) => ({
+        ...sanitizeCreate(image),
+        generalId: (shelter as unknown as { user: { generalId: number } }).user
+          .generalId
+      }));
+      const createdImages = await Image.bulkCreate(mappedImages);
+      response.status = constants.statusCodes.ok;
+      response.message = 'Images added to shelter succesfully!';
+      response.data = createdImages;
+    } catch (err) {
+      console.warn('ERROR AT SHELTER-CONTROLLER-addManyImages: ', err);
+    }
     res.status(response.status).send(response);
   }
 };
