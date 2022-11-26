@@ -3,7 +3,6 @@
 </script>
 
 <div class="list-container">
-  <p style="padding-left: 1rem; color: blue">This is list-container</p>
   <ListItem />
   <ListItem />
   <ListItem />

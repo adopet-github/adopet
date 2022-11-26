@@ -1,4 +1,5 @@
 <script>
+  import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';
 </script>
 
@@ -8,10 +9,12 @@
       <h2>Dashboard</h2>
       <p>hey</p>
     </div>
-    <div class="glass grid-tab div2"><p>hey</p></div>
-    <div class="glass grid-tab div3"><p>hey</p></div>
-    <div class="glass grid-tab div4"><p>hey</p></div>
-    <div class="glass grid-tab div5"><p>hey</p></div>
+    <div class="div2">
+      <DashStats desc={'add pet'} stat={'+'} color={'red'} />
+    </div>
+    <div class="div3"><DashStats desc={'pets'} stat={'10'} /></div>
+    <div class="div4"><DashStats desc={'open enquiries'} stat={'4'} /></div>
+    <div class="div5"><DashStats desc={'most popular'} stat={'Rex'} /></div>
     <div class="div6"><ListCont /></div>
   </div>
 </div>
@@ -39,16 +42,11 @@
   .grid-container {
     flex-grow: 1;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(11, 1fr);
+    grid-template-rows: repeat(10, 1fr);
     grid-column-gap: 20px;
     grid-row-gap: 20px;
     color: var(--black);
-  }
-
-  .grid-container > div {
-    border-radius: 30px;
-    padding: 2rem;
   }
 
   .grid-container > div:nth-last-child(1) {
@@ -56,21 +54,21 @@
   }
 
   .div1 {
-    grid-area: 1 / 1 / 6 / 3;
+    grid-area: 1 / 1 / 11 / 4;
   }
   .div2 {
-    grid-area: 1 / 3 / 2 / 4;
+    grid-area: 1 / 4 / 3 / 6;
   }
   .div3 {
-    grid-area: 1 / 4 / 2 / 5;
+    grid-area: 1 / 6 / 3 / 8;
   }
   .div4 {
-    grid-area: 1 / 5 / 2 / 6;
+    grid-area: 1 / 8 / 3 / 10;
   }
   .div5 {
-    grid-area: 1 / 6 / 2 / 7;
+    grid-area: 1 / 10 / 3 / 12;
   }
   .div6 {
-    grid-area: 2 / 3 / 6 / 7;
+    grid-area: 3 / 4 / 11 / 12;
   }
 </style>
