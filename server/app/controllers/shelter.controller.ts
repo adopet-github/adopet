@@ -2,27 +2,27 @@ import { Request, Response } from 'express';
 import { MyResponse } from '../types/server';
 import constants from '../utils/constants';
 import {
-  adopterSanitize
+  shelterSanitize
 } from '../utils/sanitize';
 import models, { relationships } from '../models';
 import sequelize from '../db/db';
 import { Model } from 'sequelize';
 import Location from '../models/location.model';
 
-const { General, Adopter, User } = models;
+const { General, Shelter, User } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
-      const modelResponse = await Adopter.findAll();
+      const modelResponse = await Shelter.findAll();
 
       response.status = constants.statusCodes.ok;
-      response.message = 'Adopters retrieved successfully!';
+      response.message = 'Shelters retrieved successfully!';
       response.data = modelResponse;
     } catch (err) {
-      console.warn('ERROR AT ADOPTER-CONTROLLER-retrieveAll: ', err);
+      console.warn('ERROR AT SHELTER-CONTROLLER-retrieveAll: ', err);
     }
 
     res.status(response.status).send(response);
@@ -33,29 +33,29 @@ const controller = {
 
     try {
       const { id } = req.params;
-      const adopter = await Adopter.findByPk(id, {
+      const shelter = await Shelter.findByPk(id, {
         include: [
           {
-            association: relationships.adopter.user,
+            association: relationships.shelter.user,
             include: [relationships.user.general, relationships.user.location]
           },
           {
-            association: relationships.adopter.animals
+            association: relationships.shelter.animals
           }
         ]
       });
 
-      if (adopter === null) {
+      if (shelter === null) {
         response.status = constants.statusCodes.notFound;
-        response.message = `Adopter with id ${id} not found.`;
+        response.message = `Shelter with id ${id} not found.`;
         throw new Error(response.message);
       }
 
       response.status = constants.statusCodes.ok;
-      response.message = 'Adopter retrieved successfully!';
-      response.data = adopter;
+      response.message = 'Shelter retrieved successfully!';
+      response.data = shelter;
     } catch (err) {
-      console.warn('ERROR AT ADOPTER-CONTROLLER-retrieveOne: ', err);
+      console.warn('ERROR AT SHELTER-CONTROLLER-retrieveOne: ', err);
     }
 
     res.status(response.status).send(response);
@@ -63,7 +63,7 @@ const controller = {
 
   create: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-    const { sanitizeCreate } = adopterSanitize;
+    const { sanitizeCreate } = shelterSanitize;
 
     const unsafeBody = req.body;
 
@@ -71,21 +71,15 @@ const controller = {
 
     const transaction = await sequelize.transaction();
     try {
-      const adopter = await General.create(
+      const shelter = await General.create(
         {
           description: safeBody.description,
           user: {
             email: safeBody.email,
             password: safeBody.password,
             phone_number: safeBody.phone_number,
-            adopter: {
-              first_name: safeBody.first_name,
-              last_name: safeBody.last_name,
-              age: safeBody.age,
-              house_type: safeBody.house_type,
-              has_pets: safeBody.has_pets,
-              has_children: safeBody.has_children,
-              time_at_home: safeBody.time_at_home
+            shelter: {
+              name: safeBody.name
             },
             location: {
               latitude: safeBody.latitude,
@@ -98,7 +92,7 @@ const controller = {
           include: [
             {
               association: relationships.general.user,
-              include: [relationships.user.adopter, relationships.user.location]
+              include: [relationships.user.shelter, relationships.user.location]
             }
           ],
           transaction
@@ -106,11 +100,11 @@ const controller = {
       );
       await transaction.commit();
       response.status = constants.statusCodes.created;
-      response.message = 'Adopter created succesfully!';
-      response.data = adopter;
+      response.message = 'Shelter created succesfully!';
+      response.data = shelter;
     } catch (err) {
       await transaction.rollback();
-      console.warn('ERROR AT ADOPTER-CONTROLLER-create: ', err);
+      console.warn('ERROR AT SHELTER-CONTROLLER-create: ', err);
     }
 
     res.status(response.status).send(response);
@@ -118,7 +112,7 @@ const controller = {
 
   update: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-    const { sanitizeUpdate } = adopterSanitize;
+    const { sanitizeUpdate } = shelterSanitize;
 
     const transaction = await sequelize.transaction();
     try {
@@ -128,26 +122,26 @@ const controller = {
 
       const safeBody = sanitizeUpdate(unsafeBody);
 
-      const adopter = await Adopter.findByPk(id, {
+      const shelter = await Shelter.findByPk(id, {
         include: [
           {
-            association: relationships.adopter.user,
+            association: relationships.shelter.user,
             include: [relationships.user.general]
           },
           {
-            association: relationships.adopter.animals
+            association: relationships.shelter.animals
           }
         ]
       });
 
-      if (adopter === null) {
+      if (shelter === null) {
         response.status = constants.statusCodes.notFound;
-        response.message = `Adopter with id ${id} not found.`;
+        response.message = `Shelter with id ${id} not found.`;
         throw new Error(response.message);
       }
 
       const user = await User.findByPk(
-        (adopter as unknown as { user: { id: number } }).user.id, {
+        (shelter as unknown as { user: { id: number } }).user.id, {
           include: [relationships.user.location]
         }
       );
@@ -162,14 +156,8 @@ const controller = {
       console.log((location as unknown as {id: number}).id);
       
 
-      await adopter.update({
-        first_name: safeBody.first_name,
-        last_name: safeBody.last_name,
-        age: safeBody.age,
-        house_type: safeBody.house_type,
-        has_pets: safeBody.has_pets,
-        has_children: safeBody.has_children,
-        time_at_home: safeBody.time_at_home
+      await shelter.update({
+        name: safeBody.name
       } || {}, {
         transaction
       });
@@ -205,26 +193,26 @@ const controller = {
         }
       );
 
-      const updatedAdopter = await Adopter.findByPk(id, {
+      const updatedShelter = await Shelter.findByPk(id, {
         transaction,
         include: [
           {
-            association: relationships.adopter.user,
+            association: relationships.shelter.user,
             include: [relationships.user.general, relationships.user.location]
           },
           {
-            association: relationships.adopter.animals
+            association: relationships.shelter.animals
           }
         ]
       });
 
       await transaction.commit();
       response.status = constants.statusCodes.ok;
-      response.message = 'Adopter updated succesfully!';
-      response.data = updatedAdopter;
+      response.message = 'Shelter updated succesfully!';
+      response.data = updatedShelter;
     } catch (err) {
       await transaction.rollback();
-      console.warn('ERROR AT ADOPTER-CONTROLLER-update: ', err);
+      console.warn('ERROR AT SHELTER-CONTROLLER-update: ', err);
     }
 
     res.status(response.status).send(response);
@@ -236,18 +224,18 @@ const controller = {
     try {
       const { id } = req.params;
 
-      const rowsDeleted = await Adopter.destroy({where: {id}});
+      const rowsDeleted = await Shelter.destroy({where: {id}});
 
       if (rowsDeleted === 0) {
         response.status = constants.statusCodes.notFound;
-        response.message = `Adopter with id ${id} not found.`;
+        response.message = `Shelter with id ${id} not found.`;
         throw new Error(response.message);
       }
 
       response.status = constants.statusCodes.ok;
-      response.message = 'Adopter deleted succesfully!';
+      response.message = 'Shelter deleted succesfully!';
     } catch (err) {
-      console.warn('ERROR AT ADOPTER-CONTROLLER-delete: ', err);
+      console.warn('ERROR AT SHELTER-CONTROLLER-delete: ', err);
     };
 
     res.status(response.status).send(response);
