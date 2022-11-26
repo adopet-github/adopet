@@ -5,7 +5,7 @@
   let msgDate: Date = new Date();
 </script>
 
-<div class="list-item glass">
+<div class="list-item">
   <div class="img-container">
     <div class="dummy-img" />
   </div>
@@ -19,11 +19,11 @@
 <style>
   .list-item {
     width: 100%;
-    margin-top: 1rem;
-    border-radius: 30px;
+    /* border-radius: 30px; */
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    border-bottom: 0.5px solid var(--lightgrey);
   }
 
   .dummy-img {

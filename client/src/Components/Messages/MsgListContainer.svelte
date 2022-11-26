@@ -3,7 +3,7 @@
 </script>
 
 <div class="message-list">
-  <h2>Message List</h2>
+  <h2>Messages</h2>
   <MsgListItem />
   <MsgListItem />
   <MsgListItem />
@@ -24,5 +24,10 @@
     align-items: center;
     justify-content: flex-start;
     overflow-y: scroll;
+  }
+
+  h2 {
+    align-self: flex-start;
+    color: var(--red);
   }
 </style>

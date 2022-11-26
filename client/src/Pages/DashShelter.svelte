@@ -1,13 +1,13 @@
 <script lang="ts">
   import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';
-  import MsgListCont from '../Components/Messages/MsgListCont.svelte';
+  import MsgListContainer from '../Components/Messages/MsgListContainer.svelte';
 </script>
 
 <div class="main-container">
   <div class="grid-container">
     <div class="div1">
-      <MsgListCont />
+      <MsgListContainer />
     </div>
     <div class="div2">
       <DashStats desc={'add pet'} stat={'+'} color={'red'} />
@@ -24,10 +24,6 @@
     display: flex;
     height: 92vh;
     background-color: rgb(255, 255, 255, 0.1);
-    /* background-image: url('../assets/SVGs/red_blob_grad.svg'),
-      url('../assets/SVGs/cream_blob_grad.svg'),
-      url('../assets/SVGs/grey_blob_grad.svg'); */
-
     background-blend-mode: lighten;
     background-repeat: no-repeat;
     background-position: 100% 80%, 50% 50%, 0% 100%;
