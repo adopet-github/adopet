@@ -21,10 +21,12 @@
   button.primary {
     background: #d33e43;
     background: linear-gradient(180deg, #d33e43 0%, #a52327 100%);
-    margin-top: 1rem;
-    padding: 20px 20px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.8rem 1rem;
     width: 100%;
     border-radius: 20px;
+    color: var(--white);
   }
   button.primary:hover {
     background: #a52327;

@@ -43,7 +43,6 @@
   .main-container {
     display: flex;
     height: 92vh;
-    background-color: white;
     background-image: url('../assets/SVGs/red_blob_grad.svg'),
       url('../assets/SVGs/grey_blob_grad.svg'),
       url('../assets/SVGs/cream_blob_grad.svg');

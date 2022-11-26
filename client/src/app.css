@@ -94,3 +94,17 @@ a {
   outline-offset: 1px;
   outline: solid 2px dodgerblue;
 }
+
+/* CUSTOM STYLES NECESSARY THROUGHOUT */
+
+.glass {
+  background: linear-gradient(
+    152.97deg,
+    rgba(255, 255, 255, 0.805) 0%,
+    rgba(206, 206, 206, 0.716) 100%
+  );
+  background-blend-mode: screen;
+  box-shadow: 11px 16px 11px -5px rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(3.98404px);
+  /* Note: backdrop-filter has minimal browser support */
+}
