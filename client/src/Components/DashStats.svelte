@@ -31,7 +31,6 @@
   h3 {
     color: var(--lavendar);
     font-size: 4rem;
-    padding: 2rem;
   }
 
   p {

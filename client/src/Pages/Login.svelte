@@ -61,6 +61,7 @@
     justify-content: center;
     align-items: center;
     height: 92vh;
+    overflow: hidden;
   }
 
   .form-container {
