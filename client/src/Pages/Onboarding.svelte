@@ -56,7 +56,7 @@
       };
       userCredentials.update((prev) => ({ ...prev, ...onboardingCredentials }));
       console.log($userCredentials);
-      navigate('/user/dashboard');
+      navigate('/user/swipe');
     }
   };
 
