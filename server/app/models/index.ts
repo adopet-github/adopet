@@ -34,9 +34,6 @@ Animal.belongsToMany(Adopter, { ...cascade, through: Adopter_Animal });
 Adopter.belongsTo(User, cascade);
 Adopter.belongsToMany(Animal, { ...cascade, through: Adopter_Animal });
 
-Adopter_Animal.hasMany(Adopter, cascade);
-Adopter_Animal.hasMany(Animal, cascade);
-
 export default {
   Adopter_Animal,
   Adopter,
