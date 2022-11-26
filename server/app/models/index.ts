@@ -47,10 +47,16 @@ export const relationships = {
   animal: {
     shelter: Animal.belongsTo(Shelter, cascade),
     general: Animal.belongsTo(General, cascade),
-    adopters: Animal.belongsToMany(Adopter, { ...cascade, through: Adopter_Animal })
+    adopters: Animal.belongsToMany(Adopter, {
+      ...cascade,
+      through: Adopter_Animal
+    })
   },
   adopter: {
     user: Adopter.belongsTo(User, cascade),
-    animals: Adopter.belongsToMany(Animal, { ...cascade, through: Adopter_Animal })
+    animals: Adopter.belongsToMany(Animal, {
+      ...cascade,
+      through: Adopter_Animal
+    })
   }
 };
