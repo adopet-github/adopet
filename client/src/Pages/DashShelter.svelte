@@ -1,13 +1,13 @@
 <script>
+  import DashProfileCard from '../Components/DashProfileCard.svelte';
   import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';
 </script>
 
 <div class="main-container">
   <div class="grid-container">
-    <div class="glass dashboard div1">
-      <h2>Dashboard</h2>
-      <p>hey</p>
+    <div class="div1">
+      <DashProfileCard />
     </div>
     <div class="div2">
       <DashStats desc={'add pet'} stat={'+'} color={'red'} />
@@ -35,10 +35,6 @@
     padding: 2rem;
   }
 
-  h2 {
-    color: var(--red);
-    padding: 0.5rem;
-  }
   .grid-container {
     flex-grow: 1;
     display: grid;
