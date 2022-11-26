@@ -1,5 +1,5 @@
 import { Router } from "express";
-import controller from "../../controllers/adopter.controller";
+import controller from "../../controllers/animal.controller";
 const router = Router();
 
 router.post('/', controller.create);
