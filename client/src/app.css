@@ -83,7 +83,7 @@ a {
   font-size: 1.5rem;
 }
 
-.auth-input-container .error {
+.error {
   outline-offset: 1px;
   outline: solid 2px red;
 }
