@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
 import { MyResponse } from '../types/server';
 import constants from '../utils/constants';
-import {
-  animalSanitize
-} from '../utils/sanitize';
+import { animalSanitize, imageSanitize } from '../utils/sanitize';
 import models, { relationships } from '../models';
 import sequelize from '../db/db';
 import { Model } from 'sequelize';
+import { Image as ImageType } from '../types/models';
 
-const { General, Animal } = models;
+const { General, Animal, Image } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
@@ -34,7 +33,10 @@ const controller = {
       const { id } = req.params;
       const animal = await Animal.findByPk(id, {
         include: [
-          relationships.animal.general,
+          {
+            association: relationships.animal.general,
+            include: [relationships.general.images]
+          },
           relationships.animal.shelter
         ]
       });
@@ -110,9 +112,7 @@ const controller = {
       const safeBody = sanitizeUpdate(unsafeBody);
 
       const animal = await Animal.findByPk(id, {
-        include: [
-          relationships.animal.general
-        ]
+        include: [relationships.animal.general]
       });
 
       if (animal === null) {
@@ -122,17 +122,19 @@ const controller = {
       }
 
       const general = await General.findByPk(
-        (animal as unknown as {general: {id: number}}).general.id
+        (animal as unknown as { general: { id: number } }).general.id
       );
-      
 
-      await animal.update({
-        name: safeBody.name,
-        age: safeBody.age,
-        weight: safeBody.weight
-      } || {}, {
-        transaction
-      });
+      await animal.update(
+        {
+          name: safeBody.name,
+          age: safeBody.age,
+          weight: safeBody.weight
+        } || {},
+        {
+          transaction
+        }
+      );
 
       await (general as Model).update(
         {
@@ -145,9 +147,7 @@ const controller = {
 
       const updatedAnimal = await Animal.findByPk(id, {
         transaction,
-        include: [
-          relationships.animal.general
-        ]
+        include: [relationships.animal.general]
       });
 
       await transaction.commit();
@@ -163,12 +163,12 @@ const controller = {
   },
 
   delete: async (req: Request, res: Response) => {
-    const response = {...constants.fallbackResponse} as MyResponse;
+    const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
       const { id } = req.params;
 
-      const rowsDeleted = await Animal.destroy({where: {id}});
+      const rowsDeleted = await Animal.destroy({ where: { id } });
 
       if (rowsDeleted === 0) {
         response.status = constants.statusCodes.notFound;
@@ -180,8 +180,42 @@ const controller = {
       response.message = 'Animal deleted succesfully!';
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-delete: ', err);
-    };
+    }
 
+    res.status(response.status).send(response);
+  },
+  addManyImages: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    const { sanitizeCreate } = imageSanitize;
+
+    try {
+      const { id } = req.params;
+
+      const animal = await Animal.findByPk(id, {
+        include: [relationships.animal.general]
+      });
+
+      if (animal === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Animal with id ${id} not found.`;
+        throw new Error(response.message);
+      }
+
+      const { images } = req.body;
+      console.log(images);
+      const mappedImages = images.map((image: ImageType) => ({
+        ...sanitizeCreate(image),
+        generalId: (animal as unknown as { general: { id: number } }).general.id
+      }));
+      console.log(mappedImages);
+      const createdImages = await Image.bulkCreate(mappedImages);
+      response.status = constants.statusCodes.ok;
+      response.message = 'Images added to animal succesfully!';
+      response.data = createdImages;
+    } catch (err) {
+      console.warn('ERROR AT ANIMAL-CONTROLLER-addManyImages: ', err);
+    }
     res.status(response.status).send(response);
   }
 };

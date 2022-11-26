@@ -11,7 +11,6 @@ const app = express();
 
 app.use(cors()).use(express.json());
 
-
 app.use('/api/v1/', router);
 
 app.use('/', (req, res) => {
@@ -19,7 +18,7 @@ app.use('/', (req, res) => {
 });
 
 (async function bootstrap() {
-  await sequelize.sync({force: true});
+  await sequelize.sync();
 
   app.listen(PORT, () => {
     console.log(`server running on ${PORT}`);
