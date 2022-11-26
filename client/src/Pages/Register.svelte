@@ -28,21 +28,22 @@
   let shelterNameError: boolean;
 
   const handleRegister = () => {
-    if (accountType === 'shelter') {
-      if (!shelterName) {
-        shelterNameError = true;
-        shelterName = '';
+    if (accountType === 'shelter' && !shelterName) {
+      shelterNameError = true;
+      shelterName = '';
+    }
+
+    if (accountType === 'adopter') {
+      if (!firstName) {
+        firstNameError = true;
+        firstName = '';
+      }
+      if (!lastName) {
+        lastNameError = true;
+        lastName = '';
       }
     }
 
-    if (!firstName) {
-      firstNameError = true;
-      firstName = '';
-    }
-    if (!lastName) {
-      lastNameError = true;
-      lastName = '';
-    }
     if (!email.includes('@') || !email.includes('.')) {
       emailError = true;
       email = '';
@@ -69,6 +70,11 @@
       };
       if (accountType === 'adopter') {
         delete userCredentials.shelterName;
+        // send adopter to backend
+      } else {
+        delete userCredentials.firstName;
+        delete userCredentials.lastName;
+        // send shelter to backend
       }
       console.log(userCredentials);
       navigate('/onboarding');
@@ -117,19 +123,20 @@
             nameType="Shelter name"
             bind:error={shelterNameError}
           />
+        {:else}
+          <div class="names">
+            <Name
+              nameType="First name"
+              bind:value={firstName}
+              bind:error={firstNameError}
+            />
+            <Name
+              nameType="Last name"
+              bind:value={lastName}
+              bind:error={lastNameError}
+            />
+          </div>
         {/if}
-        <div class="names">
-          <Name
-            nameType="First name"
-            bind:value={firstName}
-            bind:error={firstNameError}
-          />
-          <Name
-            nameType="Last name"
-            bind:value={lastName}
-            bind:error={lastNameError}
-          />
-        </div>
         <Email bind:value={email} bind:error={emailError} />
         <Password bind:value={password} bind:error={passwordError} />
         <button type="submit">Register</button>
