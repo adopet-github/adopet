@@ -7,6 +7,7 @@
   import Login from './Pages/Login.svelte';
   import Onboarding from './Pages/Onboarding.svelte';
   import Register from './Pages/Register.svelte';
+  import Swipe from './Pages/Swipe.svelte';
 </script>
 
 <main>
@@ -30,6 +31,9 @@
     </Route>
     <Route path="shelter/dashboard">
       <DashShelter />
+    </Route>
+    <Route path="user/swipe">
+      <Swipe />
     </Route>
   </Router>
 </main>
