@@ -16,7 +16,7 @@ export type User = General & {
   phone_number: string
 };
 
-export type Adopter = User & {
+export type Adopter = User & Location & {
   first_name: string,
   last_name: string,
   age: number,
@@ -26,6 +26,13 @@ export type Adopter = User & {
   time_at_home: number,
 };
 
-export type Shelter = User & {
+export type Animal = General & {
+  name: string,
+  age: number,
+  weight: number,
+  shelterId: number
+};
+
+export type Shelter = User & Location & {
   name: string
 };
