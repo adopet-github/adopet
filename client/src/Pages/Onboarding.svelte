@@ -6,8 +6,10 @@
   import { onDestroy } from 'svelte';
   import DogLoader from '../Components/Loaders/DogLoader.svelte';
   import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
+  import { userCredentials } from '../Stores/userCredentials';
 
   const navigate = useNavigate();
+  console.log($userCredentials);
 
   let isLoading = true;
   const timeoutId = setTimeout(() => (isLoading = false), 2000);
@@ -45,7 +47,16 @@
 
     if (!ageError && !hasPetsError && !hasChildrenError && !timeAtHomeError) {
       // send to backend
-      navigate('/dashboard');
+      const onboardingCredentials = {
+        age,
+        houseType,
+        hasPets,
+        hasChildren,
+        timeAtHome
+      };
+      userCredentials.update((prev) => ({ ...prev, ...onboardingCredentials }));
+      console.log($userCredentials);
+      navigate('/user/dashboard');
     }
   };
 

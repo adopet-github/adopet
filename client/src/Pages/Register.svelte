@@ -7,6 +7,7 @@
   import AdopterInfo from '../Components/InfoBox/AdopterInfo.svelte';
   import ShelterInfo from '../Components/InfoBox/ShelterInfo.svelte';
   import { Link, useNavigate } from 'svelte-navigator';
+  import { userCredentials } from '../Stores/userCredentials';
 
   const navigate = useNavigate();
 
@@ -61,7 +62,7 @@
       !passwordError
     ) {
       // is user one collection of is there a separate collection for adopter and shelter
-      const userCredentials = {
+      const newUserCredentials = {
         firstName,
         lastName,
         email,
@@ -69,15 +70,17 @@
         shelterName
       };
       if (accountType === 'adopter') {
-        delete userCredentials.shelterName;
-        // send adopter to backend
+        delete newUserCredentials.shelterName;
+        // add to store
+        userCredentials.set(newUserCredentials);
+        navigate('/onboarding');
       } else {
-        delete userCredentials.firstName;
-        delete userCredentials.lastName;
-        // send shelter to backend
+        // send request to backend
+        navigate('/shelter/dashboard');
+        delete newUserCredentials.firstName;
+        delete newUserCredentials.lastName;
       }
-      console.log(userCredentials);
-      navigate('/onboarding');
+      console.log(newUserCredentials);
     }
   };
 
