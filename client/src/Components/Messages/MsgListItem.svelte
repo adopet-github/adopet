@@ -1,13 +1,18 @@
-<script lang="ts"></script>
+<script lang="ts">
+  import Time from 'svelte-time';
+  let username = 'user';
+  let message = 'this should be a message preview';
+  let msgDate: Date = new Date();
+</script>
 
 <div class="list-item glass">
   <div class="img-container">
     <div class="dummy-img" />
   </div>
   <div class="msg-details">
-    <p class="msg-username">username</p>
-    <p class="msg-preview">last message</p>
-    <p class="msg-date">last message date</p>
+    <p class="msg-username">{username}</p>
+    <p class="msg-preview">{message}</p>
+    <p class="msg-date"><Time timestamp={msgDate} relative /></p>
   </div>
 </div>
 
