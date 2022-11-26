@@ -1,4 +1,5 @@
 <script>
+  import BackgroundAnimation from '../Components/BackgroundAnimation.svelte';
   import DashProfileCard from '../Components/DashProfileCard.svelte';
   import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';

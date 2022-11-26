@@ -5,6 +5,7 @@
 
   import Button from '../Components/Button.svelte';
   import { useNavigate } from 'svelte-navigator';
+  import BackgroundAnimation from '../Components/BackgroundAnimation.svelte';
 
   const navigate = useNavigate();
 
@@ -14,8 +15,9 @@
 </script>
 
 <div class="main-container">
+  <BackgroundAnimation />
   <div class="content-left">
-    <div class="left-text">
+    <div class="left-text glass">
       <h1>Hey!</h1>
       <p>
         So far, we've helped <span>218</span> <br /> pets to find a new home.
@@ -43,13 +45,11 @@
   .main-container {
     display: flex;
     height: 92vh;
-    background-image: url('../assets/SVGs/red_blob_grad.svg'),
-      url('../assets/SVGs/grey_blob_grad.svg'),
-      url('../assets/SVGs/cream_blob_grad.svg');
+    background-image: url('../assets/SVGs/red_blob_grad.svg');
     background-blend-mode: multiply;
     background-repeat: no-repeat;
-    background-position: 100% 100%, 0% 0%, 100% 50%;
-    background-size: 1000px, 1200px, 100%;
+    background-position: 100% 100%;
+    background-size: 1000px;
   }
   .content-left,
   .content-right {
@@ -57,7 +57,7 @@
     flex: 1;
     padding: 2%;
     /* color: #d33e43; */
-    color: white;
+    color: var(--lavender);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -91,12 +91,10 @@
 
   .left-text {
     padding: 2rem;
-    background: rgba(223, 223, 223, 0.33);
     border-radius: 20px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.31);
   }
 
   .content-right {
