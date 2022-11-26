@@ -1,4 +1,4 @@
-<script></script>
+<script lang="ts"></script>
 
 <div class="list-item glass">
   <div class="img-container">

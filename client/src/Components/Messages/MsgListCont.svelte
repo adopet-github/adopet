@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import MsgListItem from './MsgListItem.svelte';
 
 </script>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import ListItem from './ListItem.svelte';
 </script>
 

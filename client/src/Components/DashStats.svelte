@@ -1,6 +1,6 @@
-<script>
-  export let desc;
-  export let stat;
+<script lang="ts">
+  export let desc: string;
+  export let stat: string | number;
   export let color = 'white';
 </script>
 

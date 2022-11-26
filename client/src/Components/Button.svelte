@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
 
-  export let text;
+  export let text: string;
   export let colour = 'red';
 
   const handleClick = () => {

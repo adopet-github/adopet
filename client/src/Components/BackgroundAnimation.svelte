@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import cream from '../assets/SVGs/cream_blob_grad.svg';
   import red from '../assets/SVGs/red_blob_grad.svg';
   import grey from '../assets/SVGs/grey_blob_grad.svg';

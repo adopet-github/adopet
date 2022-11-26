@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import dog from '../assets/imgs/flower_dog.png';
   import redCat from '../assets/imgs/red_cat.png';
   import yellowCat from '../assets/imgs/yellow_cat.png';
