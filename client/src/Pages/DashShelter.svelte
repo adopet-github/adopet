@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from '../Components/Button.svelte';
+  import Chat from '../Components/Chat.svelte';
   import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';
   import MsgListContainer from '../Components/Messages/MsgListContainer.svelte';
@@ -16,12 +17,18 @@
 
 <div class="main-container">
   <div class="grid-container">
-    <div class="div1">
-      <MsgListContainer />
-      <!-- <Button
-        text={viewingMessages ? 'View messages' : 'View dashboard'}
-        on:click={handleClick}
-      /> -->
+    <div class="div1 glass">
+      <div class="dash-headings">
+        <h1>Dashboard</h1>
+        <Button
+          text={viewingMessages ? 'View messages' : 'View animals'}
+          on:click={handleClick}
+        />
+        <h2>Messages</h2>
+      </div>
+      <div class="list-container">
+        <MsgListContainer />
+      </div>
     </div>
     <div class="div2">
       <DashStats desc={'add pet'} stat={'+'} color={'red'} />
@@ -29,7 +36,13 @@
     <div class="div3"><DashStats desc={'pets'} stat={'10'} /></div>
     <div class="div4"><DashStats desc={'open enquiries'} stat={'4'} /></div>
     <div class="div5"><DashStats desc={'most popular'} stat={'Rex'} /></div>
-    <div class="div6"><ListCont /></div>
+    <div class="div6">
+      {#if viewingMessages}
+        <ListCont />
+      {:else}
+        <Chat />
+      {/if}
+    </div>
   </div>
 </div>
 
@@ -55,13 +68,29 @@
     color: var(--black);
   }
 
+  h2 {
+    color: var(--red);
+  }
+
   .grid-container > div:nth-last-child(1) {
     padding: 0rem;
   }
 
   .div1 {
     grid-area: 1 / 1 / 11 / 4;
+    border-radius: 30px;
+    padding: 0 0 0 1rem;
   }
+
+  .dash-headings {
+    height: 20%;
+    margin-right: 1rem;
+  }
+
+  .list-container {
+    height: 80%;
+  }
+
   .div2 {
     grid-area: 1 / 4 / 3 / 6;
   }

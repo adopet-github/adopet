@@ -19,7 +19,7 @@
   .list-item {
     width: 100%;
     padding: 1rem 3rem;
-    margin-top: 1rem;
+    margin-bottom: 1rem;
     border-radius: 30px;
     display: flex;
     justify-content: space-between;

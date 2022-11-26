@@ -1,20 +1,24 @@
 <script lang="ts">
   import Time from 'svelte-time';
+  import { Link, useNavigate } from 'svelte-navigator';
+
   let username = 'user';
   let message = 'this should be a message preview';
   let msgDate: Date = new Date();
 </script>
 
-<div class="list-item">
-  <div class="img-container">
-    <div class="dummy-img" />
+<Link to="/chat">
+  <div class="list-item">
+    <div class="img-container">
+      <div class="dummy-img" />
+    </div>
+    <div class="msg-details">
+      <p class="msg-username">{username}</p>
+      <p class="msg-preview">{message}</p>
+      <p class="msg-date"><Time timestamp={msgDate} relative /></p>
+    </div>
   </div>
-  <div class="msg-details">
-    <p class="msg-username">{username}</p>
-    <p class="msg-preview">{message}</p>
-    <p class="msg-date"><Time timestamp={msgDate} relative /></p>
-  </div>
-</div>
+</Link>
 
 <style>
   .list-item {
@@ -31,6 +35,7 @@
     width: 60px;
     border-radius: 30px;
     margin: 1rem;
+    margin-left: 0;
     background-color: var(--grey);
   }
 

@@ -25,6 +25,7 @@
     margin-bottom: 0.5rem;
     padding: 0.8rem 1rem;
     width: 100%;
+    font-size: 1rem;
     border-radius: 20px;
     color: var(--white);
   }
@@ -39,6 +40,7 @@
     margin-top: 1rem;
     padding: 20px 20px;
     width: 100%;
+    font-size: 1rem;
     border-radius: 20px;
   }
   button.secondary:hover {
