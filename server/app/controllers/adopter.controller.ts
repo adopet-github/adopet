@@ -1,39 +1,80 @@
 import { Request, Response } from 'express';
 import { MyResponse } from '../types/server';
 import constants from '../utils/constants';
-import { sanitizeAdopter } from '../utils/sanitize';
+import {
+  sanitizeAdopterCreate,
+  sanitizeAdopterUpdate
+} from '../utils/sanitize';
 import models, { relationships } from '../models';
 import sequelize from '../db/db';
+import {
+  generateAdopterUpdateBody,
+  getAdopterFromSafeBody,
+  getUserFromSafeBody
+} from '../utils/db';
+import { Model } from 'sequelize';
 
 const { General, Adopter, User } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
-    const response = constants.fallbackResponse as MyResponse;
+    const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
       const modelResponse = await Adopter.findAll();
 
       response.status = constants.statusCodes.ok;
-      response.message = 'Tests retrieved successfully!';
+      response.message = 'Adopters retrieved successfully!';
       response.data = modelResponse;
     } catch (err) {
-      console.warn('ERROR AT TEST-CONTROLLER-retrieveAll: ', err);
+      console.warn('ERROR AT ADOPTER-CONTROLLER-retrieveAll: ', err);
+    }
+
+    res.status(response.status).send(response);
+  },
+
+  retrieveOne: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    try {
+      const { id } = req.params;
+      const adopter = await Adopter.findByPk(id, {
+        include: [
+          {
+            association: relationships.adopter.user,
+            include: [relationships.user.general]
+          },
+          {
+            association: relationships.adopter.animals
+          }
+        ]
+      });
+
+      if (adopter === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Adopter with id ${id} not found.`;
+        throw new Error(response.message);
+      }
+
+      response.status = constants.statusCodes.ok;
+      response.message = 'Adopter retrieved successfully!';
+      response.data = adopter;
+    } catch (err) {
+      console.warn('ERROR AT ADOPTER-CONTROLLER-retrieveOne: ', err);
     }
 
     res.status(response.status).send(response);
   },
 
   create: async (req: Request, res: Response) => {
-    const response = constants.fallbackResponse as MyResponse;
+    const response = { ...constants.fallbackResponse } as MyResponse;
 
     const unsafeBody = req.body;
 
-    const safeBody = sanitizeAdopter(unsafeBody);
+    const safeBody = sanitizeAdopterCreate(unsafeBody);
 
     const transaction = await sequelize.transaction();
     try {
-      //TODO: FIRST MAKE ADOPTER PASS ID TO NEW USER AND PASS NEW USER ID TO GENERAL
       const adopter = await General.create(
         {
           description: safeBody.description,
@@ -70,6 +111,108 @@ const controller = {
       await transaction.rollback();
       console.warn('ERROR AT ADOPTER-CONTROLLER-create: ', err);
     }
+
+    res.status(response.status).send(response);
+  },
+
+  update: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    const transaction = await sequelize.transaction();
+    try {
+      const { id } = req.params;
+
+      const unsafeBody = req.body;
+
+      const safeBody = sanitizeAdopterUpdate(unsafeBody);
+
+      const adopter = await Adopter.findByPk(id, {
+        include: [
+          {
+            association: relationships.adopter.user,
+            include: [relationships.user.general]
+          },
+          {
+            association: relationships.adopter.animals
+          }
+        ]
+      });
+
+      if (adopter === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Adopter with id ${id} not found.`;
+        throw new Error(response.message);
+      }
+
+      const user = await User.findByPk(
+        (adopter as unknown as { user: { id: number } }).user.id
+      );
+      const general = await General.findByPk(
+        (user as unknown as { generalId: number }).generalId
+      );
+
+      await adopter.update(getAdopterFromSafeBody(safeBody) || {}, {
+        transaction
+      });
+
+      await (user as Model).update(
+        getUserFromSafeBody(safeBody) || {},
+        {
+          transaction
+        }
+      );
+
+      await (general as Model).update(
+        generateAdopterUpdateBody(safeBody) || {},
+        {
+          transaction
+        }
+      );
+
+      const updatedAdopter = await Adopter.findByPk(id, {
+        transaction,
+        include: [
+          {
+            association: relationships.adopter.user,
+            include: [relationships.user.general]
+          },
+          {
+            association: relationships.adopter.animals
+          }
+        ]
+      });
+
+      await transaction.commit();
+      response.status = constants.statusCodes.ok;
+      response.message = 'Adopter updated succesfully!';
+      response.data = updatedAdopter;
+    } catch (err) {
+      await transaction.rollback();
+      console.warn('ERROR AT ADOPTER-CONTROLLER-update: ', err);
+    }
+
+    res.status(response.status).send(response);
+  },
+
+  delete: async (req: Request, res: Response) => {
+    const response = {...constants.fallbackResponse} as MyResponse;
+
+    try {
+      const { id } = req.params;
+
+      const rowsDeleted = await Adopter.destroy({where: {id}});
+
+      if (rowsDeleted === 0) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Adopter with id ${id} not found.`;
+        throw new Error(response.message);
+      }
+
+      response.status = constants.statusCodes.ok;
+      response.message = 'Adopter deleted succesfully!';
+    } catch (err) {
+      console.warn('ERROR AT ADOPTER-CONTROLLER-delete: ', err);
+    };
 
     res.status(response.status).send(response);
   }

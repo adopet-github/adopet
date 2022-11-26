@@ -11,29 +11,6 @@ import Shelter from './shelter.model';
 import User from './user.model';
 import { cascade } from '../utils/db';
 
-User.belongsTo(General, cascade);
-User.hasOne(Location, cascade);
-User.hasOne(Shelter, cascade);
-User.Adopter = User.hasOne(Adopter, cascade);
-
-Shelter.belongsTo(User, cascade);
-Shelter.hasMany(Animal, cascade);
-
-Location.belongsTo(User, cascade);
-
-Image.belongsTo(General, cascade);
-
-General.User = General.hasOne(User, cascade);
-General.hasOne(Animal, cascade);
-General.hasMany(Image, cascade);
-
-Animal.belongsTo(Shelter, cascade);
-Animal.belongsTo(General, cascade);
-Animal.belongsToMany(Adopter, { ...cascade, through: Adopter_Animal });
-
-Adopter.belongsTo(User, cascade);
-Adopter.belongsToMany(Animal, { ...cascade, through: Adopter_Animal });
-
 export default {
   Adopter_Animal,
   Adopter,
@@ -53,6 +30,27 @@ export const relationships = {
     adopter: User.hasOne(Adopter, cascade)
   },
   general: {
-    user: General.hasOne(User, cascade)
+    user: General.hasOne(User, cascade),
+    animal: General.hasOne(Animal, cascade),
+    images: General.hasMany(Image, cascade)
+  },
+  shelter: {
+    user: Shelter.belongsTo(User, cascade),
+    animals: Shelter.hasMany(Animal, cascade)
+  },
+  location: {
+    user: Location.belongsTo(User, cascade)
+  },
+  image: {
+    general: Image.belongsTo(General, cascade)
+  },
+  animal: {
+    shelter: Animal.belongsTo(Shelter, cascade),
+    general: Animal.belongsTo(General, cascade),
+    adopters: Animal.belongsToMany(Adopter, { ...cascade, through: Adopter_Animal })
+  },
+  adopter: {
+    user: Adopter.belongsTo(User, cascade),
+    animals: Adopter.belongsToMany(Animal, { ...cascade, through: Adopter_Animal })
   }
 };
