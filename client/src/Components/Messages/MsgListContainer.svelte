@@ -17,7 +17,7 @@
 
 <style>
   .message-list {
-    height: 100%;
+    max-height: 100%;
     padding: 1rem;
     display: flex;
     flex-direction: column;

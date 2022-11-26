@@ -1,13 +1,27 @@
 <script lang="ts">
+  import Button from '../Components/Button.svelte';
   import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';
   import MsgListContainer from '../Components/Messages/MsgListContainer.svelte';
+
+  let viewingMessages = false;
+
+  const handleClick = () => {
+    viewingMessages === false
+      ? (viewingMessages = true)
+      : (viewingMessages = false);
+    console.log(viewingMessages);
+  };
 </script>
 
 <div class="main-container">
   <div class="grid-container">
     <div class="div1">
       <MsgListContainer />
+      <!-- <Button
+        text={viewingMessages ? 'View messages' : 'View dashboard'}
+        on:click={handleClick}
+      /> -->
     </div>
     <div class="div2">
       <DashStats desc={'add pet'} stat={'+'} color={'red'} />
