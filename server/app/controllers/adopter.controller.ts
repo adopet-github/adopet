@@ -339,7 +339,7 @@ const controller = {
         is_matched: false
       });
 
-      response.status = constants.statusCodes.created;
+      response.status = constants.statusCodes.ok;
       response.message = 'Animal liked successfully!';
       response.data = like;
 
@@ -390,7 +390,7 @@ const controller = {
         is_matched: false
       });
 
-      response.status = constants.statusCodes.created;
+      response.status = constants.statusCodes.ok;
       response.message = 'Animal disliked successfully!';
       response.data = dislike;
 
