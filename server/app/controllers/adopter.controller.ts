@@ -8,7 +8,7 @@ import { Model } from 'sequelize';
 import Location from '../models/location.model';
 import { Image as ImageType } from '../types/models';
 
-const { General, Adopter, User, Image } = models;
+const { General, Adopter, User, Image, Animal, Adopter_Animal } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
@@ -45,7 +45,7 @@ const controller = {
             ]
           },
           {
-            association: relationships.adopter.animals
+            association: relationships.adopter.animals,
           }
         ]
       });
@@ -297,7 +297,109 @@ const controller = {
       console.warn('ERROR AT ADOPTER-CONTROLLER-addManyImages: ', err);
     }
     res.status(response.status).send(response);
-  }
+  },
+
+  likeAnimal: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    try {
+      const { adopterId, animalId } = req.params;
+
+      const adopter = await Adopter.findByPk(adopterId);
+      if (adopter === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Adopter with id ${adopterId} not found.`;
+        throw new Error(response.message);
+      }
+
+      const animal = await Animal.findByPk(animalId);
+      if (animal === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Animal with id ${animalId} not found.`;
+        throw new Error(response.message);
+      }
+
+      const relationship = await Adopter_Animal.findOne(
+        {where: {
+          adopterId,
+          animalId
+        }}
+      );
+
+      if (relationship !== null) {
+        response.status = constants.statusCodes.badRequest;
+        response.message = `The adopter with id ${adopterId} already likes or dislikes animal with id ${animalId}`;
+        throw new Error(response.message);
+      }
+
+      const like = await Adopter_Animal.create({
+        adopterId,
+        animalId,
+        is_liked: true,
+        is_matched: false
+      });
+
+      response.status = constants.statusCodes.created;
+      response.message = 'Animal liked successfully!';
+      response.data = like;
+
+    } catch (err) {
+      console.warn('ERROR AT ADOPTER-CONTROLLER-likeAnimal: ', err);
+    }
+
+    res.status(response.status).send(response);
+  },
+
+  dislikeAnimal: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    try {
+      const { adopterId, animalId } = req.params;
+
+      const adopter = await Adopter.findByPk(adopterId);
+      if (adopter === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Adopter with id ${adopterId} not found.`;
+        throw new Error(response.message);
+      }
+
+      const animal = await Animal.findByPk(animalId);
+      if (animal === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Animal with id ${animalId} not found.`;
+        throw new Error(response.message);
+      }
+
+      const relationship = await Adopter_Animal.findOne(
+        {where: {
+          adopterId,
+          animalId
+        }}
+      );
+
+      if (relationship !== null) {
+        response.status = constants.statusCodes.badRequest;
+        response.message = `The adopter with id ${adopterId} already likes or dislikes animal with id ${animalId}`;
+        throw new Error(response.message);
+      }
+
+      const dislike = await Adopter_Animal.create({
+        adopterId,
+        animalId,
+        is_liked: false,
+        is_matched: false
+      });
+
+      response.status = constants.statusCodes.created;
+      response.message = 'Animal disliked successfully!';
+      response.data = dislike;
+
+    } catch (err) {
+      console.warn('ERROR AT ADOPTER-CONTROLLER-likeAnimal: ', err);
+    }
+
+    res.status(response.status).send(response);
+  },
 };
 
 export default controller;

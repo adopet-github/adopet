@@ -7,7 +7,7 @@ import sequelize from '../db/db';
 import { Model } from 'sequelize';
 import { Image as ImageType } from '../types/models';
 
-const { General, Animal, Image } = models;
+const { General, Animal, Image, Shelter } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
@@ -66,7 +66,16 @@ const controller = {
     const safeBody = sanitizeCreate(unsafeBody);
 
     const transaction = await sequelize.transaction();
+
     try {
+      const shelter = await Shelter.findByPk(safeBody.shelterId);
+
+      if (shelter === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `Shelter with id ${safeBody.shelterId} not found.`;
+        throw new Error(response.message);
+      }
+
       const animal = await General.create(
         {
           description: safeBody.description,

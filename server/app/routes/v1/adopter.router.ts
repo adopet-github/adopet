@@ -8,5 +8,7 @@ router.get('/:id', controller.retrieveOne);
 router.put('/:id', controller.update);
 router.delete('/:id', controller.delete);
 router.put('/:id/images', controller.addManyImages);
+router.put('/:adopterId/like/:animalId', controller.likeAnimal);
+router.put('/:adopterId/dislike/:animalId', controller.dislikeAnimal);
 
 export default router;
