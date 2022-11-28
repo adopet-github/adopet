@@ -21,9 +21,11 @@ app.use('/', (req, res) => {
 });
 
 (async function bootstrap() {
-  await sequelize.sync({force: true});
+  await sequelize.sync({ force: true });
 
   app.listen(PORT, () => {
     console.log(`server running on ${PORT}`);
   });
 })();
+
+module.exports = app;
