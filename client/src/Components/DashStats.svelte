@@ -1,5 +1,12 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import Button from './Button.svelte';
+
+  const dispatch = createEventDispatcher();
+
+  const handleClick = () => {
+    dispatch('click', {});
+  };
 
   export let desc: string;
   export let stat: string | number;
@@ -13,7 +20,11 @@
   </div>
 {:else}
   <div class="stat-container red">
-    <Button text={`${stat} ${desc}`} fontSize={'1.5rem'} />
+    <Button
+      text={`${stat} ${desc}`}
+      fontSize={'1.5rem'}
+      on:click={handleClick}
+    />
   </div>
 {/if}
 

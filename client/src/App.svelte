@@ -2,6 +2,7 @@
   import { Router, Route } from 'svelte-navigator';
   import Nav from './Components/Nav.svelte';
   import TransitionContainer from './Components/Transitions/TransitionContainer.svelte';
+  import AddPet from './Pages/AddPet.svelte';
   import DashShelter from './Pages/DashShelter.svelte';
   import Home from './Pages/Home.svelte';
   import Login from './Pages/Login.svelte';
@@ -31,6 +32,9 @@
     </Route>
     <Route path="shelter/dashboard">
       <DashShelter />
+    </Route>
+    <Route path="shelter/addpet">
+      <AddPet />
     </Route>
     <Route path="user/swipe">
       <Swipe />
