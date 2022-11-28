@@ -1,54 +1,44 @@
 <script lang="ts">
   import Button from '../Components/Button.svelte';
+  import Name from '../Components/Inputs/Name.svelte';
+  import Number from '../Components/Inputs/Number.svelte';
+  import CloseButton from './CloseButton.svelte';
+
+  let petWeight: number;
+  let petAge: number;
 </script>
 
-<div class="container glass">
-  <p
-    style="color: var(--red);
-    cursor: pointer;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;"
-  >
-    close
-  </p>
+<div class="container glass glass1">
+  <CloseButton />
   <h2>Add Pet</h2>
   <div class="profile-img" />
   <p style="color: var(--red); cursor: pointer">upload images</p>
   <div class="details">
     <label for="pet-name">Pet name:</label>
-    <input id="pet-name" label="pet name" placeholder="Rex" type="text" />
+    <Name nameType="Pet name" />
     <div class="ageWeightCont">
-      <div
-        style="display: flex;
-      align-items: center;"
-      >
-        <label for="weight">Weight (kg):</label>
-        <input id="weight" label="weight" placeholder="10" type="number" />
+      <div>
+        <Number bind:value={petWeight} label="Weight (kg): " />
       </div>
-      <div
-        style="display: flex;
-      align-items: center;
-      text-align: end;"
-      >
-        <label for="weight">Age:</label>
-        <input id="age" label="age" placeholder="10" type="number" />
+      <div>
+        <Number bind:value={petAge} label="Age of pet: " />
       </div>
     </div>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" rows="3" />
     <span><Button text="add pet" /></span>
   </div>
 </div>
 
 <style>
   .container {
-    height: 80vh;
+    height: fit-content;
     position: relative;
-    width: 50%;
+    width: 500px;
     border-radius: 20px;
     margin: auto;
     margin-top: 4rem;
-    padding: 1rem;
-    padding-top: 4rem;
+    padding: 1rem 1rem 4rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -56,16 +46,13 @@
     color: var(--black);
   }
 
-  .container > div {
-    margin-top: 2rem;
-  }
-
   .details {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    width: 40%;
+    width: 70%;
+    gap: 0.5rem;
   }
 
   .ageWeightCont {
@@ -73,11 +60,15 @@
     width: 100%;
     align-items: center;
     justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
   }
 
   .profile-img {
-    height: 200px;
-    width: 200px;
+    min-height: 10rem;
+    min-width: 10rem;
+    max-height: 10rem;
+    max-width: 10rem;
     background-color: var(--grey);
     border-radius: 100px;
   }
@@ -89,30 +80,8 @@
     font-weight: 900;
   }
 
-  input {
-    padding: 1rem;
-    border-radius: 20px;
-    margin: 1rem 0;
-    width: 100%;
-    font-size: 1.2rem;
-  }
-
   label {
-    font-size: 1.2rem;
     width: 100%;
-  }
-
-  #weight,
-  #age {
-    width: 100%;
-  }
-
-  .ageWeightCont label {
-    margin: 0 1rem;
-  }
-
-  .ageWeightCont label:first-child {
-    margin: 0 1rem 0 0;
   }
 
   span {

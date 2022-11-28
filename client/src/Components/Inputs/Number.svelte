@@ -38,8 +38,8 @@
     color: var(--black);
   }
   input {
-    padding: 1rem;
+    padding: 1rem 0.5rem;
     min-width: 20%;
-    max-width: 30%;
+    max-width: 40%;
   }
 </style>

@@ -10,6 +10,13 @@
   };
 </script>
 
+<svelte:head>
+  <script
+    src="https://kit.fontawesome.com/2611249795.js"
+    crossorigin="anonymous"
+  ></script>
+</svelte:head>
+
 <div class="auth-input-container">
   <input
     class="auth-input {error && 'error'}"
@@ -20,6 +27,8 @@
   />
   {#if nameType == 'Shelter name'}
     <i class="mi mi-home" />
+  {:else if nameType == 'Pet name'}
+    <i class="fa-solid fa-paw" />
   {:else}
     <i class="mi mi-user" />
   {/if}

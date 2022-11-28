@@ -4,6 +4,7 @@
   import Email from '../Components/Inputs/Email.svelte';
   import Name from '../Components/Inputs/Name.svelte';
   import Number from '../Components/Inputs/Number.svelte';
+  import CloseButton from './CloseButton.svelte';
 
   let accountType = 'adopter';
 
@@ -47,15 +48,7 @@
 />
 
 <div class="container glass glass1">
-  <p
-    style="color: var(--red);
-    cursor: pointer;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;"
-  >
-    close
-  </p>
+  <CloseButton />
   <h2>Edit profile</h2>
   <div class="profile-img" />
   <p style="color: var(--red); cursor: pointer">change image</p>
@@ -83,7 +76,7 @@
     {/if}
 
     <label for="email">Email:</label>
-    <Email bind:value={email} />
+    <Email bind:value={email} bind:error={emailError} />
 
     <label for="phone">Phone:</label>
     <input id="phone" label="phone" placeholder="123456789" type="tel" />

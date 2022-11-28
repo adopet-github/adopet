@@ -128,7 +128,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    color: black;
+    color: var(--black);
     padding: 2rem;
     border-radius: 1rem;
   }

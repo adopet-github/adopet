@@ -81,6 +81,7 @@ a {
   left: 10px;
   color: var(--grey);
   font-size: 1.5rem;
+  margin-right: 100px;
 }
 
 .error {
@@ -88,7 +89,7 @@ a {
   outline: solid 2px red;
 }
 
-.auth-input {
+.auth-input, input[type=text], textarea {
   padding: 1rem 1rem 1rem 2.5rem;
   border-radius: 20px;
   width: 100%;
@@ -98,9 +99,15 @@ a {
   backdrop-filter: blur(15.2px);
   -webkit-backdrop-filter: blur(15.2px);
   border: 1px solid rgba(255, 255, 255, 0.19);
+  resize: none;
+  font-family: 'Satoshi-Variable';
 }
 
-.auth-input:focus {
+textarea {
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+.auth-input:focus, input:focus, textarea:focus {
   outline-offset: 1px;
   outline: solid 2px dodgerblue;
 }
@@ -121,7 +128,6 @@ a {
     rgba(206, 206, 206, 0.716) 100%
   );
   background-blend-mode: screen;
-  box-shadow: 11px 16px 11px -5px rgba(0, 0, 0, 0.02);
   backdrop-filter: blur(3.98404px);
   /* Note: backdrop-filter has minimal browser support */
 }
@@ -133,7 +139,7 @@ a {
 }
 
 /* ACTIVE SWIPE */
-/* 
+/*
 #active {
   transition: transform 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
 } */
