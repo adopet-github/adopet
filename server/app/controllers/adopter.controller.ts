@@ -11,8 +11,10 @@ import { notFoundChecker } from '../utils/db';
 import includes from '../utils/includes';
 import dataParser from '../utils/dataparser';
 import { AdopterFromDb } from '../types/dboutputs';
+import { generateToken } from '../utils/jwt';
+import { genPasswordAndSalt } from '../utils/password';
 
-const { General, Adopter, User, Image, Animal, Adopter_Animal } = models;
+const { General, Adopter, User, Image, Animal, Adopter_Animal, Token } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
@@ -60,6 +62,10 @@ const controller = {
 
     const safeBody = sanitizeCreate(unsafeBody);
 
+    const adopterPassword = safeBody.password;
+    const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
+    safeBody.password = passSaltObj.password;
+    safeBody.salt = passSaltObj.salt;
     const transaction = await sequelize.transaction();
     try {
       const adopter = await General.create(
@@ -68,6 +74,7 @@ const controller = {
           user: {
             email: safeBody.email,
             password: safeBody.password,
+            salt: safeBody.salt,
             phone_number: safeBody.phone_number,
             adopter: {
               first_name: safeBody.first_name,
@@ -95,10 +102,18 @@ const controller = {
           transaction
         }
       );
+
+      const responseToken = await Token.create({content: generateToken({
+        id: (adopter as unknown as {user: {adopter: {id: number}}}).user.adopter.id,
+        type: 'adopter'
+      })});
+      response.token = (responseToken as unknown as {content: string}).content;
+      
       await transaction.commit();
       response.status = constants.statusCodes.created;
       response.message = 'Adopter created succesfully!';
       response.data = adopter;
+    
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT ADOPTER-CONTROLLER-create: ', err);
