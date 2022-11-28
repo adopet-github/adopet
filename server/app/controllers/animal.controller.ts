@@ -8,6 +8,8 @@ import { Model } from 'sequelize';
 import { Image as ImageType } from '../types/models';
 import includes from '../utils/includes';
 import { notFoundChecker } from '../utils/db';
+import { AnimalFromDb } from '../types/dboutputs';
+import dataParser from '../utils/dataparser';
 
 const { General, Animal, Image, Shelter, Adopter, Adopter_Animal } = models;
 
@@ -20,7 +22,7 @@ const controller = {
 
       response.status = constants.statusCodes.ok;
       response.message = 'Animals retrieved successfully!';
-      response.data = modelResponse;
+      response.data = (modelResponse as unknown as AnimalFromDb[]).map(dataParser.animal);
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-retrieveAll: ', err);
     }
@@ -41,7 +43,7 @@ const controller = {
 
       response.status = constants.statusCodes.ok;
       response.message = 'Animal retrieved successfully!';
-      response.data = animal;
+      response.data = dataParser.animal(animal as unknown as AnimalFromDb);
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-retrieveOne: ', err);
     }
@@ -146,7 +148,7 @@ const controller = {
       await transaction.commit();
       response.status = constants.statusCodes.ok;
       response.message = 'Animal updated succesfully!';
-      response.data = updatedAnimal;
+      response.data = dataParser.animal(updatedAnimal as unknown as AnimalFromDb);
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT ANIMAL-CONTROLLER-update: ', err);

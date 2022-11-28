@@ -25,6 +25,8 @@ export type Adopter = User &
     has_pets: boolean;
     has_children: boolean;
     time_at_home: number;
+    id?: number;
+    images?: Image[];
   };
 
 export type Animal = General & {
@@ -32,11 +34,17 @@ export type Animal = General & {
   age: number;
   weight: number;
   shelterId: number;
+  images?: Image[];
+  adopters?: Adopter[];
+  id?: number;
 };
 
 export type Shelter = User &
   Location & {
     name: string;
+    id?: number,
+    images?: Image[],
+    animals?: Animal[]
   };
 
 export type Image = {

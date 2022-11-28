@@ -9,6 +9,8 @@ import Location from '../models/location.model';
 import { Image as ImageType } from '../types/models';
 import { notFoundChecker } from '../utils/db';
 import includes from '../utils/includes';
+import dataParser from '../utils/dataparser';
+import { ShelterFromDb } from '../types/dboutputs';
 
 const { General, Shelter, User, Image } = models;
 
@@ -21,7 +23,7 @@ const controller = {
 
       response.status = constants.statusCodes.ok;
       response.message = 'Shelters retrieved successfully!';
-      response.data = modelResponse;
+      response.data = (modelResponse as unknown as ShelterFromDb[]).map(dataParser.shelter);
     } catch (err) {
       console.warn('ERROR AT SHELTER-CONTROLLER-retrieveAll: ', err);
     }
@@ -43,7 +45,7 @@ const controller = {
 
       response.status = constants.statusCodes.ok;
       response.message = 'Shelter retrieved successfully!';
-      response.data = shelter;
+      response.data = dataParser.shelter(shelter as unknown as ShelterFromDb);
     } catch (err) {
       console.warn('ERROR AT SHELTER-CONTROLLER-retrieveOne: ', err);
     }
@@ -188,7 +190,7 @@ const controller = {
       await transaction.commit();
       response.status = constants.statusCodes.ok;
       response.message = 'Shelter updated succesfully!';
-      response.data = updatedShelter;
+      response.data = dataParser.shelter(updatedShelter as unknown as ShelterFromDb);
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT SHELTER-CONTROLLER-update: ', err);

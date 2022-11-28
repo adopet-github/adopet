@@ -9,6 +9,8 @@ import Location from '../models/location.model';
 import { Image as ImageType } from '../types/models';
 import { notFoundChecker } from '../utils/db';
 import includes from '../utils/includes';
+import dataParser from '../utils/dataparser';
+import { AdopterFromDb } from '../types/dboutputs';
 
 const { General, Adopter, User, Image, Animal, Adopter_Animal } = models;
 
@@ -21,7 +23,7 @@ const controller = {
 
       response.status = constants.statusCodes.ok;
       response.message = 'Adopters retrieved successfully!';
-      response.data = modelResponse;
+      response.data = (modelResponse as unknown as AdopterFromDb[]).map(dataParser.adopter);
     } catch (err) {
       console.warn('ERROR AT ADOPTER-CONTROLLER-retrieveAll: ', err);
     }
@@ -42,7 +44,7 @@ const controller = {
 
       response.status = constants.statusCodes.ok;
       response.message = 'Adopter retrieved successfully!';
-      response.data = adopter;
+      response.data = dataParser.adopter((adopter as unknown as AdopterFromDb));
     } catch (err) {
       console.warn('ERROR AT ADOPTER-CONTROLLER-retrieveOne: ', err);
     }
@@ -201,7 +203,7 @@ const controller = {
       await transaction.commit();
       response.status = constants.statusCodes.ok;
       response.message = 'Adopter updated succesfully!';
-      response.data = updatedAdopter;
+      response.data = dataParser.adopter((updatedAdopter as unknown as AdopterFromDb));;
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT ADOPTER-CONTROLLER-update: ', err);
