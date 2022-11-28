@@ -21,7 +21,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     height: 100%;
     border-radius: 30px;
     padding: 1rem;
@@ -30,7 +30,7 @@
 
   h3 {
     color: var(--lavender);
-    font-size: 4rem;
+    font-size: 2rem;
   }
 
   p {
