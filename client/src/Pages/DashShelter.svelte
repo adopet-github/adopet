@@ -68,7 +68,12 @@
     color: var(--black);
   }
 
+  h1 {
+    margin: 1rem 0;
+  }
+
   h2 {
+    margin-top: 1rem;
     color: var(--red);
   }
 
@@ -88,7 +93,9 @@
   }
 
   .list-container {
-    height: 80%;
+    height: 75%;
+    margin-bottom: 11%;
+    border-bottom: 1px solid var(--lightgrey);
   }
 
   .div2 {
