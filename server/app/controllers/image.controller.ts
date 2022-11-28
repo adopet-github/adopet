@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { MyResponse } from '../types/server';
 import constants from '../utils/constants';
 import models from '../models';
+import { notFoundChecker } from '../utils/db';
 
 const { Image } = models;
 
@@ -14,11 +15,7 @@ const controller = {
 
       const rowsDeleted = await Image.destroy({ where: { id } });
 
-      if (rowsDeleted === 0) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Image with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(rowsDeleted, Number(id), response, 'Image');
 
       response.status = constants.statusCodes.ok;
       response.message = 'Image deleted succesfully!';

@@ -1,17 +1,53 @@
 <script lang="ts">
-  import { afterUpdate } from 'svelte';
-  import img1 from '../assets/imgs/mockdog/1.jpg';
-  import img2 from '../assets/imgs/mockdog/2.jpg';
-  import img3 from '../assets/imgs/mockdog/3.jpg';
-  import img4 from '../assets/imgs/mockdog/4.jpg';
+  import { afterUpdate, onMount } from 'svelte';
 
   let group: HTMLDivElement;
   let information: HTMLDivElement;
   export let infoOpen;
+  export let outcome: false | 'yes' | 'no';
+
+  export let index: number;
+  // pet will be the pet object from backend
+  export let pet;
+
+  onMount(() => {
+    if (index !== 0) {
+      group.style.transform = 'scale(0)';
+      information.style.transform = 'scale(0)';
+    } else {
+      group.setAttribute('id', 'active');
+    }
+  });
 
   afterUpdate(() => {
     handleInfoClick();
   });
+
+  // afterUpdate(() => {
+  //   if (outcome === 'yes') {
+  //     handleYes();
+  //   } else if (outcome === 'no') {
+  //     handleNo();
+  //   }
+  // });
+
+  // const handleYes = () => {
+  //   if (index === 0) {
+  //     console.log('yes');
+  //   } else if (index === 1) {
+  //     console.log(index, 'im next');
+  //   }
+  //   outcome = false;
+  // };
+
+  // const handleNo = () => {
+  //   if (index === 0) {
+  //     console.log('no');
+  //   } else if (index === 1) {
+  //     console.log(index, 'im next');
+  //   }
+  //   outcome = false;
+  // };
 
   const handleImageClick = (index: string) => {
     const card = document.getElementById(index);
@@ -26,8 +62,8 @@
     }
   };
 
-  const handleInfoClick = () => {
-    if (infoOpen === false) {
+  const handleInfoClick = async () => {
+    if (!infoOpen && index === 0) {
       information.style.transform = 'scale(1) translateY(-50%)';
       group.style.left = '25%';
       group.classList.add('no-hover');
@@ -48,20 +84,20 @@
 
 <div class="group" bind:this={group}>
   <div class="card" on:mousedown={() => handleImageClick('three')} id="three">
-    <img src={img1} alt="pet" />
+    <img src={pet[0]} alt="pet" />
     <div class="overlay"><i class="uil uil-map-marker" /> 7KM AWAY</div>
   </div>
   <div class="card" on:mousedown={() => handleImageClick('two')} id="two">
-    <img src={img2} alt="pet" />
+    <img src={pet[1]} alt="pet" />
     <div class="overlay">5KG</div>
   </div>
   <div class="card" on:mousedown={() => handleImageClick('one')} id="one">
-    <img src={img3} alt="pet" />
+    <img src={pet[2]} alt="pet" />
     <div class="overlay">2 YEARS OLD</div>
   </div>
   <div class="card" on:mousedown={() => handleImageClick('zero')} id="zero">
-    <img src={img4} alt="pet" />
-    <div class="overlay">BUSTER</div>
+    <img src={pet[3]} alt="pet" />
+    <div class="overlay">BUSTER {index}</div>
   </div>
 </div>
 <div class="information" bind:this={information}>
@@ -87,7 +123,7 @@
     top: 50%;
     position: absolute;
     left: 50%;
-    transform: translateX(-50%) translateY(-50%) !important;
+    transform: translateX(-50%) translateY(-50%);
     transition: left 300ms cubic-bezier(0.16, 0.89, 0.61, 0.99);
   }
 
@@ -95,7 +131,6 @@
   .card {
     width: 300px;
     aspect-ratio: 5 / 7;
-    transform: translateY(10%);
   }
 
   img {

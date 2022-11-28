@@ -7,6 +7,10 @@ import sequelize from '../db/db';
 import { Model } from 'sequelize';
 import Location from '../models/location.model';
 import { Image as ImageType } from '../types/models';
+import { notFoundChecker } from '../utils/db';
+import includes from '../utils/includes';
+import dataParser from '../utils/dataparser';
+import { ShelterFromDb } from '../types/dboutputs';
 
 const { General, Shelter, User, Image } = models;
 
@@ -15,11 +19,11 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
-      const modelResponse = await Shelter.findAll();
+      const modelResponse = await Shelter.findAll({include: includes.shelter});
 
       response.status = constants.statusCodes.ok;
       response.message = 'Shelters retrieved successfully!';
-      response.data = modelResponse;
+      response.data = (modelResponse as unknown as ShelterFromDb[]).map(dataParser.shelter);
     } catch (err) {
       console.warn('ERROR AT SHELTER-CONTROLLER-retrieveAll: ', err);
     }
@@ -33,32 +37,15 @@ const controller = {
     try {
       const { id } = req.params;
       const shelter = await Shelter.findByPk(id, {
-        include: [
-          {
-            association: relationships.shelter.user,
-            include: [
-              {
-                association: relationships.user.general,
-                include: [relationships.general.images]
-              },
-              relationships.user.location
-            ]
-          },
-          {
-            association: relationships.shelter.animals
-          }
-        ]
+        include: includes.shelter
       });
+      
 
-      if (shelter === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Shelter with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(shelter, Number(id), response, 'Shelter');
 
       response.status = constants.statusCodes.ok;
       response.message = 'Shelter retrieved successfully!';
-      response.data = shelter;
+      response.data = dataParser.shelter(shelter as unknown as ShelterFromDb);
     } catch (err) {
       console.warn('ERROR AT SHELTER-CONTROLLER-retrieveOne: ', err);
     }
@@ -139,11 +126,7 @@ const controller = {
         ]
       });
 
-      if (shelter === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Shelter with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(shelter, Number(id), response, 'Shelter');
 
       const user = await User.findByPk(
         (shelter as unknown as { user: { id: number } }).user.id,
@@ -159,9 +142,7 @@ const controller = {
         (user as unknown as { location: { id: number } }).location.id
       );
 
-      console.log((location as unknown as { id: number }).id);
-
-      await shelter.update(
+      await (shelter as Model).update(
         {
           name: safeBody.name
         } || {},
@@ -203,21 +184,13 @@ const controller = {
 
       const updatedShelter = await Shelter.findByPk(id, {
         transaction,
-        include: [
-          {
-            association: relationships.shelter.user,
-            include: [relationships.user.general, relationships.user.location]
-          },
-          {
-            association: relationships.shelter.animals
-          }
-        ]
+        include: includes.shelter
       });
 
       await transaction.commit();
       response.status = constants.statusCodes.ok;
       response.message = 'Shelter updated succesfully!';
-      response.data = updatedShelter;
+      response.data = dataParser.shelter(updatedShelter as unknown as ShelterFromDb);
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT SHELTER-CONTROLLER-update: ', err);
@@ -234,11 +207,7 @@ const controller = {
 
       const rowsDeleted = await Shelter.destroy({ where: { id } });
 
-      if (rowsDeleted === 0) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Shelter with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(rowsDeleted, Number(id), response, 'Shelter');
 
       response.status = constants.statusCodes.ok;
       response.message = 'Shelter deleted succesfully!';
@@ -265,11 +234,7 @@ const controller = {
         ]
       });
 
-      if (shelter === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Shelter with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(shelter, Number(id), response, 'Shelter');
 
       const { images } = req.body;
       const mappedImages = images.map((image: ImageType) => ({

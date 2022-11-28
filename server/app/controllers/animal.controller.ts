@@ -6,6 +6,10 @@ import models, { relationships } from '../models';
 import sequelize from '../db/db';
 import { Model } from 'sequelize';
 import { Image as ImageType } from '../types/models';
+import includes from '../utils/includes';
+import { notFoundChecker } from '../utils/db';
+import { AnimalFromDb } from '../types/dboutputs';
+import dataParser from '../utils/dataparser';
 
 const { General, Animal, Image, Shelter, Adopter, Adopter_Animal } = models;
 
@@ -14,11 +18,11 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
-      const modelResponse = await Animal.findAll();
+      const modelResponse = await Animal.findAll({include: includes.animal});
 
       response.status = constants.statusCodes.ok;
       response.message = 'Animals retrieved successfully!';
-      response.data = modelResponse;
+      response.data = (modelResponse as unknown as AnimalFromDb[]).map(dataParser.animal);
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-retrieveAll: ', err);
     }
@@ -32,24 +36,14 @@ const controller = {
     try {
       const { id } = req.params;
       const animal = await Animal.findByPk(id, {
-        include: [
-          {
-            association: relationships.animal.general,
-            include: [relationships.general.images]
-          },
-          relationships.animal.shelter
-        ]
+        include: includes.animal
       });
 
-      if (animal === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Animal with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(animal, Number(id), response, 'Animal');
 
       response.status = constants.statusCodes.ok;
       response.message = 'Animal retrieved successfully!';
-      response.data = animal;
+      response.data = dataParser.animal(animal as unknown as AnimalFromDb);
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-retrieveOne: ', err);
     }
@@ -70,11 +64,7 @@ const controller = {
     try {
       const shelter = await Shelter.findByPk(safeBody.shelterId);
 
-      if (shelter === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Shelter with id ${safeBody.shelterId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(shelter, safeBody.shelterId, response, 'Shelter');
 
       const animal = await General.create(
         {
@@ -124,17 +114,13 @@ const controller = {
         include: [relationships.animal.general]
       });
 
-      if (animal === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Animal with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(animal, Number(id), response, 'Animal');
 
       const general = await General.findByPk(
         (animal as unknown as { general: { id: number } }).general.id
       );
 
-      await animal.update(
+      await (animal as Model).update(
         {
           name: safeBody.name,
           age: safeBody.age,
@@ -156,13 +142,13 @@ const controller = {
 
       const updatedAnimal = await Animal.findByPk(id, {
         transaction,
-        include: [relationships.animal.general]
+        include: includes.animal
       });
 
       await transaction.commit();
       response.status = constants.statusCodes.ok;
       response.message = 'Animal updated succesfully!';
-      response.data = updatedAnimal;
+      response.data = dataParser.animal(updatedAnimal as unknown as AnimalFromDb);
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT ANIMAL-CONTROLLER-update: ', err);
@@ -179,11 +165,7 @@ const controller = {
 
       const rowsDeleted = await Animal.destroy({ where: { id } });
 
-      if (rowsDeleted === 0) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Animal with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(rowsDeleted, Number(id), response, 'Animal');
 
       response.status = constants.statusCodes.ok;
       response.message = 'Animal deleted succesfully!';
@@ -205,11 +187,7 @@ const controller = {
         include: [relationships.animal.general]
       });
 
-      if (animal === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Animal with id ${id} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(animal, Number(id), response, 'Animal');
 
       const { images } = req.body;
       console.log(images);
@@ -217,7 +195,6 @@ const controller = {
         ...sanitizeCreate(image),
         generalId: (animal as unknown as { general: { id: number } }).general.id
       }));
-      console.log(mappedImages);
       const createdImages = await Image.bulkCreate(mappedImages);
       response.status = constants.statusCodes.ok;
       response.message = 'Images added to animal succesfully!';
@@ -235,18 +212,10 @@ const controller = {
       const { adopterId, animalId } = req.params;
 
       const animal = await Animal.findByPk(animalId);
-      if (animal === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Animal with id ${animalId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(animal, Number(animalId), response, 'Animal');
 
       const adopter = await Adopter.findByPk(adopterId);
-      if (adopter === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Adopter with id ${adopterId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(adopter, Number(adopterId), response, 'Adopter');
 
 
       const relationship = await Adopter_Animal.findOne(
@@ -287,18 +256,10 @@ const controller = {
       const { adopterId, animalId } = req.params;
 
       const animal = await Animal.findByPk(animalId);
-      if (animal === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Animal with id ${animalId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(animal, Number(animalId), response, 'Animal');
 
       const adopter = await Adopter.findByPk(adopterId);
-      if (adopter === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Adopter with id ${adopterId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(adopter, Number(adopterId), response, 'Adopter');
 
       const relationship = await Adopter_Animal.findOne(
         {where: {
