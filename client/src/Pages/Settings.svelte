@@ -61,20 +61,20 @@
   <p style="color: var(--red); cursor: pointer">change image</p>
   <div class="details">
     {#if accountType === 'shelter'}
-      <label for="Name" />Shelter Name:
+      <label for="Name">Shelter Name:</label>
       <Name
         bind:value={shelterName}
         nameType="Shelter name"
         bind:error={shelterNameError}
       />
     {:else}
-      <label for="Name" />First Name:
+      <label for="Name">First Name:</label>
       <Name
         nameType="First name"
         bind:value={firstName}
         bind:error={firstNameError}
       />
-      <label for="Name" />Last Name:
+      <label for="Name">Last Name:</label>
       <Name
         nameType="Last name"
         bind:value={lastName}
@@ -82,25 +82,28 @@
       />
     {/if}
 
-    <label for="email" />Email:
+    <label for="email">Email:</label>
     <Email bind:value={email} />
 
-    <label for="phone" />Phone:
+    <label for="phone">Phone:</label>
     <input id="phone" label="phone" placeholder="123456789" type="tel" />
 
     {#if accountType == 'adopter'}
-      <Number bind:value={age} label="Age:" bind:error={ageError} />
+      <label for="House-type"> House type: </label>
       <div class="auth-input-container">
-        <label>
-          House type:
-          <select class="auth-input" bind:value={houseType}>
-            <option value="apartment">Apartment</option>
-            <option value="house">House</option>
-            <option value="townhouse">Townhouse</option>
-            <option value="villa">Villa</option>
-          </select>
-        </label>
+        <select class="auth-input" bind:value={houseType}>
+          <option value="apartment">Apartment</option>
+          <option value="house">House</option>
+          <option value="townhouse">Townhouse</option>
+          <option value="villa">Villa</option>
+        </select>
       </div>
+      <Number bind:value={age} label="Age:" bind:error={ageError} />
+      <Number
+        bind:value={timeAtHome}
+        label="Average hours at home daily:"
+        bind:error={timeAtHomeError}
+      />
       <div class="radio-input">
         <p>Do you have any other pets?</p>
         <BooleanRadio bind:value={hasPets} bind:error={hasPetsError} />
@@ -109,11 +112,6 @@
         <p>Do you have any children?</p>
         <BooleanRadio bind:value={hasChildren} bind:error={hasChildrenError} />
       </div>
-      <Number
-        bind:value={timeAtHome}
-        label="Average hours at home daily:"
-        bind:error={timeAtHomeError}
-      />
     {/if}
     <span><Button text="save" /></span>
   </div>
@@ -169,19 +167,12 @@
 
   input {
     padding: 1rem;
-    margin-bottom: 1rem;
     border-radius: 20px;
     width: 100%;
   }
 
   select {
     padding: 1rem;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  #phone {
-    width: 100%;
   }
 
   span {

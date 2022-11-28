@@ -81,11 +81,6 @@
       <div class="form-container glass">
         <div class="form">
           <h1>Tell us more about yourself</h1>
-          <Number
-            bind:value={age}
-            label="How old are you?"
-            bind:error={ageError}
-          />
           <div class="auth-input-container">
             <label>
               What type of home do you live in?
@@ -97,6 +92,16 @@
               </select>
             </label>
           </div>
+          <Number
+            bind:value={age}
+            label="How old are you?"
+            bind:error={ageError}
+          />
+          <Number
+            bind:value={timeAtHome}
+            label="Average hours at home daily:"
+            bind:error={timeAtHomeError}
+          />
           <div class="radio-input">
             <p>Do you have any pets?</p>
             <BooleanRadio bind:value={hasPets} bind:error={hasPetsError} />
@@ -108,11 +113,6 @@
               bind:error={hasChildrenError}
             />
           </div>
-          <Number
-            bind:value={timeAtHome}
-            label="Average hours at home daily:"
-            bind:error={timeAtHomeError}
-          />
           <button on:click={handleOnboarding}>
             <Button text="Continue" />
           </button>
