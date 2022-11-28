@@ -9,6 +9,7 @@ import Image from './image.model';
 import Location from './location.model';
 import Shelter from './shelter.model';
 import User from './user.model';
+import Message from './message.model';
 import { cascade } from '../utils/db';
 
 export default {
@@ -19,7 +20,8 @@ export default {
   Image,
   Location,
   Shelter,
-  User
+  User,
+  Message
 };
 
 export const relationships = {
@@ -47,10 +49,22 @@ export const relationships = {
   animal: {
     shelter: Animal.belongsTo(Shelter, cascade),
     general: Animal.belongsTo(General, cascade),
-    adopters: Animal.belongsToMany(Adopter, { ...cascade, through: Adopter_Animal })
+    adopters: Animal.belongsToMany(Adopter, {
+      ...cascade,
+      through: Adopter_Animal
+    }),
+    messages: Animal.hasMany(Message, cascade)
   },
   adopter: {
     user: Adopter.belongsTo(User, cascade),
-    animals: Adopter.belongsToMany(Animal, { ...cascade, through: Adopter_Animal })
-  }
+    animals: Adopter.belongsToMany(Animal, {
+      ...cascade,
+      through: Adopter_Animal
+    }),
+    messages: Adopter.hasMany(Message, cascade)
+  },
+  message: {
+    animal: Message.belongsTo(Animal, cascade),
+    adopter: Message.belongsTo(Adopter, cascade)
+  },
 };

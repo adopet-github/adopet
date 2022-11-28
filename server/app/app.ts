@@ -11,11 +11,13 @@ const app = express();
 
 app.use(cors()).use(express.json());
 
-
 app.use('/api/v1/', router);
 
 app.use('/', (req, res) => {
-  res.send('hello world');
+  res.status(404).send({
+    status: 404,
+    message: 'Endpoint not found, check if the URL is correct'
+  });
 });
 
 (async function bootstrap() {
