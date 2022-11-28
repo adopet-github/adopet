@@ -9,6 +9,7 @@
   import { Link, useNavigate } from 'svelte-navigator';
   import { userCredentials } from '../Stores/userCredentials';
   import Button from '../Components/Button.svelte';
+  import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
 
   const navigate = useNavigate();
 
@@ -28,6 +29,10 @@
 
   let shelterName = '';
   let shelterNameError: boolean;
+
+  let address = '';
+  let location = '';
+  let addressError: boolean;
 
   const handleRegister = () => {
     if (accountType === 'shelter' && !shelterName) {
@@ -55,12 +60,18 @@
       password = '';
     }
 
+    if (!address || !location) {
+      addressError = true;
+      address = '';
+    }
+
     if (
       !shelterNameError &&
       !firstNameError &&
       !lastNameError &&
       !emailError &&
-      !passwordError
+      !passwordError &&
+      !addressError
     ) {
       // is user one collection of is there a separate collection for adopter and shelter
       const newUserCredentials = {
@@ -68,11 +79,14 @@
         lastName,
         email,
         password,
-        shelterName
+        shelterName,
+        address,
+        location
       };
       if (accountType === 'adopter') {
         delete newUserCredentials.shelterName;
         // add to store
+        console.log(newUserCredentials);
         userCredentials.set(newUserCredentials);
         navigate('/onboarding');
       } else {
@@ -143,6 +157,11 @@
         {/if}
         <Email bind:value={email} bind:error={emailError} />
         <Password bind:value={password} bind:error={passwordError} />
+        <AddressAutocomplete
+          bind:value={address}
+          bind:location
+          bind:error={addressError}
+        />
         <button type="submit" id="normal-register-btn"
           ><Button text="Register" /></button
         >
