@@ -10,6 +10,7 @@ import Location from './location.model';
 import Shelter from './shelter.model';
 import User from './user.model';
 import Message from './message.model';
+import Token from './token.model';
 import { cascade } from '../utils/db';
 
 export default {
@@ -21,7 +22,8 @@ export default {
   Location,
   Shelter,
   User,
-  Message
+  Message,
+  Token 
 };
 
 export const relationships = {
