@@ -3,6 +3,15 @@
 </script>
 
 <div class="container glass">
+  <p
+    style="color: var(--red);
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;"
+  >
+    close
+  </p>
   <h2>Add Pet</h2>
   <div class="profile-img" />
   <p style="color: var(--red); cursor: pointer">upload images</p>
@@ -33,6 +42,7 @@
 <style>
   .container {
     height: 80vh;
+    position: relative;
     width: 50%;
     border-radius: 20px;
     margin: auto;

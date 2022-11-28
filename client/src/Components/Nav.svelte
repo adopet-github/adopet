@@ -16,6 +16,7 @@
     <Link to="/"><span>HOME</span></Link>
     <Link to="/login"><span>LOGIN</span></Link>
     <Link to="/register"><span>REGISTER</span></Link>
+    <Link to="/settings"><span>SETTINGS</span></Link>
   </div>
 </nav>
 

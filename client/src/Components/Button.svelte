@@ -23,13 +23,15 @@
 {/if}
 
 <style>
-  button.primary {
-    background: #d33e43;
-    background: linear-gradient(180deg, #d33e43 0%, #a52327 100%);
+  button {
     padding: 0.8rem 1rem;
     flex: 1;
     width: 100%;
     border-radius: 20px;
+  }
+  button.primary {
+    background: #d33e43;
+    background: linear-gradient(180deg, #d33e43 0%, #a52327 100%);
     color: var(--white);
   }
   button.primary:hover {
@@ -37,14 +39,9 @@
     background: linear-gradient(180deg, #a52327 0%, #6b1316 100%);
   }
   button.secondary {
-    color: #282829;
     background: #e7e7e7;
     background: linear-gradient(180deg, #e7e7e7 0%, #afafaf 100%);
-    margin-top: 1rem;
-    padding: 20px 20px;
-    flex: 1;
-    width: 100%;
-    border-radius: 20px;
+    color: var(--black);
   }
   button.secondary:hover {
     background: #afafaf;

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Router, Route } from 'svelte-navigator';
+  import DashProfileCard from './Components/DashProfileCard.svelte';
   import Nav from './Components/Nav.svelte';
   import TransitionContainer from './Components/Transitions/TransitionContainer.svelte';
   import AddPet from './Pages/AddPet.svelte';
@@ -8,6 +9,7 @@
   import Login from './Pages/Login.svelte';
   import Onboarding from './Pages/Onboarding.svelte';
   import Register from './Pages/Register.svelte';
+  import Settings from './Pages/Settings.svelte';
   import Swipe from './Pages/Swipe.svelte';
 </script>
 
@@ -35,6 +37,9 @@
     </Route>
     <Route path="shelter/addpet">
       <AddPet />
+    </Route>
+    <Route path="settings">
+      <Settings />
     </Route>
     <Route path="user/swipe">
       <Swipe />
