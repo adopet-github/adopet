@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Button from './Button.svelte';
+
   export let desc: string;
   export let stat: string | number;
   export let color = 'white';
@@ -11,8 +13,7 @@
   </div>
 {:else}
   <div class="stat-container red">
-    <h3>{stat}</h3>
-    <p>{desc}</p>
+    <Button text={`${stat} ${desc}`} fontSize={'1.5rem'} />
   </div>
 {/if}
 
@@ -24,7 +25,6 @@
     justify-content: center;
     height: 100%;
     border-radius: 30px;
-    padding: 1rem;
     position: relative;
   }
 
@@ -40,10 +40,6 @@
 
   .red {
     background-color: var(--red);
-  }
-
-  .red p,
-  .red h3 {
-    color: var(--white);
+    font-size: 2rem !important;
   }
 </style>

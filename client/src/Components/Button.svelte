@@ -5,6 +5,7 @@
 
   export let text: string;
   export let colour = 'red';
+  export let fontSize = '1rem';
 
   const handleClick = () => {
     dispatch('click', {});
@@ -12,20 +13,22 @@
 </script>
 
 {#if colour === 'red'}
-  <button class="primary" on:click={handleClick}>{text}</button>
+  <button class="primary" style="font-size:{fontSize}" on:click={handleClick}
+    >{text}</button
+  >
 {:else}
-  <button class="secondary" on:click={handleClick}>{text}</button>
+  <button class="secondary" style="font-size:{fontSize}" on:click={handleClick}
+    >{text}</button
+  >
 {/if}
 
 <style>
   button.primary {
     background: #d33e43;
     background: linear-gradient(180deg, #d33e43 0%, #a52327 100%);
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
     padding: 0.8rem 1rem;
+    flex: 1;
     width: 100%;
-    font-size: 1rem;
     border-radius: 20px;
     color: var(--white);
   }
@@ -39,8 +42,8 @@
     background: linear-gradient(180deg, #e7e7e7 0%, #afafaf 100%);
     margin-top: 1rem;
     padding: 20px 20px;
+    flex: 1;
     width: 100%;
-    font-size: 1rem;
     border-radius: 20px;
   }
   button.secondary:hover {
