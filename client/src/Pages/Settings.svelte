@@ -1,9 +1,23 @@
 <script lang="ts">
   import Button from '../Components/Button.svelte';
   import BooleanRadio from '../Components/Inputs/BooleanRadio.svelte';
+  import Email from '../Components/Inputs/Email.svelte';
+  import Name from '../Components/Inputs/Name.svelte';
   import Number from '../Components/Inputs/Number.svelte';
 
-  let user = 'adopter';
+  let accountType = 'adopter';
+
+  let shelterName = '';
+  let shelterNameError: boolean;
+
+  let firstName = '';
+  let firstNameError: boolean;
+
+  let lastName = '';
+  let lastNameError: boolean;
+
+  let email = '';
+  let emailError: boolean;
 
   let age: number;
   let ageError: boolean;
@@ -20,7 +34,9 @@
   let timeAtHomeError: boolean;
 
   const handleProfileView = () => {
-    user == 'adopter' ? (user = 'shelter') : (user = 'adopter');
+    accountType == 'adopter'
+      ? (accountType = 'shelter')
+      : (accountType = 'adopter');
   };
 </script>
 
@@ -30,7 +46,7 @@
   on:click={handleProfileView}
 />
 
-<div class="container glass">
+<div class="container glass glass1">
   <p
     style="color: var(--red);
     cursor: pointer;
@@ -44,25 +60,35 @@
   <div class="profile-img" />
   <p style="color: var(--red); cursor: pointer">change image</p>
   <div class="details">
-    <label for="pet-name">{user == 'adopter' ? 'Name' : 'Shelter name:'}</label>
-    <input
-      id="pet-name"
-      label="shelter name"
-      placeholder="Shelter123"
-      type="text"
-    />
+    {#if accountType === 'shelter'}
+      <label for="Name" />Shelter Name:
+      <Name
+        bind:value={shelterName}
+        nameType="Shelter name"
+        bind:error={shelterNameError}
+      />
+    {:else}
+      <label for="Name" />First Name:
+      <Name
+        nameType="First name"
+        bind:value={firstName}
+        bind:error={firstNameError}
+      />
+      <label for="Name" />Last Name:
+      <Name
+        nameType="Last name"
+        bind:value={lastName}
+        bind:error={lastNameError}
+      />
+    {/if}
 
-    <label for="email">Email:</label>
-    <input
-      id="email"
-      label="email"
-      placeholder="shelter@shelter.com"
-      type="email"
-    />
+    <label for="email" />Email:
+    <Email bind:value={email} />
 
-    <label for="phone">Phone:</label>
+    <label for="phone" />Phone:
     <input id="phone" label="phone" placeholder="123456789" type="tel" />
-    {#if user == 'adopter'}
+
+    {#if accountType == 'adopter'}
       <Number bind:value={age} label="Age:" bind:error={ageError} />
       <div class="auth-input-container">
         <label>
@@ -88,8 +114,6 @@
         label="Average hours at home daily:"
         bind:error={timeAtHomeError}
       />
-    {:else}
-      <p>shelter fields here</p>
     {/if}
     <span><Button text="save" /></span>
   </div>
@@ -99,7 +123,7 @@
   .container {
     height: fit-content;
     position: relative;
-    width: 50%;
+    width: 500px;
     border-radius: 20px;
     margin: auto;
     margin-top: 1rem;
@@ -121,7 +145,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    width: 40%;
+    width: 70%;
+    gap: 0.5rem;
   }
 
   .profile-img {
@@ -129,6 +154,10 @@
     min-width: 10rem;
     background-color: var(--grey);
     border-radius: 100px;
+  }
+
+  .radio-input {
+    width: 100%;
   }
 
   h2 {
@@ -140,18 +169,17 @@
 
   input {
     padding: 1rem;
+    margin-bottom: 1rem;
     border-radius: 20px;
-    margin: 0.5rem 0;
-    width: 100%;
-    font-size: 1rem;
-  }
-
-  label {
-    font-size: 1rem;
     width: 100%;
   }
 
-  #email,
+  select {
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
   #phone {
     width: 100%;
   }

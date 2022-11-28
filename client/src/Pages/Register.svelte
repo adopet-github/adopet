@@ -8,6 +8,7 @@
   import ShelterInfo from '../Components/InfoBox/ShelterInfo.svelte';
   import { Link, useNavigate } from 'svelte-navigator';
   import { userCredentials } from '../Stores/userCredentials';
+  import Button from '../Components/Button.svelte';
 
   const navigate = useNavigate();
 
@@ -96,7 +97,7 @@
     {:else}
       <ShelterInfo />
     {/if} -->
-    <div class="form-container">
+    <div class="form-container glass">
       <h1>Sign up</h1>
       <div class="account-type">
         <label>
@@ -109,7 +110,7 @@
         </label>
       </div>
       {#if accountType === 'adopter'}
-        <button on:click={handleGoogleRegister}>
+        <button id="google" on:click={handleGoogleRegister}>
           <img src={GoogleIcon} alt="google icon" />
           <span>Register with Google </span>
         </button>
@@ -142,12 +143,14 @@
         {/if}
         <Email bind:value={email} bind:error={emailError} />
         <Password bind:value={password} bind:error={passwordError} />
-        <button type="submit">Register</button>
+        <button type="submit" id="normal-register-btn"
+          ><Button text="Register" /></button
+        >
       </form>
       <p>
         Already have an account?
         <Link to="/login">
-          <strong>Login Now</strong>
+          <span><strong>Login Now</strong></span>
         </Link>
       </p>
     </div>
@@ -172,7 +175,7 @@
     backdrop-filter: blur(15.2px);
     -webkit-backdrop-filter: blur(15.2px);
     border: 1px solid rgba(255, 255, 255, 0.19);
-    color: black;
+    color: var(--black);
     width: 500px;
     padding: 2rem 0;
     display: flex;
@@ -189,32 +192,13 @@
     justify-content: center;
     gap: 1rem;
     width: 70%;
-    accent-color: black;
-  }
-
-  label {
-    display: grid;
-    grid-template-columns: 1em auto;
-    gap: 0.5em;
-    border: 1px solid #374151;
-    width: 50%;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(15.2px);
-    -webkit-backdrop-filter: blur(15.2px);
-    border: 1px solid rgba(255, 255, 255, 0.19);
-    cursor: pointer;
-  }
-
-  label:hover {
-    background-color: #ededed;
+    accent-color: var(--black);
   }
 
   .names {
     display: flex;
     gap: 15px;
-    width: 70%;
+    width: 100%;
   }
 
   .or {
@@ -236,13 +220,13 @@
     justify-content: center;
     align-items: center;
     gap: 15px;
-    width: 100%;
+    width: 70%;
   }
 
-  button {
+  button#google {
     width: 70%;
     padding: 0.75rem 1rem;
-    border-radius: 10px;
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -257,12 +241,22 @@
     border: 1px solid rgba(255, 255, 255, 0.19);
   }
 
-  button:focus {
+  button#normal-register-btn {
+    border-style: none;
+    background-color: rgba(255, 255, 255, 0);
+    width: 100%;
+  }
+
+  button#google:focus {
     outline: solid 1px rgba(30, 144, 255, 0.5);
   }
 
   img {
     width: 20px;
     height: 20px;
+  }
+
+  span:hover {
+    color: var(--red);
   }
 </style>

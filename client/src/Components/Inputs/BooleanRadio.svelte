@@ -36,10 +36,10 @@
     justify-content: center;
     gap: 1rem;
     width: 100%;
-    accent-color: black;
+    accent-color: var(--black);
   }
 
-  label {
+  /* label {
     display: grid;
     grid-template-columns: 1em auto;
     gap: 0.5em;
@@ -52,9 +52,13 @@
     -webkit-backdrop-filter: blur(15.2px);
     border: 1px solid rgba(255, 255, 255, 0.19);
     cursor: pointer;
-  }
+  } */
 
-  label:hover {
-    background-color: #ededed;
+  label {
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.5em;
+    padding: 0.5rem;
+    cursor: pointer;
   }
 </style>

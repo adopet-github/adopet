@@ -29,18 +29,17 @@
 
 <style>
   div {
-    width: 70%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
   label {
-    color: black;
-    display: block;
+    color: var(--black);
   }
   input {
-    padding: 0.5rem;
+    padding: 1rem;
     min-width: 20%;
-    max-width: 20%;
+    max-width: 30%;
   }
 </style>

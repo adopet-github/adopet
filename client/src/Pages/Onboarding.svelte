@@ -7,6 +7,7 @@
   import DogLoader from '../Components/Loaders/DogLoader.svelte';
   import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
   import { userCredentials } from '../Stores/userCredentials';
+  import Button from '../Components/Button.svelte';
 
   const navigate = useNavigate();
   console.log($userCredentials);
@@ -77,36 +78,46 @@
     </DogLoader>
   {:else}
     <div class="container">
-      <h1>Tell us more about yourself</h1>
-      <Number bind:value={age} label="How old are you?" bind:error={ageError} />
-      <div class="auth-input-container">
-        <label>
-          What type of home do you live in?
-          <select class="auth-input" bind:value={houseType}>
-            <option value="apartment">Apartment</option>
-            <option value="house">House</option>
-            <option value="townhouse">Townhouse</option>
-            <option value="villa">Villa</option>
-          </select>
-        </label>
+      <div class="form-container glass">
+        <div class="form">
+          <h1>Tell us more about yourself</h1>
+          <Number
+            bind:value={age}
+            label="How old are you?"
+            bind:error={ageError}
+          />
+          <div class="auth-input-container">
+            <label>
+              What type of home do you live in?
+              <select class="auth-input" bind:value={houseType}>
+                <option value="apartment">Apartment</option>
+                <option value="house">House</option>
+                <option value="townhouse">Townhouse</option>
+                <option value="villa">Villa</option>
+              </select>
+            </label>
+          </div>
+          <div class="radio-input">
+            <p>Do you have any pets?</p>
+            <BooleanRadio bind:value={hasPets} bind:error={hasPetsError} />
+          </div>
+          <div class="radio-input">
+            <p>Do you have any children?</p>
+            <BooleanRadio
+              bind:value={hasChildren}
+              bind:error={hasChildrenError}
+            />
+          </div>
+          <Number
+            bind:value={timeAtHome}
+            label="Average hours at home daily:"
+            bind:error={timeAtHomeError}
+          />
+          <button on:click={handleOnboarding}>
+            <Button text="Continue" />
+          </button>
+        </div>
       </div>
-      <div class="radio-input">
-        <p>Do you have any pets?</p>
-        <BooleanRadio bind:value={hasPets} bind:error={hasPetsError} />
-      </div>
-      <div class="radio-input">
-        <p>Do you have any children?</p>
-        <BooleanRadio bind:value={hasChildren} bind:error={hasChildrenError} />
-      </div>
-      <Number
-        bind:value={timeAtHome}
-        label="Average hours at home daily:"
-        bind:error={timeAtHomeError}
-      />
-      <button on:click={handleOnboarding}>
-        <i class="mi mi-arrow-right" />
-        Continue
-      </button>
     </div>
   {/if}
 </MovingBackground>
@@ -122,8 +133,34 @@
     border-radius: 1rem;
   }
 
-  .radio-input {
+  .form-container {
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15.2px);
+    -webkit-backdrop-filter: blur(15.2px);
+    border: 1px solid rgba(255, 255, 255, 0.19);
+    color: var(--black);
+    width: 500px;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    border-radius: 1rem;
+    transition: 1s all;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
     width: 70%;
+  }
+
+  .radio-input {
+    width: 100%;
   }
 
   select {
@@ -131,17 +168,19 @@
   }
 
   button {
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    width: 100%;
   }
 
-  i {
+  select {
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  /* i {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+  } */
 </style>

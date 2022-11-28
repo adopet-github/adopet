@@ -17,7 +17,7 @@
 <div class="main-container">
   <BackgroundAnimation />
   <div class="content-left">
-    <div class="left-text glass">
+    <div class="left-text glass glass1">
       <h1>Hey!</h1>
       <p>
         So far, we've helped <span>218</span> <br /> pets to find a new home.

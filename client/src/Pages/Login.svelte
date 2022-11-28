@@ -4,6 +4,7 @@
   import GoogleIcon from '../assets/icons/google-icon.svg';
   import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
   import { Link } from 'svelte-navigator';
+  import Button from '../Components/Button.svelte';
   let email = '';
   let password = '';
 
@@ -25,9 +26,9 @@
 
 <RouteTransition direction="backward">
   <div class="container">
-    <div class="form-container">
+    <div class="form-container glass">
       <h1>Login</h1>
-      <button on:click={handleGoogleLogin}>
+      <button id="google" on:click={handleGoogleLogin}>
         <img src={GoogleIcon} alt="google icon" />
         <span>Login with Google </span>
       </button>
@@ -39,12 +40,14 @@
       <form on:submit|preventDefault={handleLogin}>
         <Email bind:value={email} />
         <Password bind:value={password} />
-        <button type="submit">Login</button>
+        <button id="normal-register-btn" type="submit"
+          ><Button text="Login" /></button
+        >
       </form>
       <p>
         Don't have an account?
         <Link to="/register">
-          <strong>Register</strong>
+          <span><strong>Register</strong></span>
         </Link>
       </p>
     </div>
@@ -99,27 +102,43 @@
     justify-content: center;
     align-items: center;
     gap: 15px;
-    width: 100%;
+    width: 70%;
   }
 
-  button {
+  button#google {
     width: 70%;
     padding: 0.75rem 1rem;
-    border-radius: 10px;
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
     background-color: white;
     color: black;
+    font-weight: bold;
+    font-size: 1;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(15.2px);
     -webkit-backdrop-filter: blur(15.2px);
     border: 1px solid rgba(255, 255, 255, 0.19);
   }
 
+  button#normal-register-btn {
+    border-style: none;
+    background-color: rgba(255, 255, 255, 0);
+    width: 100%;
+  }
+
+  button#google:focus {
+    outline: solid 1px rgba(30, 144, 255, 0.5);
+  }
+
   img {
     width: 20px;
     height: 20px;
+  }
+
+  span:hover {
+    color: var(--red);
   }
 </style>

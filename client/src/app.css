@@ -70,7 +70,7 @@ a {
 /* INPUT GLOBAL STYLES */
 
 .auth-input-container {
-  width: 70%;
+  width: 100%;
   position: relative;
 }
 
@@ -79,7 +79,7 @@ a {
   margin: auto;
   top: 25%;
   left: 10px;
-  color: #757575;
+  color: var(--grey);
   font-size: 1.5rem;
 }
 
@@ -90,10 +90,10 @@ a {
 
 .auth-input {
   padding: 1rem 1rem 1rem 2.5rem;
-  border-radius: 10px;
+  border-radius: 20px;
   width: 100%;
-  color: black;
-  background-color: white;
+  color: var(--black);
+  background-color: var(--white);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(15.2px);
   -webkit-backdrop-filter: blur(15.2px);
@@ -106,6 +106,13 @@ a {
 }
 
 /* CUSTOM STYLES NECESSARY THROUGHOUT */
+
+.glass1 {
+  box-shadow: 0 4px 30px rgb(0 0 0 / 10%);
+  backdrop-filter: blur(15.2px);
+  -webkit-backdrop-filter: blur(15.2px);
+  border: 1px solid rgba(255, 255, 255, 0.19);
+}
 
 .glass {
   background: linear-gradient(
