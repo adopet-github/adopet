@@ -75,7 +75,6 @@ const controller = {
             email: safeBody.email,
             password: safeBody.password,
             salt: safeBody.salt,
-            phone_number: safeBody.phone_number,
             adopter: {
               first_name: safeBody.first_name,
               last_name: safeBody.last_name,
@@ -182,8 +181,7 @@ const controller = {
       await (user as Model).update(
         {
           email: safeBody.email,
-          password: safeBody.password,
-          phone_number: safeBody.phone_number
+          password: safeBody.password
         } || {},
         {
           transaction

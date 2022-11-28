@@ -1,15 +1,55 @@
 import { Router } from 'express';
 import controller from '../../controllers/adopter.controller';
+import { InputTypes } from '../../enums';
 import authMiddleware from '../../middlewares/auth.middeware';
+import joiMiddleware from '../../middlewares/joi.middleware';
+import schema from '../../schemas/adopter.schema';
+import globalSchema from '../../schemas/global.schema';
 const router = Router();
 
-router.post('/', controller.create);
+router.post(
+  '/',
+  joiMiddleware(schema.create, InputTypes.BODY),
+  controller.create
+);
 router.get('/', authMiddleware, controller.retrieveAll);
-router.get('/:id', authMiddleware, controller.retrieveOne);
-router.put('/:id', authMiddleware, controller.update);
-router.delete('/:id', authMiddleware, controller.delete);
-router.put('/:id/images', authMiddleware, controller.addManyImages);
-router.put('/:adopterId/like/:animalId', authMiddleware, controller.likeAnimal);
-router.put('/:adopterId/dislike/:animalId', authMiddleware, controller.dislikeAnimal);
+router.get(
+  '/:id',
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  authMiddleware,
+  controller.retrieveOne
+);
+router.put(
+  '/:id',
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  joiMiddleware(schema.update, InputTypes.BODY),
+  authMiddleware,
+  controller.update
+);
+router.delete(
+  '/:id',
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  authMiddleware,
+  controller.delete
+);
+router.put(
+  '/:id/images',
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  joiMiddleware(globalSchema.validateImages, InputTypes.BODY),
+  authMiddleware,
+  controller.addManyImages
+);
+router.put(
+  '/:adopterId/like/:animalId',
+  joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
+  authMiddleware,
+  controller.likeAnimal
+);
+router.put(
+  '/:adopterId/dislike/:animalId',
+  joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
+  authMiddleware,
+  controller.dislikeAnimal
+);
 
 export default router;

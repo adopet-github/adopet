@@ -13,6 +13,8 @@ import Message from './message.model';
 import Token from './token.model';
 import { cascade } from '../utils/db';
 
+// TODO: CHANGE ID FOR UUID
+
 export default {
   Adopter_Animal,
   Adopter,
