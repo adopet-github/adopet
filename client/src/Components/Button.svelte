@@ -24,7 +24,7 @@
 
 <style>
   button {
-    padding: 0.8rem 1rem;
+    padding: 1rem 1rem;
     flex: 1;
     width: 100%;
     border-radius: 20px;

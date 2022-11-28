@@ -12,6 +12,9 @@
       }
     }
   };
+  $: if (label === 'Average hours at home daily:' && value > 24) value = 24;
+  $: if ((label.includes('Age') || label.includes('old')) && value > 99)
+    value = 99;
 </script>
 
 <div class="auth-input-container">

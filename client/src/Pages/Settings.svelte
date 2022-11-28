@@ -5,6 +5,7 @@
   import Name from '../Components/Inputs/Name.svelte';
   import Number from '../Components/Inputs/Number.svelte';
   import CloseButton from './CloseButton.svelte';
+  import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
 
   let accountType = 'adopter';
 
@@ -49,39 +50,47 @@
 
 <div class="container glass glass1">
   <CloseButton />
-  <h2>Edit profile</h2>
-  <div class="profile-img" />
-  <p style="color: var(--red); cursor: pointer">change image</p>
-  <div class="details">
-    {#if accountType === 'shelter'}
-      <label for="Name">Shelter Name:</label>
-      <Name
-        bind:value={shelterName}
-        nameType="Shelter name"
-        bind:error={shelterNameError}
-      />
-    {:else}
-      <label for="Name">First Name:</label>
-      <Name
-        nameType="First name"
-        bind:value={firstName}
-        bind:error={firstNameError}
-      />
-      <label for="Name">Last Name:</label>
-      <Name
-        nameType="Last name"
-        bind:value={lastName}
-        bind:error={lastNameError}
-      />
-    {/if}
+  <div class="content-left">
+    <h2>Edit profile</h2>
+    <div class="profile-img" />
+    <p style="color: var(--red); cursor: pointer">change image</p>
+    <div class="details">
+      {#if accountType === 'shelter'}
+        <label for="Name">Shelter Name:</label>
+        <Name
+          bind:value={shelterName}
+          nameType="Shelter name"
+          bind:error={shelterNameError}
+        />
+      {:else}
+        <label for="Name">First Name:</label>
+        <Name
+          nameType="First name"
+          bind:value={firstName}
+          bind:error={firstNameError}
+        />
+        <label for="Name">Last Name:</label>
+        <Name
+          nameType="Last name"
+          bind:value={lastName}
+          bind:error={lastNameError}
+        />
+      {/if}
 
-    <label for="email">Email:</label>
-    <Email bind:value={email} bind:error={emailError} />
+      <label for="email">Email:</label>
+      <Email bind:value={email} bind:error={emailError} />
+      <label for="address">Address: </label>
+      <AddressAutocomplete />
+      {#if accountType === 'shelter'}
+        <span><Button text="save" /></span>
+      {/if}
+    </div>
+  </div>
 
-    <label for="phone">Phone:</label>
-    <input id="phone" label="phone" placeholder="123456789" type="tel" />
-
-    {#if accountType == 'adopter'}
+  {#if accountType == 'adopter'}
+    <div class="content-right">
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" rows="3" />
       <label for="House-type"> House type: </label>
       <div class="auth-input-container">
         <select class="auth-input" bind:value={houseType}>
@@ -105,30 +114,40 @@
         <p>Do you have any children?</p>
         <BooleanRadio bind:value={hasChildren} bind:error={hasChildrenError} />
       </div>
-    {/if}
-    <span><Button text="save" /></span>
-  </div>
+      <span><Button text="save" /></span>
+    </div>
+  {/if}
 </div>
 
 <style>
   .container {
     height: fit-content;
     position: relative;
-    width: 500px;
+    width: 1000px;
     border-radius: 20px;
     margin: auto;
     margin-top: 1rem;
     padding: 1rem;
     padding-top: 1rem;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-end;
     justify-content: center;
     color: var(--black);
+    gap: 1rem;
   }
 
-  .container > div {
-    margin-top: 1rem;
+  .content-left,
+  .content-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .content-right {
+    align-items: flex-start;
   }
 
   .details {
@@ -156,12 +175,6 @@
     font-size: 2rem;
     padding: 0.5rem;
     font-weight: 900;
-  }
-
-  input {
-    padding: 1rem;
-    border-radius: 20px;
-    width: 100%;
   }
 
   select {
