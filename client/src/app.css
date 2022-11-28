@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'Satoshi-Variable';
   src: url('./assets/fonts/satoshi/Satoshi-Variable.woff2') format('woff2'),
-       url('./assets/fonts/satoshi/Satoshi-Variable.woff') format('woff'),
-       url('./assets/fonts/satoshi/Satoshi-Variable.ttf') format('truetype');
-       font-weight: 300 900;
-       font-display: swap;
-       font-style: normal;
+    url('./assets/fonts/satoshi/Satoshi-Variable.woff') format('woff'),
+    url('./assets/fonts/satoshi/Satoshi-Variable.ttf') format('truetype');
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
 }
 
 :root {
@@ -117,4 +117,10 @@ a {
   box-shadow: 11px 16px 11px -5px rgba(0, 0, 0, 0.02);
   backdrop-filter: blur(3.98404px);
   /* Note: backdrop-filter has minimal browser support */
+}
+
+/* NO HOVER */
+
+.no-hover {
+  pointer-events: none;
 }

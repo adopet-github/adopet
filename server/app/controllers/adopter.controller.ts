@@ -45,7 +45,7 @@ const controller = {
             ]
           },
           {
-            association: relationships.adopter.animals,
+            association: relationships.adopter.animals
           }
         ]
       });
@@ -319,12 +319,12 @@ const controller = {
         throw new Error(response.message);
       }
 
-      const relationship = await Adopter_Animal.findOne(
-        {where: {
+      const relationship = await Adopter_Animal.findOne({
+        where: {
           adopterId,
           animalId
-        }}
-      );
+        }
+      });
 
       if (relationship !== null) {
         response.status = constants.statusCodes.badRequest;
@@ -342,7 +342,6 @@ const controller = {
       response.status = constants.statusCodes.ok;
       response.message = 'Animal liked successfully!';
       response.data = like;
-
     } catch (err) {
       console.warn('ERROR AT ADOPTER-CONTROLLER-likeAnimal: ', err);
     }
@@ -370,12 +369,12 @@ const controller = {
         throw new Error(response.message);
       }
 
-      const relationship = await Adopter_Animal.findOne(
-        {where: {
+      const relationship = await Adopter_Animal.findOne({
+        where: {
           adopterId,
           animalId
-        }}
-      );
+        }
+      });
 
       if (relationship !== null) {
         response.status = constants.statusCodes.badRequest;
@@ -393,13 +392,12 @@ const controller = {
       response.status = constants.statusCodes.ok;
       response.message = 'Animal disliked successfully!';
       response.data = dislike;
-
     } catch (err) {
       console.warn('ERROR AT ADOPTER-CONTROLLER-likeAnimal: ', err);
     }
 
     res.status(response.status).send(response);
-  },
+  }
 };
 
 export default controller;
