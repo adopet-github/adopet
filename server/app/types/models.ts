@@ -12,7 +12,8 @@ export type Location = {
 
 export type User = General & {
   email: string;
-  password: string;
+  password?: string;
+  salt?: string;
   phone_number: string;
 };
 

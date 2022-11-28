@@ -11,8 +11,10 @@ import { notFoundChecker } from '../utils/db';
 import includes from '../utils/includes';
 import dataParser from '../utils/dataparser';
 import { ShelterFromDb } from '../types/dboutputs';
+import { generateToken } from '../utils/jwt';
+import { genPasswordAndSalt } from '../utils/password';
 
-const { General, Shelter, User, Image } = models;
+const { General, Shelter, User, Image, Token } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
@@ -61,6 +63,11 @@ const controller = {
 
     const safeBody = sanitizeCreate(unsafeBody);
 
+    const adopterPassword = safeBody.password;
+    const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
+    safeBody.password = passSaltObj.password;
+    safeBody.salt = passSaltObj.salt;
+
     const transaction = await sequelize.transaction();
     try {
       const shelter = await General.create(
@@ -69,6 +76,7 @@ const controller = {
           user: {
             email: safeBody.email,
             password: safeBody.password,
+            salt: safeBody.salt,
             phone_number: safeBody.phone_number,
             shelter: {
               name: safeBody.name
@@ -90,6 +98,12 @@ const controller = {
           transaction
         }
       );
+      const responseToken = await Token.create({content: generateToken({
+        id: (shelter as unknown as {user: {shelter: {id: number}}}).user.shelter.id,
+        type: 'shelter'
+      })});
+      response.token = (responseToken as unknown as {content: string}).content;
+
       await transaction.commit();
       response.status = constants.statusCodes.created;
       response.message = 'Shelter created succesfully!';
