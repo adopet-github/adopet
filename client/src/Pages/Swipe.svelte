@@ -1,10 +1,43 @@
 <script lang="ts">
   import SwipeCard from '../Components/SwipeCard.svelte';
+  import img1 from '../assets/imgs/mockdog/1.jpg';
+  import img2 from '../assets/imgs/mockdog/2.jpg';
+  import img3 from '../assets/imgs/mockdog/3.jpg';
+  import img4 from '../assets/imgs/mockdog/4.jpg';
 
   let infoOpen = true;
+  let outcome: false | 'yes' | 'no' = false;
 
   const toggleInfoOpen = () => {
     infoOpen = !infoOpen;
+  };
+
+  let pets = [
+    [img1, img2, img3, img4],
+    [img4, img3, img2, img1],
+    [img2, img1, img4, img3],
+    [img3, img4, img1, img2],
+    [img1, img3, img4, img2]
+  ];
+
+  const handleNo = () => {
+    if (!infoOpen) toggleInfoOpen();
+    outcome = 'no';
+    pets.shift();
+    pets = pets;
+  };
+
+  const handleYes = () => {
+    if (!infoOpen) toggleInfoOpen();
+    const active = document.getElementById('active');
+    console.log(active);
+    console.log(active.style.transform);
+    // active.style.transform = 'scale(0) translateX(50%)';
+    console.log(active.style.transform);
+    // outcome = 'yes';
+    pets.shift();
+    pets = pets;
+    // active.style.transform = '';
   };
 </script>
 
@@ -16,15 +49,17 @@
 </svelte:head>
 
 <div class="container">
-  <SwipeCard {infoOpen} />
+  {#each pets as pet, i}
+    <SwipeCard {infoOpen} {outcome} index={i} {pet} />
+  {/each}
   <div class="buttons">
-    <button class="no">
+    <button class="no" on:click={handleNo}>
       <i class="uil uil-times" />
     </button>
     <button class="info" on:click={toggleInfoOpen}>
       <i class="uil uil-info" />
     </button>
-    <button class="yes">
+    <button class="yes" on:click={handleYes}>
       <i class="uil uil-heart" />
     </button>
   </div>
