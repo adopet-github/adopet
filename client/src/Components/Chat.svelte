@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Button from './Button.svelte';
 
   let animalName = 'animalName';
@@ -101,16 +101,18 @@
     justify-content: center;
     align-items: center;
     margin-top: 1rem;
+    height: 8%;
   }
 
   .chat-input-container > span {
-    margin-left: 1rem;
+    flex: 1;
   }
 
   .chat-input {
-    width: 100%;
-    height: 80%;
+    width: 80%;
+    height: 100%;
     border-radius: 30px;
     background-color: var(--white);
+    margin-right: 1rem;
   }
 </style>

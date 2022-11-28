@@ -23,7 +23,7 @@
         So far, we've helped <span>218</span> <br /> pets to find a new home.
       </p>
       <p>Help us help more.</p>
-      <Button text={'REGISTER NOW'} colour={'red'} on:click={handleClick} />
+      <Button text={'register now'} colour={'red'} on:click={handleClick} />
     </div>
   </div>
   <div class="content-right">
@@ -67,7 +67,6 @@
   h1 {
     margin-top: 1rem;
     font-size: 3rem;
-    padding-bottom: 1rem;
     align-self: flex-start;
   }
 
@@ -76,6 +75,7 @@
     font-size: 1.6rem;
     line-height: 2rem;
     white-space: nowrap;
+    margin-bottom: 2rem;
   }
 
   span {

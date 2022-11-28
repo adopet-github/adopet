@@ -10,7 +10,7 @@
   <p>type</p>
   <p>enquiries</p>
   <div class="btns-container">
-    <span><Button text="View" /></span>
+    <span><Button text="view" /></span>
     <span><Button text="X" /></span>
   </div>
 </div>

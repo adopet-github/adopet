@@ -4,14 +4,21 @@
   import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';
   import MsgListContainer from '../Components/Messages/MsgListContainer.svelte';
+  import { useNavigate } from 'svelte-navigator';
+
+  const navigate = useNavigate();
 
   let viewingMessages = false;
 
-  const handleClick = () => {
+  const handleDashViewToggle = () => {
     viewingMessages === false
       ? (viewingMessages = true)
       : (viewingMessages = false);
     console.log(viewingMessages);
+  };
+
+  const handleAddPet = () => {
+    navigate('/shelter/addpet');
   };
 </script>
 
@@ -22,7 +29,7 @@
         <h1>Dashboard</h1>
         <Button
           text={viewingMessages ? 'View messages' : 'View animals'}
-          on:click={handleClick}
+          on:click={handleDashViewToggle}
         />
         <h2>Messages</h2>
       </div>
@@ -31,7 +38,12 @@
       </div>
     </div>
     <div class="div2">
-      <DashStats desc={'add pet'} stat={'+'} color={'red'} />
+      <DashStats
+        desc={'add pet'}
+        stat={'+'}
+        color={'red'}
+        on:click={handleAddPet}
+      />
     </div>
     <div class="div3"><DashStats desc={'pets'} stat={'10'} /></div>
     <div class="div4"><DashStats desc={'open enquiries'} stat={'4'} /></div>
@@ -68,7 +80,12 @@
     color: var(--black);
   }
 
+  h1 {
+    margin: 1rem 0;
+  }
+
   h2 {
+    margin-top: 1rem;
     color: var(--red);
   }
 
@@ -88,7 +105,9 @@
   }
 
   .list-container {
-    height: 80%;
+    height: 75%;
+    margin-bottom: 11%;
+    border-bottom: 1px solid var(--lightgrey);
   }
 
   .div2 {
