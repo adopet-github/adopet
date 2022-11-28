@@ -98,7 +98,7 @@
           <option value="villa">Villa</option>
         </select>
       </div>
-      <Number bind:value={age} label="Age:" bind:error={ageError} />
+      <Number bind:value={age} label="Your Age:" bind:error={ageError} />
       <Number
         bind:value={timeAtHome}
         label="Average hours at home daily:"
