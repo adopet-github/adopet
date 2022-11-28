@@ -26,17 +26,5 @@ services:
       - '4000:4000'
     restart: always
 
-  serverless:
-    stdin_open: true
-    build:
-      context: .
-      dockerfile: ./lambda-docker/Dockerfile
-    container_name: serverless
-    depends_on:
-      - postgres
-    ports:
-      - '6000:6000'
-    restart: always
-
 volumes:
   postgres-data:

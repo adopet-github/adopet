@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import models from "../models";
 import constants from '../utils/constants';
 import { MyResponse } from "../types/server";
+import { notFoundChecker } from "../utils/db";
 
 const { Message, Adopter, Animal, Adopter_Animal } = models;
 
@@ -13,18 +14,10 @@ const controller = {
       const { adopterId, animalId } = req.params;
 
       const adopter = await Adopter.findByPk(adopterId);
-      if (adopter === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Adopter with id ${adopterId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(adopter, Number(adopterId), response, 'Adopter');
 
       const animal = await Animal.findByPk(animalId);
-      if (animal === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Animal with id ${animalId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(animal, Number(animalId), response, 'Animal');
 
       const relationship = await Adopter_Animal.findOne(
         {where: {
@@ -62,18 +55,10 @@ const controller = {
       const { author, content } = req.body;
 
       const adopter = await Adopter.findByPk(adopterId);
-      if (adopter === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Adopter with id ${adopterId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(adopter, Number(adopterId), response, 'Adopter');
 
       const animal = await Animal.findByPk(animalId);
-      if (animal === null) {
-        response.status = constants.statusCodes.notFound;
-        response.message = `Animal with id ${animalId} not found.`;
-        throw new Error(response.message);
-      }
+      notFoundChecker(animal, Number(animalId), response, 'Animal');
 
       const relationship = await Adopter_Animal.findOne(
         {where: {
