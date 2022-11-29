@@ -3,8 +3,8 @@ import { AccountTypes } from "../enums";
 
 const schema = {
   create: Joi.object({
-    content: Joi.string().required(),
-    author: Joi.string().valid(AccountTypes.ADOPTER, AccountTypes.SHELTER)
+    content: Joi.string().max(255).required(),
+    author: Joi.string().max(255).valid(AccountTypes.ADOPTER, AccountTypes.SHELTER)
   })
 }
 
