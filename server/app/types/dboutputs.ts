@@ -1,4 +1,4 @@
-import { HouseTypes } from "../enums"
+import { HouseTypes } from '../enums';
 
 export type Image = {
   id: string;
@@ -6,16 +6,16 @@ export type Image = {
   url: string;
   createdAt: Date;
   updatedAt: Date;
-  generalId: number
-}
+  generalId: string;
+};
 
 export type General = {
   id: string;
   description: string;
   createdAt: Date;
   updatedAt: Date;
-  images: Image[]
-}
+  images: Image[];
+};
 
 export type Location = {
   id: string;
@@ -24,8 +24,8 @@ export type Location = {
   address: string;
   createdAt: Date;
   updatedAt: Date;
-  userId: number
-}
+  userId: string;
+};
 
 export type User = {
   id: string;
@@ -34,19 +34,19 @@ export type User = {
   phone_number: string;
   createdAt: Date;
   updatedAt: Date;
-  generalId: number;
+  generalId: string;
   general: General;
-  location: Location
-}
+  location: Location;
+};
 
 export type AdopterAnimal = {
   is_liked: boolean;
   is_matched: boolean;
   createdAt: Date;
   updatedAt: Date;
-  animalId: number;
-  adopterId: number
-}
+  animalId: string;
+  adopterId: string;
+};
 
 export type Animal = {
   id: string;
@@ -55,10 +55,10 @@ export type Animal = {
   weight: number;
   createdAt: Date;
   updatedAt: Date;
-  generalId: number;
-  shelterId: number;
-  adopter_animal?: AdopterAnimal
-}
+  generalId: string;
+  shelterId: string;
+  adopter_animal?: AdopterAnimal;
+};
 
 export type AdopterFromDb = {
   id: string;
@@ -71,28 +71,28 @@ export type AdopterFromDb = {
   time_at_home: number;
   createdAt: Date;
   updatedAt: Date;
-  userId: number;
+  userId: string;
   user: User;
-  animals: Animal[]
-}
+  animals: Animal[];
+};
 
 export type ShelterFromDb = {
   id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
-  userId: number;
+  userId: string;
   user: User;
   animals: Animal[];
-}
+};
 
 export type Shelter = {
   id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
-  userId: number;
-}
+  userId: string;
+};
 
 export type Adopter = {
   id: string;
@@ -105,9 +105,9 @@ export type Adopter = {
   time_at_home: number;
   createdAt: Date;
   updatedAt: Date;
-  userId: number;
+  userId: string;
   adopter_animal: AdopterAnimal;
-}
+};
 
 export type AnimalFromDb = {
   id: string;
@@ -116,9 +116,9 @@ export type AnimalFromDb = {
   weight: number;
   createdAt: Date;
   updatedAt: Date;
-  generalId: number;
-  shelterId: number;
+  generalId: string;
+  shelterId: string;
   general: General;
   shelter: Shelter;
   adopters: Adopter[];
-}
+};

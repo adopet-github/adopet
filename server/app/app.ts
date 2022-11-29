@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import sequelize from './db/db';
 import router from './routes/v1.router';
 import rateLimit from 'express-rate-limit';
+const http = require('http');
+const { Server } = require('socket.io');
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -30,12 +33,16 @@ app.use('/', (req, res) => {
   });
 });
 
+const server = http.createServer(app);
+
+const io = new Server(server);
+
 (async function bootstrap() {
   await sequelize.sync();
 
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`server running on ${PORT}`);
   });
 })();
 
-module.exports = app;
+export default io;

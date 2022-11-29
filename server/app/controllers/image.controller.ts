@@ -15,7 +15,7 @@ const controller = {
 
       const rowsDeleted = await Image.destroy({ where: { id } });
 
-      notFoundChecker(rowsDeleted, Number(id), response, 'Image');
+      notFoundChecker(rowsDeleted, id, response, 'Image');
 
       response.status = constants.statusCodes.ok;
       response.message = 'Image deleted succesfully!';
@@ -24,7 +24,7 @@ const controller = {
     }
 
     res.status(response.status).send(response);
-  },
+  }
 };
 
 export default controller;
