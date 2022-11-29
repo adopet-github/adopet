@@ -51,6 +51,18 @@
 
   .red {
     background-color: var(--red);
-    font-size: 2rem !important;
+    font-size: 2rem;
+  }
+
+  @media only screen and (max-width: 1280px) {
+    h3 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+    .red {
+      font-size: 1.5rem;
+    }
   }
 </style>

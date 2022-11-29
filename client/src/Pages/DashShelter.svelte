@@ -8,8 +8,11 @@
   import AnimalProfile from '../Components/AnimalProfile.svelte';
   import { dashView } from '../Stores/dashView';
   import AdopterProfile from '../Components/AdopterProfile.svelte';
+  import { userCredentials } from '../Stores/userCredentials';
 
   const navigate = useNavigate();
+
+  userCredentials.set({ name: 'alex' });
 
   const handleDashViewToggle = () => {
     $dashView === 'allAnimals'
@@ -38,12 +41,12 @@
           text={$dashView === 'allAnimals' ? 'View messages' : 'View animals'}
           on:click={handleDashViewToggle}
         />
+        {#if $dashView == 'msgs'}
+          <h2>Messages</h2>
+        {:else}
+          <h2>Matches</h2>
+        {/if}
       </div>
-      {#if $dashView == 'msgs'}
-        <h2>Messages</h2>
-      {:else}
-        <h2>Matches</h2>
-      {/if}
       <div class="list-container">
         <MsgListContainer />
       </div>
@@ -118,13 +121,13 @@
   }
 
   .dash-headings {
-    height: 20%;
     margin-right: 1rem;
   }
 
   .list-container {
-    height: 75%;
-    margin-bottom: 8%;
+    height: auto;
+    overflow-y: scroll;
+    /* margin-bottom: 8%; */
     border-bottom: 1px solid var(--lightgrey);
   }
 
@@ -142,5 +145,23 @@
   }
   .div6 {
     grid-area: 3 / 4 / 11 / 12;
+  }
+
+  @media only screen and (max-width: 1280px) {
+    .div2 {
+      grid-area: 1 / 4 / 2 / 6;
+    }
+    .div3 {
+      grid-area: 1 / 6 / 2 / 8;
+    }
+    .div4 {
+      grid-area: 1 / 8 / 2 / 10;
+    }
+    .div5 {
+      grid-area: 1 / 10 / 2 / 12;
+    }
+    .div6 {
+      grid-area: 2 / 4 / 11 / 12;
+    }
   }
 </style>

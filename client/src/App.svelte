@@ -28,6 +28,8 @@
   import { userCredentials } from './Stores/userCredentials';
   import { Router, Route } from 'svelte-navigator';
 
+  userCredentials.set({ name: 'alex' }); ////// REMOVE THIS AND UNCOMMENT THE IF STATEMENT WHEN BACKEND IS DONE
+
   let isLoading = true;
 
   onMount(async () => {
@@ -43,45 +45,45 @@
 </script>
 
 <main>
-  {#if isLoading}
+  <!-- {#if isLoading}
     <SausageLoader />
-  {:else}
-    <Router>
-      <Nav />
-      <Route path="/">
-        <Home />
-      </Route>
-      <UnauthorizedRoute path="login">
-        <TransitionContainer>
-          <Login />
-        </TransitionContainer>
-      </UnauthorizedRoute>
-      <UnauthorizedRoute path="register">
-        <TransitionContainer>
-          <Register />
-        </TransitionContainer>
-      </UnauthorizedRoute>
-      <Route path="onboarding">
-        <Onboarding />
-      </Route>
-      <ShelterRoute path="shelter/dashboard">
-        <DashShelter />
-      </ShelterRoute>
-      <ShelterRoute path="shelter/addpet">
-        <AddPet />
-      </ShelterRoute>
-      <ShelterRoute path="shelter/animals/:id">
-        <AnimalProfile />
-      </ShelterRoute>
-      <PrivateRoute path="settings">
-        <Settings />
-      </PrivateRoute>
-      <AdopterRoute path="user/swipe">
-        <Swipe />
-      </AdopterRoute>
-      <AdopterRoute path="user/matches">
-        <Matches />
-      </AdopterRoute>
-    </Router>
-  {/if}
+  {:else} -->
+  <Router>
+    <Nav />
+    <Route path="/">
+      <Home />
+    </Route>
+    <UnauthorizedRoute path="login">
+      <TransitionContainer>
+        <Login />
+      </TransitionContainer>
+    </UnauthorizedRoute>
+    <UnauthorizedRoute path="register">
+      <TransitionContainer>
+        <Register />
+      </TransitionContainer>
+    </UnauthorizedRoute>
+    <Route path="onboarding">
+      <Onboarding />
+    </Route>
+    <ShelterRoute path="shelter/dashboard">
+      <DashShelter />
+    </ShelterRoute>
+    <ShelterRoute path="shelter/addpet">
+      <AddPet />
+    </ShelterRoute>
+    <ShelterRoute path="shelter/animals/:id">
+      <AnimalProfile />
+    </ShelterRoute>
+    <PrivateRoute path="settings">
+      <Settings />
+    </PrivateRoute>
+    <AdopterRoute path="user/swipe">
+      <Swipe />
+    </AdopterRoute>
+    <AdopterRoute path="user/matches">
+      <Matches />
+    </AdopterRoute>
+  </Router>
+  <!-- {/if} -->
 </main>

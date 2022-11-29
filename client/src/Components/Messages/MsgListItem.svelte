@@ -79,14 +79,9 @@
 
   .msg-details,
   .match-details {
-    height: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: flex-start;
     padding: 0.5rem 0;
     position: relative;
+    min-width: 40%;
     top: -3px;
   }
 
@@ -104,5 +99,33 @@
   .match-date {
     font-size: 0.6rem;
     color: var(--lavender);
+  }
+
+  @media only screen and (max-width: 992px) {
+    p {
+      font-size: 0.8rem;
+    }
+    .dummy-img,
+    .dummy-img2 {
+      height: 30px;
+      width: 30px;
+      border-radius: 20px;
+    }
+
+    .dummy-img2 {
+      left: -20px;
+    }
+
+    .msg-username,
+    .match-username {
+      color: var(--red);
+      font-size: 0.8rem;
+    }
+
+    .msg-date,
+    .match-date {
+      font-size: 0.5rem;
+      color: var(--lavender);
+    }
   }
 </style>

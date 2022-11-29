@@ -163,3 +163,20 @@ textarea:focus {
 .pac-item-query {
   font-family: 'Satoshi-Variable', sans-serif;
 }
+
+@media only screen and (max-width: 992px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+  p {
+    font-size: 0.8rem;
+  }
+  button {
+    padding: 0 0 0 0;
+    font-size: 1;
+  }
+}

@@ -52,4 +52,11 @@
     background: #afafaf;
     background: linear-gradient(180deg, #afafaf 0%, #797979 100%);
   }
+
+  @media only screen and (max-width: 992px) {
+    button.primary {
+      border: 3px solid blue;
+      font-size: 0.5rem;
+    }
+  }
 </style>
