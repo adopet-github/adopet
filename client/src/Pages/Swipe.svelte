@@ -4,9 +4,13 @@
   import img2 from '../assets/imgs/mockdog/2.jpg';
   import img3 from '../assets/imgs/mockdog/3.jpg';
   import img4 from '../assets/imgs/mockdog/4.jpg';
+  import { userCredentials } from '../Stores/userCredentials';
+  import { onMount } from 'svelte';
 
   let infoOpen = true;
   let outcome: false | 'yes' | 'no' = false;
+
+  console.log($userCredentials);
 
   const toggleInfoOpen = () => {
     infoOpen = !infoOpen;

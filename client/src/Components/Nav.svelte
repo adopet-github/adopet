@@ -3,6 +3,7 @@
 
   import logoImg from '../assets/imgs/img_logo.svg';
   import logoText from '../assets/imgs/text_logo.svg';
+  import LogOut from './Inputs/LogOut.svelte';
 </script>
 
 <nav>
@@ -17,6 +18,7 @@
     <Link to="/login"><span>LOGIN</span></Link>
     <Link to="/register"><span>REGISTER</span></Link>
     <Link to="/settings"><span>SETTINGS</span></Link>
+    <LogOut />
   </div>
 </nav>
 

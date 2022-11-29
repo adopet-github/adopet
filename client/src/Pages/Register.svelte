@@ -10,6 +10,9 @@
   import { userCredentials } from '../Stores/userCredentials';
   import Button from '../Components/Button.svelte';
   import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
+  import TextArea from '../Components/Inputs/TextArea.svelte';
+  import { createShelter } from '../Services/shelter';
+  import type { Shelter } from '../types/shelter';
 
   const navigate = useNavigate();
 
@@ -34,8 +37,10 @@
   let location = '';
   let addressError: boolean;
 
-  const handleRegister = () => {
-    console.log(password);
+  let description = '';
+  let descriptionError: boolean;
+
+  const handleRegister = async () => {
     if (accountType === 'shelter' && !shelterName) {
       shelterNameError = true;
       shelterName = '';
@@ -66,13 +71,18 @@
       address = '';
     }
 
+    if (!description) {
+      descriptionError = true;
+    }
+
     if (
       !shelterNameError &&
       !firstNameError &&
       !lastNameError &&
       !emailError &&
       !passwordError &&
-      !addressError
+      !addressError &&
+      !descriptionError
     ) {
       // is user one collection of is there a separate collection for adopter and shelter
       const newUserCredentials = {
@@ -83,18 +93,39 @@
         name: shelterName,
         address: address,
         latitude: location[0],
-        longitude: location[1]
+        longitude: location[1],
+        description: description
       };
       if (accountType === 'adopter') {
         delete newUserCredentials.name;
-        // add to store
+        delete newUserCredentials.description;
+        // TODO verify email and password
         userCredentials.set(newUserCredentials);
         navigate('/onboarding');
       } else {
-        // send request to backend
-        navigate('/shelter/dashboard');
         delete newUserCredentials.first_name;
         delete newUserCredentials.last_name;
+        // TODO verify email and password
+
+        // send request to backend
+        const res = await createShelter(
+          newUserCredentials as unknown as Shelter
+        );
+        console.log(res);
+        if (res.status === 201) {
+          // CHANGE TO HTTP ONLY COOKIE FROM SERVER
+          localStorage.setItem('jwt', res.token);
+          navigate('/shelter/dashboard');
+        } else if (res.status === 400) {
+          if (res.message === 'User with email jwt@email.com already exists!')
+            emailError = true;
+          if (
+            res.message[0] ===
+            'Password must have at least eight characters, at least one uppercase letter, one lowercase letter and one number'
+          )
+            passwordError = true;
+          alert(res.message);
+        }
       }
     }
   };
@@ -162,6 +193,9 @@
           bind:location
           bind:error={addressError}
         />
+        {#if accountType === 'shelter'}
+          <TextArea bind:value={description} bind:error={descriptionError} />
+        {/if}
         <button type="submit" id="normal-register-btn"
           ><Button text="Register" /></button
         >

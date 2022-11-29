@@ -3,18 +3,42 @@
   import Password from '../Components/Inputs/Password.svelte';
   import GoogleIcon from '../assets/icons/google-icon.svg';
   import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
-  import { Link } from 'svelte-navigator';
+  import { Link, useNavigate } from 'svelte-navigator';
   import Button from '../Components/Button.svelte';
+  import { getProfile, logIn } from '../Services/auth';
+  import { userCredentials } from '../Stores/userCredentials';
   let email = '';
   let password = '';
+  let error = '';
 
-  const handleLogin = () => {
-    // check password in db
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
     const credentials = {
       email,
       password
     };
-    console.log(credentials);
+    const res = await logIn(credentials);
+    console.log(res);
+    if (res.status === 200) {
+      error = '';
+      localStorage.setItem('jwt', res.token);
+      // get profile
+      const profileRes = await getProfile();
+      console.log(profileRes);
+      if (profileRes.status === 401) {
+        navigate('/');
+      } else if (profileRes.status === 200) {
+        userCredentials.set(profileRes.data);
+        if (profileRes.data.house_type) {
+          navigate('/user/swipe');
+        } else {
+          navigate('/shelter/dashboard');
+        }
+      }
+    } else if (res.status === 400) {
+      error = 'Email or password incorrect';
+    }
     email = '';
     password = '';
   };
@@ -40,6 +64,9 @@
       <form on:submit|preventDefault={handleLogin}>
         <Email bind:value={email} />
         <Password bind:value={password} />
+        {#if error}
+          <p class="error-message">{error}</p>
+        {/if}
         <button id="normal-register-btn" type="submit"
           ><Button text="Login" /></button
         >
@@ -139,6 +166,10 @@
   }
 
   span:hover {
+    color: var(--red);
+  }
+
+  .error-message {
     color: var(--red);
   }
 </style>
