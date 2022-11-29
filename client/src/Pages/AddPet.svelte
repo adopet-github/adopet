@@ -2,7 +2,7 @@
   import Button from '../Components/Button.svelte';
   import Name from '../Components/Inputs/Name.svelte';
   import Number from '../Components/Inputs/Number.svelte';
-  import CloseButton from './CloseButton.svelte';
+  import CloseButton from '../Components/CloseButton.svelte';
 
   let petWeight: number;
   let petAge: number;

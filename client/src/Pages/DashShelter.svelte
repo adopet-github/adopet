@@ -5,16 +5,18 @@
   import ListCont from '../Components/ListCont.svelte';
   import MsgListContainer from '../Components/Messages/MsgListContainer.svelte';
   import { useNavigate } from 'svelte-navigator';
+  import AnimalProfile from '../Components/AnimalProfile.svelte';
+  import { dashView } from '../Stores/dashView';
 
   const navigate = useNavigate();
 
-  let viewingMessages = false;
-
   const handleDashViewToggle = () => {
-    viewingMessages === false
-      ? (viewingMessages = true)
-      : (viewingMessages = false);
-    console.log(viewingMessages);
+    $dashView === 'allAnimals'
+      ? ($dashView = 'msgs')
+      : ($dashView = 'allAnimals');
+    $dashView === 'oneAnimal' ? ($dashView = 'allAnimals') : null;
+    console.log($dashView);
+    console.log($dashView.includes('Animal'));
   };
 
   const handleAddPet = () => {
@@ -26,13 +28,21 @@
   <div class="grid-container">
     <div class="div1 glass">
       <div class="dash-headings">
-        <h1>Dashboard</h1>
+        {#if $dashView.includes('Animal')}
+          <h1>Animal Dashboard</h1>
+        {:else}
+          <h1>Message Dashboard</h1>
+        {/if}
         <Button
-          text={viewingMessages ? 'View messages' : 'View animals'}
+          text={$dashView === 'allAnimals' ? 'View messages' : 'View animals'}
           on:click={handleDashViewToggle}
         />
-        <h2>Messages</h2>
       </div>
+      {#if $dashView.includes('Animal')}
+        <h2>Matches</h2>
+      {:else}
+        <h2>Messages</h2>
+      {/if}
       <div class="list-container">
         <MsgListContainer />
       </div>
@@ -49,8 +59,10 @@
     <div class="div4"><DashStats desc={'open enquiries'} stat={'4'} /></div>
     <div class="div5"><DashStats desc={'most popular'} stat={'Rex'} /></div>
     <div class="div6">
-      {#if viewingMessages}
+      {#if $dashView === 'allAnimals'}
         <ListCont />
+      {:else if $dashView === 'oneAnimal'}
+        <AnimalProfile />
       {:else}
         <Chat />
       {/if}
@@ -95,8 +107,11 @@
 
   .div1 {
     grid-area: 1 / 1 / 11 / 4;
-    border-radius: 30px;
+    border-radius: 1.5rem;
     padding: 0 0 0 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .dash-headings {
@@ -106,7 +121,7 @@
 
   .list-container {
     height: 75%;
-    margin-bottom: 11%;
+    margin-bottom: 8%;
     border-bottom: 1px solid var(--lightgrey);
   }
 

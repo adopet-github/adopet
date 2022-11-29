@@ -4,7 +4,7 @@
   import Email from '../Components/Inputs/Email.svelte';
   import Name from '../Components/Inputs/Name.svelte';
   import Number from '../Components/Inputs/Number.svelte';
-  import CloseButton from './CloseButton.svelte';
+  import CloseButton from '../Components/CloseButton.svelte';
   import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
 
   let accountType = 'adopter';
