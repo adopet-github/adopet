@@ -111,7 +111,6 @@ const controller = {
       await transaction.commit();
       response.status = constants.statusCodes.created;
       response.message = 'Adopter created succesfully!';
-      response.data = adopter;
     
     } catch (err) {
       await transaction.rollback();

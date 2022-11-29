@@ -106,7 +106,6 @@ const controller = {
       await transaction.commit();
       response.status = constants.statusCodes.created;
       response.message = 'Shelter created succesfully!';
-      response.data = shelter;
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT SHELTER-CONTROLLER-create: ', err);

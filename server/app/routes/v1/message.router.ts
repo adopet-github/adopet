@@ -9,15 +9,15 @@ const router = Router();
 
 router.post(
   '/adopter/:adopterId/animal/:animalId',
+  authMiddleware,
   joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   joiMiddleware(schema.create, InputTypes.BODY),
-  authMiddleware,
   controller.create
 );
 router.get(
   '/adopter/:adopterId/animal/:animalId',
-  joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   authMiddleware,
+  joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   controller.retrieveByMatch
 );
 

@@ -8,8 +8,8 @@ const router = Router();
 
 router.delete(
   '/:id',
-  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   authMiddleware,
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   controller.delete
 );
 

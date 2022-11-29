@@ -9,22 +9,22 @@ const router = Router();
 
 router.post(
   '/',
-  joiMiddleware(schema.create, InputTypes.BODY),
   authMiddleware,
+  joiMiddleware(schema.create, InputTypes.BODY),
   controller.create
 );
 router.get('/', authMiddleware, controller.retrieveAll);
 router.get(
   '/:id',
-  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   authMiddleware,
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   controller.retrieveOne
 );
 router.put(
   '/:id',
+  authMiddleware,
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   joiMiddleware(schema.update, InputTypes.BODY),
-  authMiddleware,
   controller.update
 );
 router.delete(
@@ -34,21 +34,21 @@ router.delete(
 );
 router.put(
   '/:id/images',
+  authMiddleware,
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   joiMiddleware(globalSchema.validateImages, InputTypes.BODY),
-  authMiddleware,
   controller.addManyImages
 );
 router.put(
   '/:animalId/match/:adopterId',
-  joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   authMiddleware,
+  joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   controller.matchAdopter
 );
 router.put(
   '/:animalId/dislike/:adopterId',
-  joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   authMiddleware,
+  joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   controller.dislikeAdopter
 );
 
