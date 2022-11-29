@@ -3,11 +3,21 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import sequelize from './db/db';
 import router from './routes/v1.router';
+import rateLimit from 'express-rate-limit';
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
 const app = express();
+
+app.use(limiter);
 
 app.use(cors()).use(express.json());
 

@@ -1,6 +1,6 @@
 import { relationships } from "../models";
 
-const includes = {
+const includes: {[key: string]: object} = {
   adopter: [
     {
       association: relationships.adopter.user,

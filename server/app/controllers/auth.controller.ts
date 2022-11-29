@@ -64,21 +64,22 @@ const controller = {
 
       if (decryptedToken.type === 'adopter') {
         const adopter = await Adopter.findByPk(decryptedToken.id, {include: includes.adopter});
-
         notFoundChecker(adopter, decryptedToken.id, response, 'Adopter');
 
-        response.status = constants.statusCodes.ok;
-        response.message = 'Profile retrieved successfully!';
         response.data = dataParser.adopter((adopter as unknown as AdopterFromDb));
       } else if (decryptedToken.type === 'shelter') {
         const shelter = await Shelter.findByPk(decryptedToken.id, {include: includes.shelter});
-
         notFoundChecker(shelter, decryptedToken.id, response, 'Shelter');
 
-        response.status = constants.statusCodes.ok;
-        response.message = 'Profile retrieved successfully!';
         response.data = dataParser.shelter((shelter as unknown as ShelterFromDb));
+      } else {
+        response.status = 418;
+        response.message = 'Why are you trying to retrieve your profile admin? lol 🤓';
+
+        throw new Error('Admin profile');
       }
+      response.status = constants.statusCodes.ok;
+      response.message = 'Profile retrieved successfully!';
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-profile: ', err);
     }

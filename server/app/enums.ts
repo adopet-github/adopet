@@ -11,7 +11,8 @@ export enum InputTypes {
   QUERY = 'query'
 };
 
-export enum Author {
+export enum AccountTypes {
+  ADMIN = 'admin',
   SHELTER = 'shelter',
   ADOPTER = 'adopter'
 }
