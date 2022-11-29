@@ -9,6 +9,8 @@
   import { userCredentials } from '../Stores/userCredentials';
   import Button from '../Components/Button.svelte';
   import { createUser } from '../Services/adopter';
+  import TextArea from '../Components/Inputs/TextArea.svelte';
+  import type { Adopter } from '../types/adopter';
 
   const navigate = useNavigate();
 
@@ -29,6 +31,9 @@
   let timeAtHome: number;
   let timeAtHomeError: boolean;
 
+  let description: string;
+  let descriptionError: boolean;
+
   const handleOnboarding = async () => {
     if (!age || age > 99) {
       ageError = true;
@@ -46,20 +51,32 @@
       timeAtHomeError = true;
     }
 
-    if (!ageError && !hasPetsError && !hasChildrenError && !timeAtHomeError) {
+    if (!description) {
+      descriptionError = true;
+    }
+
+    if (
+      !ageError &&
+      !hasPetsError &&
+      !hasChildrenError &&
+      !timeAtHomeError &&
+      !descriptionError
+    ) {
       // send to backend
       const onboardingCredentials = {
         age: age,
         house_type: houseType,
         has_pets: hasPets,
         has_children: hasChildren,
-        time_at_home: timeAtHome
+        time_at_home: timeAtHome,
+        description: description
       };
       userCredentials.update((prev) => ({ ...prev, ...onboardingCredentials }));
       // make create adopter request
-      const res = await createUser($userCredentials);
-      console.log('res', res);
+      const res = await createUser($userCredentials as Adopter);
       if (res.status === 201) {
+        // CHANGE TO HTTP ONLY COOKIE FROM SERVER
+        localStorage.setItem('jwt', res.token);
         navigate('/user/swipe');
       }
     }
@@ -117,6 +134,10 @@
               bind:error={hasChildrenError}
             />
           </div>
+          <div class="description">
+            <p>Add a description of yourself:</p>
+            <TextArea bind:value={description} bind:error={descriptionError} />
+          </div>
           <button on:click={handleOnboarding}>
             <Button text="Continue" />
           </button>
@@ -165,6 +186,14 @@
 
   .radio-input {
     width: 100%;
+  }
+
+  .description {
+    width: 100%;
+  }
+
+  .description p {
+    margin-bottom: 0.5rem;
   }
 
   select {
