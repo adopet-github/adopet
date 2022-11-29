@@ -42,93 +42,106 @@
   };
 </script>
 
-<Button
-  text="change profile type"
-  colour="white"
-  on:click={handleProfileView}
-/>
+<div class="container">
+  <div class="card glass glass1">
+    <span class="profile-btn"
+      ><Button
+        text="change profile type"
+        colour="white"
+        on:click={handleProfileView}
+      /></span
+    >
+    <CloseButton />
+    <div class="content-left">
+      <h2>Edit profile</h2>
+      <div class="profile-img" />
+      <p style="color: var(--red); cursor: pointer">change image</p>
+      <div class="details">
+        {#if accountType === 'shelter'}
+          <label for="Name">Shelter Name:</label>
+          <Name
+            bind:value={shelterName}
+            nameType="Shelter name"
+            bind:error={shelterNameError}
+          />
+        {:else}
+          <label for="Name">First Name:</label>
+          <Name
+            nameType="First name"
+            bind:value={firstName}
+            bind:error={firstNameError}
+          />
+          <label for="Name">Last Name:</label>
+          <Name
+            nameType="Last name"
+            bind:value={lastName}
+            bind:error={lastNameError}
+          />
+        {/if}
 
-<div class="container glass glass1">
-  <CloseButton />
-  <div class="content-left">
-    <h2>Edit profile</h2>
-    <div class="profile-img" />
-    <p style="color: var(--red); cursor: pointer">change image</p>
-    <div class="details">
-      {#if accountType === 'shelter'}
-        <label for="Name">Shelter Name:</label>
-        <Name
-          bind:value={shelterName}
-          nameType="Shelter name"
-          bind:error={shelterNameError}
-        />
-      {:else}
-        <label for="Name">First Name:</label>
-        <Name
-          nameType="First name"
-          bind:value={firstName}
-          bind:error={firstNameError}
-        />
-        <label for="Name">Last Name:</label>
-        <Name
-          nameType="Last name"
-          bind:value={lastName}
-          bind:error={lastNameError}
-        />
-      {/if}
-
-      <label for="email">Email:</label>
-      <Email bind:value={email} bind:error={emailError} />
-      <label for="address">Address: </label>
-      <AddressAutocomplete />
-      {#if accountType === 'shelter'}
-        <span><Button text="save" /></span>
-      {/if}
+        <label for="email">Email:</label>
+        <Email bind:value={email} bind:error={emailError} />
+        <label for="address">Address: </label>
+        <AddressAutocomplete />
+        {#if accountType === 'shelter'}
+          <span><Button text="save" /></span>
+        {/if}
+      </div>
     </div>
+
+    {#if accountType == 'adopter'}
+      <div class="content-right">
+        <div class="details">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" rows="3" />
+          <label for="House-type"> House type: </label>
+          <div class="auth-input-container">
+            <select class="auth-input" bind:value={houseType}>
+              <option value="apartment">Apartment</option>
+              <option value="house">House</option>
+              <option value="townhouse">Townhouse</option>
+              <option value="villa">Villa</option>
+            </select>
+          </div>
+          <Number bind:value={age} label="Your Age:" bind:error={ageError} />
+          <Number
+            bind:value={timeAtHome}
+            label="Average hours at home daily:"
+            bind:error={timeAtHomeError}
+          />
+          <div class="radio-input">
+            <p>Do you have any other pets?</p>
+            <BooleanRadio bind:value={hasPets} bind:error={hasPetsError} />
+          </div>
+          <div class="radio-input">
+            <p>Do you have any children?</p>
+            <BooleanRadio
+              bind:value={hasChildren}
+              bind:error={hasChildrenError}
+            />
+          </div>
+          <span><Button text="save" /></span>
+        </div>
+      </div>
+    {/if}
   </div>
-
-  {#if accountType == 'adopter'}
-    <div class="content-right">
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" rows="3" />
-      <label for="House-type"> House type: </label>
-      <div class="auth-input-container">
-        <select class="auth-input" bind:value={houseType}>
-          <option value="apartment">Apartment</option>
-          <option value="house">House</option>
-          <option value="townhouse">Townhouse</option>
-          <option value="villa">Villa</option>
-        </select>
-      </div>
-      <Number bind:value={age} label="Your Age:" bind:error={ageError} />
-      <Number
-        bind:value={timeAtHome}
-        label="Average hours at home daily:"
-        bind:error={timeAtHomeError}
-      />
-      <div class="radio-input">
-        <p>Do you have any other pets?</p>
-        <BooleanRadio bind:value={hasPets} bind:error={hasPetsError} />
-      </div>
-      <div class="radio-input">
-        <p>Do you have any children?</p>
-        <BooleanRadio bind:value={hasChildren} bind:error={hasChildrenError} />
-      </div>
-      <span><Button text="save" /></span>
-    </div>
-  {/if}
 </div>
 
 <style>
   .container {
+    height: 92vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
     height: fit-content;
     position: relative;
     width: 1000px;
     border-radius: 20px;
-    margin: auto;
-    margin-top: 1rem;
     padding: 1rem;
-    padding-top: 1rem;
+    padding-bottom: 2.5rem;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
@@ -144,10 +157,6 @@
     flex-direction: column;
     gap: 0.5rem;
     align-items: center;
-  }
-
-  .content-right {
-    align-items: flex-start;
   }
 
   .details {
@@ -184,5 +193,12 @@
   span {
     width: 100%;
     margin-top: 1rem;
+  }
+
+  .profile-btn {
+    position: fixed;
+    top: 0;
+    left: 1rem;
+    width: 10%;
   }
 </style>
