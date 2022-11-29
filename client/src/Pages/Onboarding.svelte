@@ -1,21 +1,22 @@
 <script lang="ts">
-  import { useNavigate } from 'svelte-navigator';
+  // COMPONENTS
   import BooleanRadio from '../Components/Inputs/BooleanRadio.svelte';
   import Number from '../Components/Inputs/Number.svelte';
-  import MovingBackground from '../Components/MovingBackground.svelte';
-  import { onDestroy } from 'svelte';
   import DogLoader from '../Components/Loaders/DogLoader.svelte';
   import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
-  import { userCredentials } from '../Stores/userCredentials';
   import Button from '../Components/Button.svelte';
-  import { createUser } from '../Services/adopter';
   import TextArea from '../Components/Inputs/TextArea.svelte';
+
+  // UTILS
+  import { useNavigate } from 'svelte-navigator';
+  import { userCredentials } from '../Stores/userCredentials';
+  import { createUser } from '../Services/adopter';
   import type { Adopter } from '../types/adopter';
+  import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
 
   const navigate = useNavigate();
 
-  let isLoading = true;
-  const timeoutId = setTimeout(() => (isLoading = false), 2000);
+  let isLoading = false;
 
   let age: number;
   let ageError: boolean;
@@ -73,16 +74,19 @@
       };
       userCredentials.update((prev) => ({ ...prev, ...onboardingCredentials }));
       // make create adopter request
+      isLoading = true;
       const res = await createUser($userCredentials as Adopter);
       if (res.status === 201) {
         // CHANGE TO HTTP ONLY COOKIE FROM SERVER
         localStorage.setItem('jwt', res.token);
-        navigate('/user/swipe');
+        setTimeout(() => {
+          navigate('/user/swipe');
+        }, 2000);
+      } else {
+        console.log(res);
       }
     }
   };
-
-  onDestroy(() => clearTimeout(timeoutId));
 </script>
 
 <svelte:head>
@@ -92,13 +96,13 @@
   />
 </svelte:head>
 
-<MovingBackground>
-  {#if isLoading}
-    <DogLoader>
-      <TypingLoader>Creating your account...</TypingLoader>
-    </DogLoader>
-  {:else}
-    <div class="container">
+{#if isLoading}
+  <DogLoader>
+    <TypingLoader>Creating your account...</TypingLoader>
+  </DogLoader>
+{:else}
+  <div class="container">
+    <RouteTransition direction="backward" outDuration={0}>
       <div class="form-container glass">
         <div class="form">
           <h1>Tell us more about yourself</h1>
@@ -143,9 +147,9 @@
           </button>
         </div>
       </div>
-    </div>
-  {/if}
-</MovingBackground>
+    </RouteTransition>
+  </div>
+{/if}
 
 <style>
   .container {
@@ -156,6 +160,8 @@
     color: var(--black);
     padding: 2rem;
     border-radius: 1rem;
+    position: relative;
+    height: 92vh;
   }
 
   .form-container {
@@ -173,6 +179,10 @@
     gap: 30px;
     border-radius: 1rem;
     transition: 1s all;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .form {
@@ -210,10 +220,4 @@
     margin-top: 0.5rem;
     margin-bottom: 1rem;
   }
-
-  /* i {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  } */
 </style>

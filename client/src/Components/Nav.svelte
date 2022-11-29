@@ -1,24 +1,39 @@
 <script lang="ts">
-  import { Link } from 'svelte-navigator';
-
+  // ASSETS
   import logoImg from '../assets/imgs/img_logo.svg';
   import logoText from '../assets/imgs/text_logo.svg';
+
+  // UTILS
+  import { Link } from 'svelte-navigator';
+  import { userCredentials } from '../Stores/userCredentials';
+
+  // COMPONENTS
   import LogOut from './Inputs/LogOut.svelte';
 </script>
 
 <nav>
   <div class="nav-logo">
-    <div class="logo-container">
-      <img src={logoImg} alt="adopet logo" />
-      <img src={logoText} alt="adopet" class="logoText" />
-    </div>
+    <Link to="/">
+      <div class="logo-container">
+        <img src={logoImg} alt="adopet logo" />
+        <img src={logoText} alt="adopet" class="logoText" />
+      </div>
+    </Link>
   </div>
   <div class="links">
-    <Link to="/"><span>HOME</span></Link>
-    <Link to="/login"><span>LOGIN</span></Link>
-    <Link to="/register"><span>REGISTER</span></Link>
-    <Link to="/settings"><span>SETTINGS</span></Link>
-    <LogOut />
+    {#if $userCredentials}
+      {#if $userCredentials.house_type}
+        <Link to="/user/swipe"><span>SWIPE</span></Link>
+        <Link to="/user/matches"><span>MATCHES</span></Link>
+      {:else}
+        <Link to="/shelter/dashboard"><span>DASHBOARD</span></Link>
+      {/if}
+      <Link to="/settings"><span>SETTINGS</span></Link>
+      <LogOut />
+    {:else}
+      <Link to="/login"><span>LOGIN</span></Link>
+      <Link to="/register"><span>REGISTER</span></Link>
+    {/if}
   </div>
 </nav>
 

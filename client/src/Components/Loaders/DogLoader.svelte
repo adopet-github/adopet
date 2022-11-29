@@ -44,6 +44,7 @@
 <style>
   .loader {
     width: 100%;
+    height: 100%;
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -55,7 +56,7 @@
 
   .text {
     position: absolute;
-    top: 150%;
+    top: 15%;
     color: black;
   }
 

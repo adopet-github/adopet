@@ -1,4 +1,5 @@
 import type { Credentials } from '../types/auth';
+import { userCredentials } from '../Stores/userCredentials';
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/api/v1/auth`;
 
@@ -25,6 +26,7 @@ export const logOut = async () => {
     body: JSON.stringify({})
   });
   localStorage.removeItem('jwt');
+  userCredentials.set(null);
   return await res.json();
 };
 

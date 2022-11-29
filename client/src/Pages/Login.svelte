@@ -25,7 +25,6 @@
       localStorage.setItem('jwt', res.token);
       // get profile
       const profileRes = await getProfile();
-      console.log(profileRes);
       if (profileRes.status === 401) {
         navigate('/');
       } else if (profileRes.status === 200) {
