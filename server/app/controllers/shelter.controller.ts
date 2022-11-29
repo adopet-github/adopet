@@ -77,7 +77,6 @@ const controller = {
             email: safeBody.email,
             password: safeBody.password,
             salt: safeBody.salt,
-            phone_number: safeBody.phone_number,
             shelter: {
               name: safeBody.name
             },
@@ -107,7 +106,6 @@ const controller = {
       await transaction.commit();
       response.status = constants.statusCodes.created;
       response.message = 'Shelter created succesfully!';
-      response.data = shelter;
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT SHELTER-CONTROLLER-create: ', err);
@@ -168,8 +166,7 @@ const controller = {
       await (user as Model).update(
         {
           email: safeBody.email,
-          password: safeBody.password,
-          phone_number: safeBody.phone_number
+          password: safeBody.password
         } || {},
         {
           transaction
@@ -215,17 +212,29 @@ const controller = {
 
   delete: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
+    
+    const transaction = await sequelize.transaction();
     try {
       const { id } = req.params;
+      const shelter = await Shelter.findByPk(id,{
+        include: [relationships.shelter.user],
+        transaction
+      });
 
-      const rowsDeleted = await Shelter.destroy({ where: { id } });
+      notFoundChecker(shelter, Number(id), response, 'Shelter');
+      const userId = (shelter as unknown as {user: {id: number}}).user.id;
+      const generalId = (shelter as unknown as {user: {generalId: number}}).user.generalId;
 
-      notFoundChecker(rowsDeleted, Number(id), response, 'Shelter');
+      await Shelter.destroy({ where: { id }, transaction });
+      await User.destroy({ where: { id: userId }, transaction });
+      await General.destroy({ where: { id: generalId }, transaction });
+
+      await transaction.commit();
 
       response.status = constants.statusCodes.ok;
       response.message = 'Shelter deleted succesfully!';
     } catch (err) {
+      await transaction.rollback();
       console.warn('ERROR AT SHELTER-CONTROLLER-delete: ', err);
     }
 

@@ -1,9 +1,16 @@
 import { Router } from 'express';
 import controller from '../../controllers/auth.controller';
+import { InputTypes } from '../../enums';
 import authMiddleware from '../../middlewares/auth.middeware';
+import joiMiddleware from '../../middlewares/joi.middleware';
+import schema from '../../schemas/auth.schema';
 const router = Router();
 
-router.post('/login', controller.login);
+router.post(
+  '/login',
+  joiMiddleware(schema.login, InputTypes.BODY),
+  controller.login
+);
 router.get('/profile', authMiddleware, controller.profile);
 router.post('/logout', authMiddleware, controller.logout);
 

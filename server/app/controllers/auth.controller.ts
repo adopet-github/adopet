@@ -18,33 +18,36 @@ const controller = {
     try {
       const user = await User.findOne({
         where: {email: req.body.email},
-        include: [relationships.user.adopter, relationships.user.shelter]
+        include: [
+          relationships.user.adopter,
+          relationships.user.shelter
+        ]
       });
 
-      const typeToEvaluate = user !== null && (req.body.type === 'adopter' ? (user as unknown as {adopter: string}).adopter :
-        (user as unknown as {shelter: string}).shelter);
+      const adopter = user !== null ? (user as unknown as {adopter: string}).adopter : null;
+      const shelter = user !== null ? ((user as unknown as {shelter: string}).shelter) : null;
+
+      const type = adopter === null && shelter !== null ? 'shelter' : 'adopter';
 
       if (user === null ||
-        !await compare(req.body.password, (user as unknown as {password: string}).password) ||
-        typeToEvaluate === null) {
+        !await compare(req.body.password, (user as unknown as {password: string}).password)) {
           response.status = constants.statusCodes.badRequest;
           response.message = 'Email or password not correct';
           throw new Error(response.message);
       }
-      const id = req.body.type === 'adopter' ? (user as unknown as {adopter: {id: number}}).adopter.id :
+      const id = type === 'adopter' ? (user as unknown as {adopter: {id: number}}).adopter.id :
         (user as unknown as {shelter: {id: number}}).shelter.id;
 
       const responseToken = await Token.create({
         content: generateToken({
           id,
-          type: req.body.type
+          type
         })
       });
 
       response.token = (responseToken as unknown as {content: string}).content;
-
       response.status = constants.statusCodes.ok;
-      response.message = `${req.body.type[0].toUpperCase()}${req.body.type.slice(1)} logged in successfully!`;
+      response.message = `${type[0].toUpperCase()}${type.slice(1)} logged in successfully!`;
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-login: ', err);
       

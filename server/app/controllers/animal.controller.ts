@@ -160,16 +160,23 @@ const controller = {
   delete: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
+    const transaction = await sequelize.transaction();
     try {
       const { id } = req.params;
+      const animal = await Animal.findByPk(id);
+      notFoundChecker(animal, Number(id), response, 'Animal');
+      
+      const generalId = (animal as unknown as {generalId: number}).generalId;
+      
+      await Animal.destroy({ where: { id }, transaction });
+      await General.destroy({ where: { id: generalId }, transaction});
 
-      const rowsDeleted = await Animal.destroy({ where: { id } });
-
-      notFoundChecker(rowsDeleted, Number(id), response, 'Animal');
+      await transaction.commit();
 
       response.status = constants.statusCodes.ok;
       response.message = 'Animal deleted succesfully!';
     } catch (err) {
+      await transaction.rollback();
       console.warn('ERROR AT ANIMAL-CONTROLLER-delete: ', err);
     }
 

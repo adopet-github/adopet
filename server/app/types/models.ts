@@ -14,7 +14,6 @@ export type User = General & {
   email: string;
   password?: string;
   salt?: string;
-  phone_number: string;
 };
 
 export type Adopter = User &
