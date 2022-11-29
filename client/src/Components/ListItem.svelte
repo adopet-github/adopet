@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from './Button.svelte';
+  import { dashView } from '../Stores/dashView';
 </script>
 
 <div class="list-item glass">
@@ -10,7 +11,9 @@
   <p>type</p>
   <p>enquiries</p>
   <div class="btns-container">
-    <span><Button text="view" /></span>
+    <span
+      ><Button text="view" on:click={() => ($dashView = 'oneAnimal')} /></span
+    >
     <span><Button text="X" /></span>
   </div>
 </div>

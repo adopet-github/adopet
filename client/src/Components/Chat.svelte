@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from './Button.svelte';
+  import CloseButton from './CloseButton.svelte';
 
   let animalName = 'animalName';
   let shelterName = 'shelterName';
@@ -11,7 +12,7 @@
       <div class="dummy-img" />
     </div>
     <p class="chat-title">{animalName} <span>from</span> {shelterName}</p>
-    <span>close</span>
+    <span><CloseButton /></span>
   </div>
   <div class="chat-content">
     <div class="message-1"><p>hi</p></div>

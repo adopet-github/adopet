@@ -4,6 +4,7 @@
   import Nav from './Components/Nav.svelte';
   import TransitionContainer from './Components/Transitions/TransitionContainer.svelte';
   import AddPet from './Pages/AddPet.svelte';
+  import AnimalProfile from './Components/AnimalProfile.svelte';
   import DashShelter from './Pages/DashShelter.svelte';
   import Home from './Pages/Home.svelte';
   import Login from './Pages/Login.svelte';
@@ -38,6 +39,9 @@
     </Route>
     <Route path="shelter/addpet">
       <AddPet />
+    </Route>
+    <Route path="shelter/animals/:id">
+      <AnimalProfile />
     </Route>
     <Route path="settings">
       <Settings />
