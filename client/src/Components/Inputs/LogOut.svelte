@@ -17,5 +17,6 @@
     color: #f8e5e6;
     font-family: 'Satoshi-Variable';
     outline: none;
+    padding: 15px;
   }
 </style>

@@ -13,8 +13,12 @@
   import TextArea from '../Components/Inputs/TextArea.svelte';
   import { createShelter } from '../Services/shelter';
   import type { Shelter } from '../types/shelter';
+  import DogLoader from '../Components/Loaders/DogLoader.svelte';
+  import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
 
   const navigate = useNavigate();
+
+  let isLoading = false;
 
   let email = '';
   let emailError: boolean;
@@ -71,7 +75,7 @@
       address = '';
     }
 
-    if (!description) {
+    if (accountType === 'shelter' && !description) {
       descriptionError = true;
     }
 
@@ -108,14 +112,17 @@
         // TODO verify email and password
 
         // send request to backend
+        isLoading = true;
         const res = await createShelter(
           newUserCredentials as unknown as Shelter
         );
-        console.log(res);
         if (res.status === 201) {
           // CHANGE TO HTTP ONLY COOKIE FROM SERVER
+          userCredentials.set(newUserCredentials);
           localStorage.setItem('jwt', res.token);
-          navigate('/shelter/dashboard');
+          setTimeout(() => {
+            navigate('/shelter/dashboard');
+          }, 2000);
         } else if (res.status === 400) {
           if (res.message === 'User with email jwt@email.com already exists!')
             emailError = true;
@@ -135,80 +142,86 @@
   };
 </script>
 
-<RouteTransition direction="forward">
-  <div class="container">
-    <!-- {#if accountType === 'adopter'}
+{#if isLoading}
+  <DogLoader>
+    <TypingLoader>Creating your account...</TypingLoader>
+  </DogLoader>
+{:else}
+  <RouteTransition direction="forward">
+    <div class="container">
+      <!-- {#if accountType === 'adopter'}
       <AdopterInfo />
     {:else}
       <ShelterInfo />
     {/if} -->
-    <div class="form-container glass">
-      <h1>Sign up</h1>
-      <div class="account-type">
-        <label>
-          <input type="radio" bind:group={accountType} value="adopter" />
-          I want to adopt
-        </label>
-        <label>
-          <input type="radio" bind:group={accountType} value="shelter" />
-          We are a shelter
-        </label>
-      </div>
-      {#if accountType === 'adopter'}
-        <button id="google" on:click={handleGoogleRegister}>
-          <img src={GoogleIcon} alt="google icon" />
-          <span>Register with Google </span>
-        </button>
-        <div class="or">
-          <hr />
-          <h2>OR</h2>
-          <hr />
+      <div class="form-container glass">
+        <h1>Sign up</h1>
+        <div class="account-type">
+          <label>
+            <input type="radio" bind:group={accountType} value="adopter" />
+            I want to adopt
+          </label>
+          <label>
+            <input type="radio" bind:group={accountType} value="shelter" />
+            We are a shelter
+          </label>
         </div>
-      {/if}
-      <form on:submit|preventDefault={handleRegister}>
-        {#if accountType === 'shelter'}
-          <Name
-            bind:value={shelterName}
-            nameType="Shelter name"
-            bind:error={shelterNameError}
-          />
-        {:else}
-          <div class="names">
-            <Name
-              nameType="First name"
-              bind:value={firstName}
-              bind:error={firstNameError}
-            />
-            <Name
-              nameType="Last name"
-              bind:value={lastName}
-              bind:error={lastNameError}
-            />
+        {#if accountType === 'adopter'}
+          <button id="google" on:click={handleGoogleRegister}>
+            <img src={GoogleIcon} alt="google icon" />
+            <span>Register with Google </span>
+          </button>
+          <div class="or">
+            <hr />
+            <h2>OR</h2>
+            <hr />
           </div>
         {/if}
-        <Email bind:value={email} bind:error={emailError} />
-        <Password bind:value={password} bind:error={passwordError} />
-        <AddressAutocomplete
-          bind:value={address}
-          bind:location
-          bind:error={addressError}
-        />
-        {#if accountType === 'shelter'}
-          <TextArea bind:value={description} bind:error={descriptionError} />
-        {/if}
-        <button type="submit" id="normal-register-btn"
-          ><Button text="Register" /></button
-        >
-      </form>
-      <p>
-        Already have an account?
-        <Link to="/login">
-          <span><strong>Login Now</strong></span>
-        </Link>
-      </p>
+        <form on:submit|preventDefault={handleRegister}>
+          {#if accountType === 'shelter'}
+            <Name
+              bind:value={shelterName}
+              nameType="Shelter name"
+              bind:error={shelterNameError}
+            />
+          {:else}
+            <div class="names">
+              <Name
+                nameType="First name"
+                bind:value={firstName}
+                bind:error={firstNameError}
+              />
+              <Name
+                nameType="Last name"
+                bind:value={lastName}
+                bind:error={lastNameError}
+              />
+            </div>
+          {/if}
+          <Email bind:value={email} bind:error={emailError} />
+          <Password bind:value={password} bind:error={passwordError} />
+          <AddressAutocomplete
+            bind:value={address}
+            bind:location
+            bind:error={addressError}
+          />
+          {#if accountType === 'shelter'}
+            <TextArea bind:value={description} bind:error={descriptionError} />
+          {/if}
+          <button type="submit" id="normal-register-btn"
+            ><Button text="Register" /></button
+          >
+        </form>
+        <p>
+          Already have an account?
+          <Link to="/login">
+            <span><strong>Login Now</strong></span>
+          </Link>
+        </p>
+      </div>
     </div>
-  </div>
-</RouteTransition>
+  </RouteTransition>
+{/if}
 
 <style>
   h1 {

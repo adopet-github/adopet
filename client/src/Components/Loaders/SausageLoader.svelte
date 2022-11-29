@@ -1,7 +1,3 @@
-<script lang="ts">
-  import { fade } from 'svelte/transition';
-</script>
-
 <!-- https://codepen.io/stivaliserna/pen/jObPyKe -->
 
 <div class="container">
@@ -9,9 +5,6 @@
     class="sausage-dog-animation"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="-50 0 1200 1080"
-    in:fade={{
-      duration: 300
-    }}
   >
     <ellipse
       class="shadow"
@@ -336,9 +329,9 @@
 
 <style>
   .container {
-    height: 100%;
+    height: 100vh;
     align-items: center;
-    background-color: #d4e6ff;
+    background-color: white;
     display: flex;
     justify-content: center;
     margin: 0;
