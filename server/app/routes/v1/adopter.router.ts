@@ -4,6 +4,7 @@ import { AccountTypes, InputTypes } from '../../enums';
 import authMiddleware from '../../middlewares/auth.middeware';
 import isRoleMiddleware from '../../middlewares/isrole.middleware';
 import joiMiddleware from '../../middlewares/joi.middleware';
+import reflexiveMiddleware from '../../middlewares/reflexive.middleware';
 import userExistsMiddleware from '../../middlewares/userexists.middleware';
 import schema from '../../schemas/adopter.schema';
 import globalSchema from '../../schemas/global.schema';
@@ -27,6 +28,7 @@ router.put(
   '/:id',
   authMiddleware,
   isRoleMiddleware(AccountTypes.ADOPTER),
+  reflexiveMiddleware(),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   joiMiddleware(schema.update, InputTypes.BODY),
   controller.update
@@ -35,6 +37,7 @@ router.delete(
   '/:id',
   authMiddleware,
   isRoleMiddleware(AccountTypes.ADOPTER),
+  reflexiveMiddleware(),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   controller.delete
 );
@@ -42,6 +45,7 @@ router.put(
   '/:id/images',
   authMiddleware,
   isRoleMiddleware(AccountTypes.ADOPTER),
+  reflexiveMiddleware(),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   joiMiddleware(globalSchema.validateImages, InputTypes.BODY),
   controller.addManyImages
@@ -50,6 +54,7 @@ router.put(
   '/:adopterId/like/:animalId',
   authMiddleware,
   isRoleMiddleware(AccountTypes.ADOPTER),
+  reflexiveMiddleware('adopterId'),
   joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   controller.likeAnimal
 );
@@ -57,6 +62,7 @@ router.put(
   '/:adopterId/dislike/:animalId',
   authMiddleware,
   isRoleMiddleware(AccountTypes.ADOPTER),
+  reflexiveMiddleware('adopterId'),
   joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
   controller.dislikeAnimal
 );

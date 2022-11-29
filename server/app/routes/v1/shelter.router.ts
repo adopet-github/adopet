@@ -7,6 +7,7 @@ import globalSchema from '../../schemas/global.schema';
 import authMiddleware from '../../middlewares/auth.middeware';
 import userExistsMiddleware from '../../middlewares/userexists.middleware';
 import isRoleMiddleware from '../../middlewares/isrole.middleware';
+import reflexiveMiddleware from '../../middlewares/reflexive.middleware';
 const router = Router();
 
 router.post(
@@ -28,6 +29,7 @@ router.put(
   authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  reflexiveMiddleware(),
   joiMiddleware(schema.update, InputTypes.BODY),
   controller.update
 );
@@ -36,6 +38,7 @@ router.delete(
   authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  reflexiveMiddleware(),
   controller.delete
 );
 router.put(
@@ -43,6 +46,7 @@ router.put(
   authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  reflexiveMiddleware(),
   joiMiddleware(globalSchema.validateImages, InputTypes.BODY),
   controller.addManyImages
 );
