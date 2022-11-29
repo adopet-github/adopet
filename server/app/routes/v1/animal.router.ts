@@ -4,6 +4,7 @@ import { AccountTypes, InputTypes } from '../../enums';
 import authMiddleware from '../../middlewares/auth.middeware';
 import isRoleMiddleware from '../../middlewares/isrole.middleware';
 import joiMiddleware from '../../middlewares/joi.middleware';
+import selfShelterMiddleware from '../../middlewares/selfshelter.middleware';
 import schema from '../../schemas/animal.schema';
 import globalSchema from '../../schemas/global.schema';
 const router = Router();
@@ -13,6 +14,7 @@ router.post(
   authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(schema.create, InputTypes.BODY),
+  selfShelterMiddleware('shelterId', InputTypes.BODY),
   controller.create
 );
 router.get('/', authMiddleware, isRoleMiddleware(AccountTypes.ADOPTER), controller.retrieveAll);
@@ -27,6 +29,7 @@ router.put(
   authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  selfShelterMiddleware(),
   joiMiddleware(schema.update, InputTypes.BODY),
   controller.update
 );
@@ -34,6 +37,7 @@ router.delete(
   '/:id',
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  selfShelterMiddleware(),
   controller.delete
 );
 router.put(
@@ -41,6 +45,7 @@ router.put(
   authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  selfShelterMiddleware(),
   joiMiddleware(globalSchema.validateImages, InputTypes.BODY),
   controller.addManyImages
 );
@@ -49,6 +54,7 @@ router.put(
   authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
+  selfShelterMiddleware('animalId'),
   controller.matchAdopter
 );
 router.put(
@@ -56,6 +62,7 @@ router.put(
   authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateLike, InputTypes.PARAMS),
+  selfShelterMiddleware('animalId'),
   controller.dislikeAdopter
 );
 
