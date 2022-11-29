@@ -26,6 +26,10 @@ app.use(cors()).use(express.json());
 
 app.use('/api/v1/', router);
 
+app.use('/healthcheck', (req, res) => {
+  res.send('Healthy');
+});
+
 app.use('/', (req, res) => {
   res.status(404).send({
     status: 404,
