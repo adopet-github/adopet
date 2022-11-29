@@ -8,9 +8,9 @@
   import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
   import { userCredentials } from '../Stores/userCredentials';
   import Button from '../Components/Button.svelte';
+  import { createUser } from '../Services/adopter';
 
   const navigate = useNavigate();
-  console.log($userCredentials);
 
   let isLoading = true;
   const timeoutId = setTimeout(() => (isLoading = false), 2000);
@@ -29,7 +29,7 @@
   let timeAtHome: number;
   let timeAtHomeError: boolean;
 
-  const handleOnboarding = () => {
+  const handleOnboarding = async () => {
     if (!age || age > 99) {
       ageError = true;
     }
@@ -49,15 +49,19 @@
     if (!ageError && !hasPetsError && !hasChildrenError && !timeAtHomeError) {
       // send to backend
       const onboardingCredentials = {
-        age,
-        houseType,
-        hasPets,
-        hasChildren,
-        timeAtHome
+        age: age,
+        house_type: houseType,
+        has_pets: hasPets,
+        has_children: hasChildren,
+        time_at_home: timeAtHome
       };
       userCredentials.update((prev) => ({ ...prev, ...onboardingCredentials }));
-      console.log($userCredentials);
-      navigate('/user/swipe');
+      // make create adopter request
+      const res = await createUser($userCredentials);
+      console.log('res', res);
+      if (res.status === 201) {
+        navigate('/user/swipe');
+      }
     }
   };
 

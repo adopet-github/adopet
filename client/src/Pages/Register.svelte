@@ -35,6 +35,7 @@
   let addressError: boolean;
 
   const handleRegister = () => {
+    console.log(password);
     if (accountType === 'shelter' && !shelterName) {
       shelterNameError = true;
       shelterName = '';
@@ -75,27 +76,26 @@
     ) {
       // is user one collection of is there a separate collection for adopter and shelter
       const newUserCredentials = {
-        firstName,
-        lastName,
-        email,
-        password,
-        shelterName,
-        address,
-        location
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+        name: shelterName,
+        address: address,
+        latitude: location[0],
+        longitude: location[1]
       };
       if (accountType === 'adopter') {
-        delete newUserCredentials.shelterName;
+        delete newUserCredentials.name;
         // add to store
-        console.log(newUserCredentials);
         userCredentials.set(newUserCredentials);
         navigate('/onboarding');
       } else {
         // send request to backend
         navigate('/shelter/dashboard');
-        delete newUserCredentials.firstName;
-        delete newUserCredentials.lastName;
+        delete newUserCredentials.first_name;
+        delete newUserCredentials.last_name;
       }
-      console.log(newUserCredentials);
     }
   };
 
