@@ -19,11 +19,13 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
-      const modelResponse = await Animal.findAll({include: includes.animal});
+      const modelResponse = await Animal.findAll({ include: includes.animal });
 
       response.status = constants.statusCodes.ok;
       response.message = 'Animals retrieved successfully!';
-      response.data = (modelResponse as unknown as AnimalFromDb[]).map(dataParser.animal);
+      response.data = (modelResponse as unknown as AnimalFromDb[]).map(
+        dataParser.animal
+      );
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-retrieveAll: ', err);
     }
@@ -40,7 +42,7 @@ const controller = {
         include: includes.animal
       });
 
-      notFoundChecker(animal, Number(id), response, 'Animal');
+      notFoundChecker(animal, id, response, 'Animal');
 
       response.status = constants.statusCodes.ok;
       response.message = 'Animal retrieved successfully!';
@@ -117,7 +119,7 @@ const controller = {
         include: [relationships.animal.general]
       });
 
-      notFoundChecker(animal, Number(id), response, 'Animal');
+      notFoundChecker(animal, id, response, 'Animal');
 
       const general = await General.findByPk(
         (animal as unknown as { general: { id: number } }).general.id
@@ -151,7 +153,9 @@ const controller = {
       await transaction.commit();
       response.status = constants.statusCodes.ok;
       response.message = 'Animal updated succesfully!';
-      response.data = dataParser.animal(updatedAnimal as unknown as AnimalFromDb);
+      response.data = dataParser.animal(
+        updatedAnimal as unknown as AnimalFromDb
+      );
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT ANIMAL-CONTROLLER-update: ', err);
@@ -167,12 +171,12 @@ const controller = {
     try {
       const { id } = req.params;
       const animal = await Animal.findByPk(id);
-      notFoundChecker(animal, Number(id), response, 'Animal');
-      
-      const generalId = (animal as unknown as {generalId: number}).generalId;
-      
+      notFoundChecker(animal, id, response, 'Animal');
+
+      const generalId = (animal as unknown as { generalId: number }).generalId;
+
       await Animal.destroy({ where: { id }, transaction });
-      await General.destroy({ where: { id: generalId }, transaction});
+      await General.destroy({ where: { id: generalId }, transaction });
 
       await transaction.commit();
 
@@ -197,7 +201,7 @@ const controller = {
         include: [relationships.animal.general]
       });
 
-      notFoundChecker(animal, Number(id), response, 'Animal');
+      notFoundChecker(animal, id, response, 'Animal');
 
       const { images } = req.body;
       console.log(images);
@@ -223,19 +227,18 @@ const controller = {
       const { adopterId, animalId } = req.params;
 
       const animal = await Animal.findByPk(animalId);
-      notFoundChecker(animal, Number(animalId), response, 'Animal');
+      notFoundChecker(animal, animalId, response, 'Animal');
 
       const adopter = await Adopter.findByPk(adopterId);
-      notFoundChecker(adopter, Number(adopterId), response, 'Adopter');
+      notFoundChecker(adopter, adopterId, response, 'Adopter');
 
-
-      const relationship = await Adopter_Animal.findOne(
-        {where: {
+      const relationship = await Adopter_Animal.findOne({
+        where: {
           adopterId,
           animalId,
           is_liked: true
-        }}
-      );
+        }
+      });
 
       if (relationship === null) {
         response.status = constants.statusCodes.notFound;
@@ -243,16 +246,18 @@ const controller = {
         throw new Error(response.message);
       }
 
-      await Adopter_Animal.update({
-        is_liked: false,
-        is_matched: true
-      }, {
-        where: {adopterId, animalId}
-      });
+      await Adopter_Animal.update(
+        {
+          is_liked: false,
+          is_matched: true
+        },
+        {
+          where: { adopterId, animalId }
+        }
+      );
 
       response.status = constants.statusCodes.ok;
       response.message = 'Adopter matched successfully!';
-
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-matchAdopter: ', err);
     }
@@ -267,18 +272,18 @@ const controller = {
       const { adopterId, animalId } = req.params;
 
       const animal = await Animal.findByPk(animalId);
-      notFoundChecker(animal, Number(animalId), response, 'Animal');
+      notFoundChecker(animal, animalId, response, 'Animal');
 
       const adopter = await Adopter.findByPk(adopterId);
-      notFoundChecker(adopter, Number(adopterId), response, 'Adopter');
+      notFoundChecker(adopter, adopterId, response, 'Adopter');
 
-      const relationship = await Adopter_Animal.findOne(
-        {where: {
+      const relationship = await Adopter_Animal.findOne({
+        where: {
           adopterId,
           animalId,
           is_liked: true
-        }}
-      );
+        }
+      });
 
       if (relationship === null) {
         response.status = constants.statusCodes.notFound;
@@ -286,22 +291,24 @@ const controller = {
         throw new Error(response.message);
       }
 
-      await Adopter_Animal.update({
-        is_liked: false,
-        is_matched: false
-      }, {
-        where: {adopterId, animalId}
-      });
+      await Adopter_Animal.update(
+        {
+          is_liked: false,
+          is_matched: false
+        },
+        {
+          where: { adopterId, animalId }
+        }
+      );
 
       response.status = constants.statusCodes.ok;
       response.message = 'Adopter disliked successfully!';
-
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-likeAdopter: ', err);
     }
 
     res.status(response.status).send(response);
-  },
+  }
 };
 
 export default controller;

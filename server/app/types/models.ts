@@ -34,7 +34,7 @@ export type Animal = General & {
   name: string;
   age: number;
   weight: number;
-  shelterId: number;
+  shelterId: string;
   images?: Image[];
   adopters?: Adopter[];
   id?: string;
@@ -43,9 +43,9 @@ export type Animal = General & {
 export type Shelter = User &
   Location & {
     name: string;
-    id?: string,
-    images?: Image[],
-    animals?: Animal[]
+    id?: string;
+    images?: Image[];
+    animals?: Animal[];
   };
 
 export type Image = {

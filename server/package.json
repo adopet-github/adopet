@@ -15,6 +15,7 @@
     "@hapi/joi": "^17.1.1",
     "@types/bcrypt": "^5.0.0",
     "@types/hapi__joi": "^17.1.8",
+    "@types/http-server": "^0.12.1",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
@@ -31,6 +32,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.25.8",
     "sequelize-typescript": "^2.1.5",
+    "socket.io": "^4.5.4",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

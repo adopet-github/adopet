@@ -22,11 +22,15 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
-      const modelResponse = await Adopter.findAll({include: includes.adopter});
+      const modelResponse = await Adopter.findAll({
+        include: includes.adopter
+      });
 
       response.status = constants.statusCodes.ok;
       response.message = 'Adopters retrieved successfully!';
-      response.data = (modelResponse as unknown as AdopterFromDb[]).map(dataParser.adopter);
+      response.data = (modelResponse as unknown as AdopterFromDb[]).map(
+        dataParser.adopter
+      );
     } catch (err) {
       console.warn('ERROR AT ADOPTER-CONTROLLER-retrieveAll: ', err);
     }
@@ -43,11 +47,11 @@ const controller = {
         include: includes.adopter
       });
 
-      notFoundChecker(adopter, Number(id), response, 'Adopter');
+      notFoundChecker(adopter, id, response, 'Adopter');
 
       response.status = constants.statusCodes.ok;
       response.message = 'Adopter retrieved successfully!';
-      response.data = dataParser.adopter((adopter as unknown as AdopterFromDb));
+      response.data = dataParser.adopter(adopter as unknown as AdopterFromDb);
     } catch (err) {
       console.warn('ERROR AT ADOPTER-CONTROLLER-retrieveOne: ', err);
     }
@@ -110,16 +114,21 @@ const controller = {
         }
       );
 
-      const responseToken = await Token.create({id: uuidv4(), content: generateToken({
-        id: (adopter as unknown as {user: {adopter: {id: number}}}).user.adopter.id,
-        type: 'adopter'
-      })});
-      response.token = (responseToken as unknown as {content: string}).content;
-      
+      const responseToken = await Token.create({
+        id: uuidv4(),
+        content: generateToken({
+          id: (adopter as unknown as { user: { adopter: { id: number } } }).user
+            .adopter.id,
+          type: 'adopter'
+        })
+      });
+      response.token = (
+        responseToken as unknown as { content: string }
+      ).content;
+
       await transaction.commit();
       response.status = constants.statusCodes.created;
       response.message = 'Adopter created succesfully!';
-    
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT ADOPTER-CONTROLLER-create: ', err);
@@ -152,7 +161,7 @@ const controller = {
         ]
       });
 
-      notFoundChecker(adopter, Number(id), response, 'Adopter');
+      notFoundChecker(adopter, id, response, 'Adopter');
 
       const user = await User.findByPk(
         (adopter as unknown as { user: { id: number } }).user.id,
@@ -223,7 +232,9 @@ const controller = {
       await transaction.commit();
       response.status = constants.statusCodes.ok;
       response.message = 'Adopter updated succesfully!';
-      response.data = dataParser.adopter((updatedAdopter as unknown as AdopterFromDb));;
+      response.data = dataParser.adopter(
+        updatedAdopter as unknown as AdopterFromDb
+      );
     } catch (err) {
       await transaction.rollback();
       console.warn('ERROR AT ADOPTER-CONTROLLER-update: ', err);
@@ -239,14 +250,15 @@ const controller = {
     try {
       const { id } = req.params;
 
-      const adopter = await Adopter.findByPk(id,{
+      const adopter = await Adopter.findByPk(id, {
         include: [relationships.adopter.user],
         transaction
       });
 
-      notFoundChecker(adopter, Number(id), response, 'Adopter');
-      const userId = (adopter as unknown as {user: {id: number}}).user.id;
-      const generalId = (adopter as unknown as {user: {generalId: number}}).user.generalId;
+      notFoundChecker(adopter, id, response, 'Adopter');
+      const userId = (adopter as unknown as { user: { id: number } }).user.id;
+      const generalId = (adopter as unknown as { user: { generalId: number } })
+        .user.generalId;
 
       await Adopter.destroy({ where: { id }, transaction });
       await User.destroy({ where: { id: userId }, transaction });
@@ -280,7 +292,7 @@ const controller = {
         ]
       });
 
-      notFoundChecker(adopter, Number(id), response, 'Adopter');
+      notFoundChecker(adopter, id, response, 'Adopter');
 
       const { images } = req.body;
       const mappedImages = images.map((image: ImageType) => ({
@@ -306,10 +318,10 @@ const controller = {
       const { adopterId, animalId } = req.params;
 
       const adopter = await Adopter.findByPk(adopterId);
-      notFoundChecker(adopter, Number(adopterId), response, 'Adopter');
+      notFoundChecker(adopter, adopterId, response, 'Adopter');
 
       const animal = await Animal.findByPk(animalId);
-      notFoundChecker(animal, Number(animalId), response, 'Animal');
+      notFoundChecker(animal, animalId, response, 'Animal');
 
       const relationship = await Adopter_Animal.findOne({
         where: {
@@ -348,10 +360,10 @@ const controller = {
       const { adopterId, animalId } = req.params;
 
       const adopter = await Adopter.findByPk(adopterId);
-      notFoundChecker(adopter, Number(adopterId), response, 'Adopter');
+      notFoundChecker(adopter, adopterId, response, 'Adopter');
 
       const animal = await Animal.findByPk(animalId);
-      notFoundChecker(animal, Number(animalId), response, 'Animal');
+      notFoundChecker(animal, animalId, response, 'Animal');
 
       const relationship = await Adopter_Animal.findOne({
         where: {
