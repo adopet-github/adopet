@@ -226,17 +226,30 @@ const controller = {
 
   delete: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
+    const transaction = await sequelize.transaction();
 
     try {
       const { id } = req.params;
 
-      const rowsDeleted = await Adopter.destroy({ where: { id } });
+      const adopter = await Adopter.findByPk(id,{
+        include: [relationships.adopter.user],
+        transaction
+      });
 
-      notFoundChecker(rowsDeleted, Number(id), response, 'Adopter');
+      notFoundChecker(adopter, Number(id), response, 'Adopter');
+      const userId = (adopter as unknown as {user: {id: number}}).user.id;
+      const generalId = (adopter as unknown as {user: {generalId: number}}).user.generalId;
+
+      await Adopter.destroy({ where: { id }, transaction });
+      await User.destroy({ where: { id: userId }, transaction });
+      await General.destroy({ where: { id: generalId }, transaction });
+
+      await transaction.commit();
 
       response.status = constants.statusCodes.ok;
       response.message = 'Adopter deleted succesfully!';
     } catch (err) {
+      await transaction.rollback();
       console.warn('ERROR AT ADOPTER-CONTROLLER-delete: ', err);
     }
 

@@ -27,7 +27,7 @@ const controller = {
       const adopter = user !== null ? (user as unknown as {adopter: string}).adopter : null;
       const shelter = user !== null ? ((user as unknown as {shelter: string}).shelter) : null;
 
-      const type = adopter === null ? 'shelter' : 'adopter';
+      const type = adopter === null && shelter !== null ? 'shelter' : 'adopter';
 
       if (user === null ||
         !await compare(req.body.password, (user as unknown as {password: string}).password)) {
