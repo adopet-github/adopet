@@ -1,18 +1,41 @@
-import { NextFunction, Response } from "express";
-import { MyRequest } from "../types/server";
-import { decryptToken } from "../utils/jwt";
-import constants from "../utils/constants";
-import { AccountTypes } from "../enums";
+import { NextFunction, Response } from 'express';
+import { MyRequest, MyResponse } from '../types/server';
+import { decryptToken } from '../utils/jwt';
+import constants from '../utils/constants';
+import { AccountTypes } from '../enums';
+import models from '../models/index';
+import { notFoundChecker } from '../utils/db';
 
-export default function chatMemberMiddleware (req: MyRequest, res: Response, next: NextFunction) {
-  const response = {...constants.fallbackResponse};
+const { Animal } = models;
 
-  const decryptedToken = (decryptToken(req.token as string) as unknown as {id: number, type: AccountTypes});
-  const { adopterId, shelterId } = req.params;
+export default async function chatMemberMiddleware(
+  req: MyRequest,
+  res: Response,
+  next: NextFunction
+) {
+  const response = { ...constants.fallbackResponse } as MyResponse;
 
-  if (decryptedToken.id === Number(adopterId) || decryptedToken.id === Number(shelterId)) {
-    next();
-    return;
+  const decryptedToken = decryptToken(req.token as string) as unknown as {
+    id: string;
+    type: AccountTypes;
+  };
+  try {
+    const { adopterId, animalId } = req.params;
+
+    const animal = await Animal.findByPk(animalId);
+
+    notFoundChecker(animal, animalId, response, 'Animal');
+
+    if (
+      decryptedToken.id === adopterId ||
+      decryptedToken.id ===
+        (animal as unknown as { shelterId: string }).shelterId
+    ) {
+      next();
+      return;
+    }
+  } catch (err) {
+    console.warn('ERROR AT CHATMEMBER-MIDDLEWARE-chatMemberMiddleware ', err);
   }
 
   response.status = constants.statusCodes.unAuthorized;
