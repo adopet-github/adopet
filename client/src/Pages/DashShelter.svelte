@@ -7,6 +7,7 @@
   import { useNavigate } from 'svelte-navigator';
   import AnimalProfile from '../Components/AnimalProfile.svelte';
   import { dashView } from '../Stores/dashView';
+  import AdopterProfile from '../Components/AdopterProfile.svelte';
 
   const navigate = useNavigate();
 
@@ -28,20 +29,20 @@
   <div class="grid-container">
     <div class="div1 glass">
       <div class="dash-headings">
-        {#if $dashView.includes('Animal')}
-          <h1>Animal Dashboard</h1>
-        {:else}
+        {#if $dashView == 'msgs'}
           <h1>Message Dashboard</h1>
+        {:else}
+          <h1>Animal Dashboard</h1>
         {/if}
         <Button
           text={$dashView === 'allAnimals' ? 'View messages' : 'View animals'}
           on:click={handleDashViewToggle}
         />
       </div>
-      {#if $dashView.includes('Animal')}
-        <h2>Matches</h2>
-      {:else}
+      {#if $dashView == 'msgs'}
         <h2>Messages</h2>
+      {:else}
+        <h2>Matches</h2>
       {/if}
       <div class="list-container">
         <MsgListContainer />
@@ -63,6 +64,8 @@
         <ListCont />
       {:else if $dashView === 'oneAnimal'}
         <AnimalProfile />
+      {:else if $dashView === 'match'}
+        <AdopterProfile />
       {:else}
         <Chat />
       {/if}

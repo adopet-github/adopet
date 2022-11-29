@@ -6,6 +6,7 @@
   export let text: string;
   export let colour = 'red';
   export let fontSize = '1rem';
+  export let padding = '1rem';
 
   const handleClick = () => {
     dispatch('click', {});
@@ -13,12 +14,16 @@
 </script>
 
 {#if colour === 'red'}
-  <button class="primary" style="font-size:{fontSize}" on:click={handleClick}
-    >{text}</button
+  <button
+    class="primary"
+    style="font-size:{fontSize}; padding: {padding} 1rem"
+    on:click={handleClick}>{text}</button
   >
 {:else}
-  <button class="secondary" style="font-size:{fontSize}" on:click={handleClick}
-    >{text}</button
+  <button
+    class="secondary"
+    style="font-size:{fontSize}; padding: {padding} 1rem"
+    on:click={handleClick}>{text}</button
   >
 {/if}
 
