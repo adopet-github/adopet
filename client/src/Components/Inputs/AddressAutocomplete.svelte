@@ -22,6 +22,7 @@
     on:load={() => {
       const onPlaceChanged = () => {
         const place = autocomplete.getPlace();
+        value = place.formatted_address;
         if (place.geometry) {
           location = [
             place.geometry.location.lat(),
