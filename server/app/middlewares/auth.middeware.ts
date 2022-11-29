@@ -4,9 +4,6 @@ import { decryptToken } from "../utils/jwt";
 import constants from './../utils/constants';
 import models from "../models";
 
-// TODO: CHECK IF WE ARE TRYING TO DO SOMETHING OVER OUR ACCOUNT
-// TODO: ANOTHER MIDDLEWARE FOR TYPE (SHELTER OR ADOPTER)
-
 const { Token } = models;
 
 export default async function authMiddleware (req: MyRequest, res: Response, next: NextFunction) {

@@ -8,7 +8,7 @@ const schema = {
     images: Joi.array().items(Joi.object().keys({
       caption: Joi.string().required(),
       url: Joi.string().required()
-    }).optional()).required()
+    }).optional()).min(1).required()
   }),
   validateLike: Joi.object({
     adopterId: Joi.number().integer().required(),

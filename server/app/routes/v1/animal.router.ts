@@ -2,6 +2,7 @@ import { Router } from 'express';
 import controller from '../../controllers/animal.controller';
 import { AccountTypes, InputTypes } from '../../enums';
 import authMiddleware from '../../middlewares/auth.middeware';
+import imageLimitMiddleware from '../../middlewares/imagelimit.middleware';
 import isRoleMiddleware from '../../middlewares/isrole.middleware';
 import joiMiddleware from '../../middlewares/joi.middleware';
 import selfShelterMiddleware from '../../middlewares/selfshelter.middleware';
@@ -47,6 +48,7 @@ router.put(
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   selfShelterMiddleware(),
   joiMiddleware(globalSchema.validateImages, InputTypes.BODY),
+  imageLimitMiddleware('animal'),
   controller.addManyImages
 );
 router.put(

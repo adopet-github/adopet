@@ -8,6 +8,7 @@ import authMiddleware from '../../middlewares/auth.middeware';
 import userExistsMiddleware from '../../middlewares/userexists.middleware';
 import isRoleMiddleware from '../../middlewares/isrole.middleware';
 import reflexiveMiddleware from '../../middlewares/reflexive.middleware';
+import imageLimitMiddleware from '../../middlewares/imagelimit.middleware';
 const router = Router();
 
 router.post(
@@ -48,6 +49,7 @@ router.put(
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   reflexiveMiddleware(),
   joiMiddleware(globalSchema.validateImages, InputTypes.BODY),
+  imageLimitMiddleware(AccountTypes.SHELTER),
   controller.addManyImages
 );
 

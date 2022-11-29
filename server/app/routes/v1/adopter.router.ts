@@ -2,6 +2,7 @@ import { Router } from 'express';
 import controller from '../../controllers/adopter.controller';
 import { AccountTypes, InputTypes } from '../../enums';
 import authMiddleware from '../../middlewares/auth.middeware';
+import imageLimitMiddleware from '../../middlewares/imagelimit.middleware';
 import isRoleMiddleware from '../../middlewares/isrole.middleware';
 import joiMiddleware from '../../middlewares/joi.middleware';
 import reflexiveMiddleware from '../../middlewares/reflexive.middleware';
@@ -48,6 +49,7 @@ router.put(
   reflexiveMiddleware(),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   joiMiddleware(globalSchema.validateImages, InputTypes.BODY),
+  imageLimitMiddleware(AccountTypes.ADOPTER),
   controller.addManyImages
 );
 router.put(
