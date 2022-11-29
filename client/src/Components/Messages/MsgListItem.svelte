@@ -34,7 +34,13 @@
       <p class="petName">{petName}</p>
       <p class="match-date"><Time timestamp={msgDate} relative /></p>
     </div>
-    <span><Button text={'view'} /></span>
+    <span
+      ><Button
+        text={'view'}
+        on:click={() => ($dashView = 'match')}
+        padding={'0.5rem'}
+      /></span
+    >
   </div>
 {/if}
 

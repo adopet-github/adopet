@@ -13,6 +13,7 @@ import dataParser from '../utils/dataparser';
 import { AdopterFromDb } from '../types/dboutputs';
 import { generateToken } from '../utils/jwt';
 import { genPasswordAndSalt } from '../utils/password';
+import { v4 as uuidv4 } from 'uuid';
 
 const { General, Adopter, User, Image, Animal, Adopter_Animal, Token } = models;
 
@@ -63,28 +64,35 @@ const controller = {
     const safeBody = sanitizeCreate(unsafeBody);
 
     const adopterPassword = safeBody.password;
-    const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
-    safeBody.password = passSaltObj.password;
-    safeBody.salt = passSaltObj.salt;
+    if (adopterPassword) {
+      const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
+      safeBody.password = passSaltObj.password;
+      safeBody.salt = passSaltObj.salt;
+    }
     const transaction = await sequelize.transaction();
     try {
       const adopter = await General.create(
         {
+          id: uuidv4(),
           description: safeBody.description,
           user: {
+            id: uuidv4(),
             email: safeBody.email,
-            password: safeBody.password,
-            salt: safeBody.salt,
+            password: safeBody.password || null,
+            salt: safeBody.salt || null,
             adopter: {
+              id: uuidv4(),
               first_name: safeBody.first_name,
               last_name: safeBody.last_name,
               age: safeBody.age,
               house_type: safeBody.house_type,
               has_pets: safeBody.has_pets,
               has_children: safeBody.has_children,
-              time_at_home: safeBody.time_at_home
+              time_at_home: safeBody.time_at_home,
+              google_id: safeBody.google_id || null
             },
             location: {
+              id: uuidv4(),
               latitude: safeBody.latitude,
               longitude: safeBody.longitude,
               address: safeBody.address
@@ -102,7 +110,7 @@ const controller = {
         }
       );
 
-      const responseToken = await Token.create({content: generateToken({
+      const responseToken = await Token.create({id: uuidv4(), content: generateToken({
         id: (adopter as unknown as {user: {adopter: {id: number}}}).user.adopter.id,
         type: 'adopter'
       })});
@@ -277,6 +285,7 @@ const controller = {
       const { images } = req.body;
       const mappedImages = images.map((image: ImageType) => ({
         ...sanitizeCreate(image),
+        id: uuidv4(),
         generalId: (adopter as unknown as { user: { generalId: number } }).user
           .generalId
       }));

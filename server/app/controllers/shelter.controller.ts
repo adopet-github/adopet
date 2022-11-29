@@ -13,6 +13,7 @@ import dataParser from '../utils/dataparser';
 import { ShelterFromDb } from '../types/dboutputs';
 import { generateToken } from '../utils/jwt';
 import { genPasswordAndSalt } from '../utils/password';
+import { v4 as uuidv4 } from 'uuid';
 
 const { General, Shelter, User, Image, Token } = models;
 
@@ -72,15 +73,19 @@ const controller = {
     try {
       const shelter = await General.create(
         {
+          id: uuidv4(),
           description: safeBody.description,
           user: {
+            id: uuidv4(),
             email: safeBody.email,
             password: safeBody.password,
             salt: safeBody.salt,
             shelter: {
+              id: uuidv4(),
               name: safeBody.name
             },
             location: {
+              id: uuidv4(),
               latitude: safeBody.latitude,
               longitude: safeBody.longitude,
               address: safeBody.address
@@ -97,7 +102,7 @@ const controller = {
           transaction
         }
       );
-      const responseToken = await Token.create({content: generateToken({
+      const responseToken = await Token.create({id: uuidv4(), content: generateToken({
         id: (shelter as unknown as {user: {shelter: {id: number}}}).user.shelter.id,
         type: 'shelter'
       })});
@@ -262,6 +267,7 @@ const controller = {
       const { images } = req.body;
       const mappedImages = images.map((image: ImageType) => ({
         ...sanitizeCreate(image),
+        id: uuidv4(),
         generalId: (shelter as unknown as { user: { generalId: number } }).user
           .generalId
       }));

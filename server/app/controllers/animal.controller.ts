@@ -10,6 +10,7 @@ import includes from '../utils/includes';
 import { notFoundChecker } from '../utils/db';
 import { AnimalFromDb } from '../types/dboutputs';
 import dataParser from '../utils/dataparser';
+import { v4 as uuidv4 } from 'uuid';
 
 const { General, Animal, Image, Shelter, Adopter, Adopter_Animal } = models;
 
@@ -68,8 +69,10 @@ const controller = {
 
       const animal = await General.create(
         {
+          id: uuidv4(),
           description: safeBody.description,
           animal: {
+            id: uuidv4(),
             name: safeBody.name,
             age: safeBody.age,
             weight: safeBody.weight,
@@ -200,6 +203,7 @@ const controller = {
       console.log(images);
       const mappedImages = images.map((image: ImageType) => ({
         ...sanitizeCreate(image),
+        id: uuidv4(),
         generalId: (animal as unknown as { general: { id: number } }).general.id
       }));
       const createdImages = await Image.bulkCreate(mappedImages);
