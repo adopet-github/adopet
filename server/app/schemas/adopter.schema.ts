@@ -5,7 +5,7 @@ const schema = {
   create: Joi.object({
     description: Joi.string().max(255).required(),
     email: Joi.string().email().required(),
-    password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/).messages({'string.pattern.base': 'Password must have at least eight characters, at least one uppercase letter, one lowercase letter and one number'}).required(),
+    password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/).messages({'string.pattern.base': 'Password must have at least eight characters, at least one uppercase letter, one lowercase letter and one number'}).optional(),
     first_name: Joi.string().regex(/^[A-Za-z]+$/)
       .messages({'string.pattern.base': 'First name must only include alphabetic characters'}).required(),
     last_name: Joi.string().regex(/^[A-Za-z]+$/)
@@ -14,10 +14,11 @@ const schema = {
     house_type: Joi.string().valid(HouseTypes.APARTMENT, HouseTypes.HOUSE, HouseTypes.TOWNHOUSE, HouseTypes.VILLA).required(),
     has_pets: Joi.boolean().required(),
     has_children: Joi.boolean().required(),
-    time_at_home: Joi.number().integer().required(),
-    latitude: Joi.number().required(),
-    longitude: Joi.number().required(),
-    address: Joi.string().max(255).required()
+    time_at_home: Joi.number().integer().min(0).max(24).required(),
+    latitude: Joi.number().min(-91).max(91).required(),
+    longitude: Joi.number().min(-181).max(181).required(),
+    address: Joi.string().max(255).required(),
+    google_id: Joi.string().optional()
   }),
   update: Joi.object({
     description: Joi.string().max(255).optional(),
@@ -31,9 +32,9 @@ const schema = {
     house_type: Joi.string().valid(HouseTypes.APARTMENT, HouseTypes.HOUSE, HouseTypes.TOWNHOUSE, HouseTypes.VILLA).optional(),
     has_pets: Joi.boolean().optional(),
     has_children: Joi.boolean().optional(),
-    time_at_home: Joi.number().integer().optional(),
-    latitude: Joi.number().optional(),
-    longitude: Joi.number().optional(),
+    time_at_home: Joi.number().integer().min(0).max(24).optional(),
+    latitude: Joi.number().min(-91).max(91).optional(),
+    longitude: Joi.number().min(-181).max(181).optional(),
     address: Joi.string().max(255).optional()
   })
 }

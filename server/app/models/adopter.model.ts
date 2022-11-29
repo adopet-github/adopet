@@ -12,7 +12,11 @@ const Adopter = sequelize.define('adopter', {
   house_type: DataTypes.ENUM('apartment', 'villa', 'house', 'townhouse'),
   has_pets: DataTypes.BOOLEAN,
   has_children: DataTypes.BOOLEAN,
-  time_at_home: DataTypes.INTEGER
+  time_at_home: DataTypes.INTEGER,
+  google_id: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
 });
 
 export default Adopter;

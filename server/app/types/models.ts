@@ -25,6 +25,7 @@ export type Adopter = User &
     has_pets: boolean;
     has_children: boolean;
     time_at_home: number;
+    google_id?: string;
     id?: string;
     images?: Image[];
   };

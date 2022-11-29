@@ -16,6 +16,7 @@ router.get('/profile', authMiddleware, controller.profile);
 router.post('/logout', authMiddleware, controller.logout);
 router.post('/verify',
 joiMiddleware(schema.login, InputTypes.BODY),
-userExistsMiddleware)
+userExistsMiddleware),
+router.post('/google', controller.google)
 
 export default router;

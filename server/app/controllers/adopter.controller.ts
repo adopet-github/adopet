@@ -64,9 +64,11 @@ const controller = {
     const safeBody = sanitizeCreate(unsafeBody);
 
     const adopterPassword = safeBody.password;
-    const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
-    safeBody.password = passSaltObj.password;
-    safeBody.salt = passSaltObj.salt;
+    if (adopterPassword) {
+      const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
+      safeBody.password = passSaltObj.password;
+      safeBody.salt = passSaltObj.salt;
+    }
     const transaction = await sequelize.transaction();
     try {
       const adopter = await General.create(
@@ -76,8 +78,8 @@ const controller = {
           user: {
             id: uuidv4(),
             email: safeBody.email,
-            password: safeBody.password,
-            salt: safeBody.salt,
+            password: safeBody.password || null,
+            salt: safeBody.salt || null,
             adopter: {
               id: uuidv4(),
               first_name: safeBody.first_name,
@@ -86,7 +88,8 @@ const controller = {
               house_type: safeBody.house_type,
               has_pets: safeBody.has_pets,
               has_children: safeBody.has_children,
-              time_at_home: safeBody.time_at_home
+              time_at_home: safeBody.time_at_home,
+              google_id: safeBody.google_id || null
             },
             location: {
               id: uuidv4(),
