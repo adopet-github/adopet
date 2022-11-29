@@ -8,6 +8,7 @@ import { notFoundChecker } from "../utils/db";
 import dataParser from "../utils/dataparser";
 import includes from "../utils/includes";
 import { AdopterFromDb, ShelterFromDb } from "../types/dboutputs";
+import { v4 as uuidv4 } from 'uuid';
 
 const { User, Adopter, Shelter, Token } = models;
 
@@ -39,6 +40,7 @@ const controller = {
         (user as unknown as {shelter: {id: number}}).shelter.id;
 
       const responseToken = await Token.create({
+        id: uuidv4(),
         content: generateToken({
           id,
           type
