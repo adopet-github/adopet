@@ -2,7 +2,7 @@ import Joi from "@hapi/joi";
 
 const schema = {
   validateId: Joi.object({
-    id: Joi.number().integer().required()
+    id: Joi.string().uuid({version: 'uuidv4'}).required()
   }),
   validateImages: Joi.object({
     images: Joi.array().items(Joi.object().keys({
@@ -11,8 +11,8 @@ const schema = {
     }).optional()).min(1).required()
   }),
   validateLike: Joi.object({
-    adopterId: Joi.number().integer().required(),
-    animalId: Joi.number().integer().required()
+    adopterId: Joi.string().uuid({version: 'uuidv4'}).required(),
+    animalId: Joi.string().uuid({version: 'uuidv4'}).required()
   })
 }
 

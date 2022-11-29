@@ -1,7 +1,7 @@
 import { HouseTypes } from "../enums"
 
 export type Image = {
-  id: number;
+  id: string;
   caption: string;
   url: string;
   createdAt: Date;
@@ -10,7 +10,7 @@ export type Image = {
 }
 
 export type General = {
-  id: number;
+  id: string;
   description: string;
   createdAt: Date;
   updatedAt: Date;
@@ -18,7 +18,7 @@ export type General = {
 }
 
 export type Location = {
-  id: number;
+  id: string;
   longitude: number;
   latitude: number;
   address: string;
@@ -28,7 +28,7 @@ export type Location = {
 }
 
 export type User = {
-  id: number;
+  id: string;
   email: string;
   password: string;
   phone_number: string;
@@ -49,7 +49,7 @@ export type AdopterAnimal = {
 }
 
 export type Animal = {
-  id: number;
+  id: string;
   name: string;
   age: number;
   weight: number;
@@ -61,7 +61,7 @@ export type Animal = {
 }
 
 export type AdopterFromDb = {
-  id: number;
+  id: string;
   first_name: string;
   last_name: string;
   age: number;
@@ -77,7 +77,7 @@ export type AdopterFromDb = {
 }
 
 export type ShelterFromDb = {
-  id: number;
+  id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
@@ -87,7 +87,7 @@ export type ShelterFromDb = {
 }
 
 export type Shelter = {
-  id: number;
+  id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
@@ -95,7 +95,7 @@ export type Shelter = {
 }
 
 export type Adopter = {
-  id: number;
+  id: string;
   first_name: string;
   last_name: string;
   age: number;
@@ -110,7 +110,7 @@ export type Adopter = {
 }
 
 export type AnimalFromDb = {
-  id: number;
+  id: string;
   name: string;
   age: number;
   weight: number;

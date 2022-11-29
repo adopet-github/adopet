@@ -6,7 +6,7 @@ const schema = {
     name: Joi.string().required(),
     age: Joi.number().integer().required(),
     weight: Joi.number().required(),
-    shelterId: Joi.number().integer().required()
+    shelterId: Joi.string().uuid({version: 'uuidv4'}).required()
   }),
   update: Joi.object({
     description: Joi.string().max(255).optional(),
