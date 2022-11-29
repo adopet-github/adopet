@@ -14,9 +14,12 @@ router.post(
 );
 router.get('/profile', authMiddleware, controller.profile);
 router.post('/logout', authMiddleware, controller.logout);
-router.post('/verify',
-joiMiddleware(schema.login, InputTypes.BODY),
-userExistsMiddleware),
-router.post('/google', controller.google)
+router.post(
+  '/verify',
+  joiMiddleware(schema.verify, InputTypes.BODY),
+  userExistsMiddleware,
+  controller.verify
+),
+  router.post('/google', controller.google);
 
 export default router;

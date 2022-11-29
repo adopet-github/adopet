@@ -167,6 +167,14 @@ const controller = {
     }
 
     res.status(response.status).send(response);
+  },
+
+  verify: (req: Request, res: Response) => {
+    const response = {
+      status: constants.statusCodes.ok,
+      message: 'The fields provided are correct'
+    }
+    res.status(response.status).send(response);
   }
 };
 
