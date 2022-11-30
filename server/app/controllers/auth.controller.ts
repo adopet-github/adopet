@@ -64,6 +64,14 @@ const controller = {
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-login: ', err);
     }
+    
+    if (response.status === constants.statusCodes.ok) {
+      const responseToken = response.token;
+      delete response.token;
+      return res
+        .cookie('access_token', responseToken, constants.cookieSettings)
+        .status(response.status).send(response);
+    }
 
     res.status(response.status).send(response);
   },
@@ -120,6 +128,12 @@ const controller = {
       response.message = 'User logged out successfully!';
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-logout: ', err);
+    }
+    
+    if (response.status === constants.statusCodes.ok) {
+      return res
+        .clearCookie('access_token')
+        .status(response.status).send(response);
     }
 
     res.status(response.status).send(response);
@@ -190,6 +204,16 @@ const controller = {
       console.warn('ERROR AT AUTH-CONTROLLER-google: ', err);
     }
 
+    if (response.status === constants.statusCodes.ok) {
+      const responseToken = response.token;
+      delete response.token;
+      return res
+        .cookie('access_token', responseToken, {
+          httpOnly: true,
+          secure: process.env.ENVIRONMENT === 'production'
+        })
+        .status(response.status).send(response);
+    }
     res.status(response.status).send(response);
   },
 

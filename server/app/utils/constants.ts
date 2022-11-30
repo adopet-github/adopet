@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 const constants = {
   statusCodes: {
     ok: 200,
@@ -10,6 +13,12 @@ const constants = {
   fallbackResponse: {
     status: 500,
     message: 'Internal server error'
+  },
+  cookieSettings: {
+    httpOnly: true,
+    sameSite: 'strict' as 'strict' | 'lax',
+    secure: process.env.ENVIRONMENT === 'production',
+    maxAge: 15 * 60 * 1000
   }
 };
 
