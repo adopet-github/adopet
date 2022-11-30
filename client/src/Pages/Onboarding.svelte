@@ -16,6 +16,8 @@
 
   const navigate = useNavigate();
 
+  if ($userCredentials?.house_type || $userCredentials?.name) navigate('/');
+
   let isLoading = false;
 
   let age: number;

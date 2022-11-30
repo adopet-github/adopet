@@ -5,7 +5,7 @@ const schema = {
   create: Joi.object({
     description: Joi.string().max(255).required(),
     email: Joi.string().email().required(),
-    password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/).messages({'string.pattern.base': 'Password must have at least eight characters, at least one uppercase letter, one lowercase letter and one number'}).optional(),
+    password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)([a-zA-Z\d-!$%^&*()·_+|~=`{}[\]:";'<>?,./]){8,}$/).messages({'string.pattern.base': 'Password must have at least eight characters, at least one uppercase letter, one lowercase letter and one number'}).optional(),
     first_name: Joi.string().max(255).regex(/^[A-Za-z]+$/)
       .messages({'string.pattern.base': 'First name must only include alphabetic characters'}).required(),
     last_name: Joi.string().max(255).regex(/^[A-Za-z]+$/)
@@ -23,7 +23,7 @@ const schema = {
   update: Joi.object({
     description: Joi.string().max(255).optional(),
     email: Joi.string().email().optional(),
-    password: Joi.string().max(255).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/).messages({'string.pattern.base': 'Password must have at least eight characters, at least one uppercase letter, one lowercase letter and one number'}).optional(),
+    password: Joi.string().max(255).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)([a-zA-Z\d-!$%^&*()·_+|~=`{}[\]:";'<>?,./]){8,}$/).messages({'string.pattern.base': 'Password must have at least eight characters, at least one uppercase letter, one lowercase letter and one number'}).optional(),
     first_name: Joi.string().max(255).regex(/^[A-Za-z]+$/)
       .messages({'string.pattern.base': 'First name must only include alphabetic characters'}).optional(),
     last_name: Joi.string().max(255).regex(/^[A-Za-z]+$/)

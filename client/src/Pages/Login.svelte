@@ -1,12 +1,21 @@
 <script lang="ts">
+  // COMPONENTS
   import Email from '../Components/Inputs/Email.svelte';
   import Password from '../Components/Inputs/Password.svelte';
-  import GoogleIcon from '../assets/icons/google-icon.svg';
-  import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
-  import { Link, useNavigate } from 'svelte-navigator';
   import Button from '../Components/Button.svelte';
+  import GoogleIcon from '../assets/icons/google-icon.svg';
+
+  // ANIMATION
+  import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
+  import DogLoader from '../Components/Loaders/DogLoader.svelte';
+  import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
+
+  // UTILS
+  import { Link, useNavigate } from 'svelte-navigator';
   import { getProfile, logIn } from '../Services/auth';
   import { userCredentials } from '../Stores/userCredentials';
+
+  let isLoading = false;
   let email = '';
   let password = '';
   let error = '';
@@ -18,8 +27,8 @@
       email,
       password
     };
+    isLoading = true;
     const res = await logIn(credentials);
-    console.log(res);
     if (res.status === 200) {
       error = '';
       localStorage.setItem('jwt', res.token);
@@ -30,7 +39,9 @@
       } else if (profileRes.status === 200) {
         userCredentials.set(profileRes.data);
         if (profileRes.data.house_type) {
-          navigate('/user/swipe');
+          setTimeout(() => {
+            navigate('/user/swipe');
+          }, 2000);
         } else {
           navigate('/shelter/dashboard');
         }
@@ -47,38 +58,44 @@
   };
 </script>
 
-<RouteTransition direction="backward">
-  <div class="container">
-    <div class="form-container glass">
-      <h1>Login</h1>
-      <button id="google" on:click={handleGoogleLogin}>
-        <img src={GoogleIcon} alt="google icon" />
-        <span>Login with Google </span>
-      </button>
-      <div class="or">
-        <hr />
-        <h2>OR</h2>
-        <hr />
+{#if isLoading}
+  <DogLoader>
+    <TypingLoader>Logging in...</TypingLoader>
+  </DogLoader>
+{:else}
+  <RouteTransition direction="backward">
+    <div class="container">
+      <div class="form-container glass">
+        <h1>Login</h1>
+        <button id="google" on:click={handleGoogleLogin}>
+          <img src={GoogleIcon} alt="google icon" />
+          <span>Login with Google </span>
+        </button>
+        <div class="or">
+          <hr />
+          <h2>OR</h2>
+          <hr />
+        </div>
+        <form on:submit|preventDefault={handleLogin}>
+          <Email bind:value={email} />
+          <Password bind:value={password} />
+          {#if error}
+            <p class="error-message">{error}</p>
+          {/if}
+          <button id="normal-register-btn" type="submit"
+            ><Button text="Login" /></button
+          >
+        </form>
+        <p>
+          Don't have an account?
+          <Link to="/register">
+            <span><strong>Register</strong></span>
+          </Link>
+        </p>
       </div>
-      <form on:submit|preventDefault={handleLogin}>
-        <Email bind:value={email} />
-        <Password bind:value={password} />
-        {#if error}
-          <p class="error-message">{error}</p>
-        {/if}
-        <button id="normal-register-btn" type="submit"
-          ><Button text="Login" /></button
-        >
-      </form>
-      <p>
-        Don't have an account?
-        <Link to="/register">
-          <span><strong>Register</strong></span>
-        </Link>
-      </p>
     </div>
-  </div>
-</RouteTransition>
+  </RouteTransition>
+{/if}
 
 <style>
   h1 {
