@@ -36,6 +36,7 @@ router.put(
 );
 router.delete(
   '/:id',
+  authMiddleware,
   isRoleMiddleware(AccountTypes.SHELTER),
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   selfShelterMiddleware(),
