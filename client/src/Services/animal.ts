@@ -24,7 +24,7 @@ export const deleteAnimal = async (id: string) => {
         'authorization': 'Bearer ' + localStorage.getItem('jwt')
       },
     });
-    return res;
+    return await res.json();
   } catch (error) {
     console.log('ERROR: delete animal: ', error)
   }

@@ -5,8 +5,6 @@
 
   export let text: string;
   export let colour = 'red';
-  // export let fontSize = '1rem';
-  // export let padding = '1rem';
 
   const handleClick = () => {
     dispatch('click', {});
@@ -33,8 +31,7 @@
     color: var(--white);
   }
   button.primary:hover {
-    background: #a52327;
-    background: linear-gradient(180deg, #a52327 0%, #6b1316 100%);
+    background: rgb(0, 0, 0, 0.25);
   }
   button.secondary {
     background: #e7e7e7;

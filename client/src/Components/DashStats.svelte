@@ -46,7 +46,6 @@
   }
 
   .red {
-    background-color: var(--red);
     font-size: 2rem;
   }
 
