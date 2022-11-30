@@ -126,6 +126,7 @@
     overflow-y: scroll;
     /* margin-bottom: 8%; */
     border-bottom: 1px solid var(--lightgrey);
+    border-top: 1px solid var(--lightgrey);
   }
 
   .div2 {
