@@ -20,11 +20,7 @@
   </div>
 {:else}
   <div class="stat-container red">
-    <Button
-      text={`${stat} ${desc}`}
-      fontSize={'1.5rem'}
-      on:click={handleClick}
-    />
+    <Button text={`${stat} ${desc}`} on:click={handleClick} />
   </div>
 {/if}
 

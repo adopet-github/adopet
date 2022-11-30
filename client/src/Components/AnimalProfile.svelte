@@ -13,7 +13,7 @@
   <CloseButton />
   <div class="heading-cont">
     <h1>{animalName}</h1>
-    <span><Button text={'edit'} padding={'0.5rem'} /></span>
+    <span><Button text={'edit'} /></span>
   </div>
   <div class="imgs-cont">
     <div class="dummy-img" />

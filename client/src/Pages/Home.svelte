@@ -23,7 +23,7 @@
         So far, we've helped <span>218</span> <br /> pets to find a new home.
       </p>
       <p>Help us help more.</p>
-      <Button text={'register now'} colour={'red'} on:click={handleClick} />
+      <Button text={'Register'} on:click={handleClick} />
     </div>
   </div>
   <div class="content-right">
@@ -83,6 +83,7 @@
     position: relative;
     padding: 20px 10px;
     color: var(--red);
+    font-weight: 900;
   }
   .content-left {
     align-items: flex-start;
@@ -97,20 +98,13 @@
     -webkit-backdrop-filter: blur(5px);
   }
 
-  .content-right {
-    flex: 1.2;
-    /* background-image: url('../assets/SVGs/cream_blob.svg'),
-      url('../assets/SVGs/grey_blob.svg'), url('../assets/SVGs/red_blob.svg');
-    background-blend-mode: multiply;
-    background-repeat: no-repeat;
-    background-position: right; */
-  }
   .grid-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(7, 1fr);
     grid-column-gap: 1rem;
     grid-row-gap: 1rem;
+    padding: 1rem;
   }
 
   img {

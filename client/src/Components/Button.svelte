@@ -5,8 +5,8 @@
 
   export let text: string;
   export let colour = 'red';
-  export let fontSize = '1rem';
-  export let padding = '1rem';
+  // export let fontSize = '1rem';
+  // export let padding = '1rem';
 
   const handleClick = () => {
     dispatch('click', {});
@@ -14,25 +14,18 @@
 </script>
 
 {#if colour === 'red'}
-  <button
-    class="primary"
-    style="font-size:{fontSize}; padding: {padding} 1rem"
-    on:click={handleClick}>{text}</button
-  >
+  <button class="primary" on:click={handleClick}>{text}</button>
 {:else}
-  <button
-    class="secondary"
-    style="font-size:{fontSize}; padding: {padding} 1rem"
-    on:click={handleClick}>{text}</button
-  >
+  <button class="secondary" on:click={handleClick}>{text}</button>
 {/if}
 
 <style>
   button {
-    padding: 1rem 1rem;
+    padding: 1rem;
     flex: 1;
     width: 100%;
     border-radius: 20px;
+    font-size: 1rem;
   }
   button.primary {
     background: #d33e43;
@@ -54,9 +47,9 @@
   }
 
   @media only screen and (max-width: 992px) {
-    button.primary {
-      border: 3px solid blue;
-      font-size: 0.5rem;
+    button {
+      padding: 0.5rem;
+      font-size: 0.8rem;
     }
   }
 </style>

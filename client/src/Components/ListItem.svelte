@@ -12,13 +12,9 @@
   <p>enquiries</p>
   <div class="btns-container">
     <span
-      ><Button
-        text="view"
-        on:click={() => ($dashView = 'oneAnimal')}
-        padding={'0.5rem'}
-      /></span
+      ><Button text="view" on:click={() => ($dashView = 'oneAnimal')} /></span
     >
-    <span><Button text="X" padding={'0.5rem'} /></span>
+    <span><Button text="X" /></span>
   </div>
 </div>
 

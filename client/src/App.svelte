@@ -28,7 +28,7 @@
   import { userCredentials } from './Stores/userCredentials';
   import { Router, Route } from 'svelte-navigator';
 
-  userCredentials.set({ name: 'alex' }); ////// REMOVE THIS AND UNCOMMENT THE IF STATEMENT WHEN BACKEND IS DONE
+  // userCredentials.set({ name: 'alex' }); ////// REMOVE THIS AND UNCOMMENT THE IF STATEMENT WHEN BACKEND IS DONE
 
   let isLoading = true;
 
