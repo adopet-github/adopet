@@ -51,6 +51,10 @@
   }
 
   @media only screen and (max-width: 1280px) {
+    .stat-container {
+      flex-direction: row;
+      gap: 1rem;
+    }
     h3 {
       font-size: 1.5rem;
     }

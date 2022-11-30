@@ -11,7 +11,7 @@
 </script>
 
 {#if $dashView === 'msgs'}
-  <Link to="/chat">
+  <button>
     <div class="list-item">
       <div class="img-container">
         <div class="dummy-img" />
@@ -22,38 +22,40 @@
         <p class="msg-date"><Time timestamp={msgDate} relative /></p>
       </div>
     </div>
-  </Link>
+  </button>
 {:else}
-  <div class="list-item">
-    <div class="img-container">
+  <button on:click={() => ($dashView = 'match')}>
+    <div class="list-item">
       <span class="dummy-img" />
+      <div class="match-details">
+        <p class="match-username">{username}</p>
+        <p class="petName">{petName}</p>
+        <p class="match-date"><Time timestamp={msgDate} relative /></p>
+      </div>
       <span class="dummy-img2" />
     </div>
-    <div class="match-details">
-      <p class="match-username">{username}</p>
-      <p class="petName">{petName}</p>
-      <p class="match-date"><Time timestamp={msgDate} relative /></p>
-    </div>
-    <span><Button text={'view'} on:click={() => ($dashView = 'match')} /></span>
-  </div>
+  </button>
 {/if}
 
 <style>
+  button {
+    background: none;
+  }
   .list-item {
     width: 100%;
     /* border-radius: 30px; */
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: center;
     border-bottom: 0.5px solid var(--lightgrey);
     position: relative;
-    padding-right: 1rem;
-    padding: 0.5rem 1rem 0.5rem 0;
+    padding: 0.5rem 1rem;
+    gap: 1rem;
   }
 
-  .img-container {
-    padding-right: 1rem;
-    display: flex;
+  .list-item:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    mix-blend-mode: multiply;
   }
 
   .dummy-img,
@@ -66,27 +68,33 @@
   }
 
   .dummy-img2 {
-    left: -30px;
     background-color: var(--red);
-    z-index: -2;
   }
 
   .msg-details,
   .match-details {
     padding: 0.5rem 0;
     position: relative;
-    min-width: 40%;
-    top: -3px;
-  }
-
-  .match-details {
-    left: -30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
   }
 
   .msg-username,
   .match-username {
     color: var(--red);
     font-size: 0.8rem;
+  }
+
+  .msg-preview,
+  .petName {
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .petName {
+    font-size: 1.2rem;
   }
 
   .msg-date,
@@ -104,10 +112,6 @@
       height: 30px;
       width: 30px;
       border-radius: 20px;
-    }
-
-    .dummy-img2 {
-      left: -20px;
     }
 
     .msg-username,

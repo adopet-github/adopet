@@ -112,14 +112,13 @@
   .div1 {
     grid-area: 1 / 1 / 11 / 4;
     border-radius: 1.5rem;
-    padding: 0 0 0 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
 
   .dash-headings {
-    margin-right: 1rem;
+    margin: 0 1rem;
   }
 
   .list-container {

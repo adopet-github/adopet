@@ -16,13 +16,16 @@ export const createAnimal = async (animal: ShelterAnimal) => {
 };
 
 export const deleteAnimal = async (id: string) => {
-  const res = await fetch(`${baseUrl}/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'authorization': 'Bearer ' + localStorage.getItem('jwt')
-    },
-  });
-
-  return await res.json();
+  try {
+    const res = await fetch(`${baseUrl}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer ' + localStorage.getItem('jwt')
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log('ERROR: delete animal: ', error)
+  }
 }
