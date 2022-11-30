@@ -102,31 +102,26 @@
         longitude: location[1],
         description: description
       };
-      const isVerified = await verifyRegisterCredentials({
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        password: password
-      });
-
-      console.log(isVerified);
-      console.log(newUserCredentials);
-      console.log('account type', accountType);
-
-      if (isVerified.status !== 200) {
-        error = isVerified.message;
-        return;
-      }
 
       if (accountType === 'adopter') {
-        console.log('in adopter');
+        const isVerified = await verifyRegisterCredentials({
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          password: password
+        });
+
+        console.log(isVerified);
+
+        if (isVerified.status !== 200) {
+          error = isVerified.message;
+          return;
+        }
         delete newUserCredentials.name;
         delete newUserCredentials.description;
         userCredentials.set(newUserCredentials);
-        console.log('navigate to onboarding');
         navigate('/onboarding');
       } else {
-        console.log('in shelter');
         delete newUserCredentials.first_name;
         delete newUserCredentials.last_name;
 
@@ -142,8 +137,7 @@
             navigate('/shelter/dashboard');
           }, 2000);
         } else if (res.status === 400) {
-          if (res.message === 'User with email jwt@email.com already exists!')
-            emailError = true;
+          if (res.message.includes('User with email')) emailError = true;
           if (
             res.message[0] ===
             'Password must have at least eight characters, at least one uppercase letter, one lowercase letter and one number'
