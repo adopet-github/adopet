@@ -2,13 +2,12 @@
   import { userCredentials } from '../Stores/userCredentials';
   import ListItem from './ListItem.svelte';
 
-  console.log($userCredentials.animals, 'list cont');
   const shelterAnimals = $userCredentials.animals;
 </script>
 
 <div class="list-container">
   {#if shelterAnimals}
-    {#each shelterAnimals as animal}
+    {#each $userCredentials.animals as animal}
       <ListItem {animal} />
     {/each}
   {:else}

@@ -6,6 +6,7 @@
   import { createAnimal } from '../Services/animal';
   import { userCredentials } from '../Stores/userCredentials';
   import { navigate } from 'svelte-navigator';
+  import { getProfile } from '../Services/auth';
 
   console.log($userCredentials);
 
@@ -23,6 +24,16 @@
       weight: petWeight
     };
     const res = await createAnimal(pet);
+    userCredentials.update((previous) => {
+      const newAnimals = [...previous.animals, res.data.animal];
+      return {
+        ...previous,
+        animals: newAnimals
+      };
+    });
+    console.log(pet);
+    // const profile = await getProfile();
+    // userCredentials.set(profile);
     console.log(res);
     navigate('/shelter/dashboard');
   };
