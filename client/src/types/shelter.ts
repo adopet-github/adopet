@@ -1,4 +1,4 @@
-export type Shelter = {
+export type CreateShelter = {
   description: string;
   email: string;
   password: string;
@@ -6,4 +6,15 @@ export type Shelter = {
   latitude: number;
   longitude: number;
   address: string;
+};
+
+export type Shelter = {
+  id: string;
+  description: string;
+  email: string;
+  longitude: number;
+  latitude: number;
+  address: string;
+  images: string[];
+  name: string;
 };

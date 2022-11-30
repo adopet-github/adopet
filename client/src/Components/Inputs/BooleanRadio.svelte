@@ -16,6 +16,7 @@
       bind:group={value}
       value="true"
       on:blur={validateRadio}
+      checked
     />
     Yes
   </label>

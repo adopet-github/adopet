@@ -13,3 +13,19 @@ export const createUser = async (user: Adopter) => {
 
   return await res.json();
 };
+
+export const updateAdopter = async (adopter: Adopter) => {
+  const { id } = adopter;
+  delete adopter.id;
+  console.log('after', adopter);
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(baseUrl + '/' + id, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(adopter)
+  });
+  return await res.json();
+};
