@@ -4,12 +4,14 @@ import { InputTypes } from '../../enums';
 import authMiddleware from '../../middlewares/auth.middeware';
 import joiMiddleware from '../../middlewares/joi.middleware';
 import userExistsMiddleware from '../../middlewares/userexists.middleware';
+import isGoogleMiddleware from '../../middlewares/isgoogle.middleware';
 import schema from '../../schemas/auth.schema';
 const router = Router();
 
 router.post(
   '/login',
   joiMiddleware(schema.login, InputTypes.BODY),
+  isGoogleMiddleware,
   controller.login
 );
 router.get('/profile', authMiddleware, controller.profile);
