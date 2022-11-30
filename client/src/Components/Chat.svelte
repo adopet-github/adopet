@@ -102,7 +102,6 @@
     justify-content: center;
     align-items: center;
     margin-top: 1rem;
-    height: 8%;
   }
 
   .chat-input-container > span {
