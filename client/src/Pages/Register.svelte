@@ -15,10 +15,12 @@
   import type { Shelter } from '../types/shelter';
   import DogLoader from '../Components/Loaders/DogLoader.svelte';
   import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
+  import { verifyRegisterCredentials } from '../Services/auth';
 
   const navigate = useNavigate();
 
   let isLoading = false;
+  let error = '';
 
   let email = '';
   let emailError: boolean;
@@ -100,18 +102,34 @@
         longitude: location[1],
         description: description
       };
+      const isVerified = await verifyRegisterCredentials({
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password
+      });
+
+      console.log(isVerified);
+      console.log(newUserCredentials);
+      console.log('account type', accountType);
+
+      if (isVerified.status !== 200) {
+        error = isVerified.message;
+        return;
+      }
+
       if (accountType === 'adopter') {
+        console.log('in adopter');
         delete newUserCredentials.name;
         delete newUserCredentials.description;
-        // TODO verify email and password
         userCredentials.set(newUserCredentials);
+        console.log('navigate to onboarding');
         navigate('/onboarding');
       } else {
+        console.log('in shelter');
         delete newUserCredentials.first_name;
         delete newUserCredentials.last_name;
-        // TODO verify email and password
 
-        // send request to backend
         isLoading = true;
         const res = await createShelter(
           newUserCredentials as unknown as Shelter
@@ -207,6 +225,9 @@
           />
           {#if accountType === 'shelter'}
             <TextArea bind:value={description} bind:error={descriptionError} />
+          {/if}
+          {#if error}
+            <p class="error-message">{error}</p>
           {/if}
           <button type="submit" id="normal-register-btn"
             ><Button text="Register" /></button
@@ -323,6 +344,10 @@
   }
 
   span:hover {
+    color: var(--red);
+  }
+
+  .error-message {
     color: var(--red);
   }
 </style>

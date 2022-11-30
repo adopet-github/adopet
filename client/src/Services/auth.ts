@@ -1,4 +1,4 @@
-import type { Credentials } from '../types/auth';
+import type { Credentials, VerifyRegister } from '../types/auth';
 import { userCredentials } from '../Stores/userCredentials';
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/api/v1/auth`;
@@ -39,5 +39,19 @@ export const getProfile = async () => {
       Authorization: `Bearer ${token}`
     }
   });
+  return await res.json();
+};
+
+export const verifyRegisterCredentials = async (
+  credentials: VerifyRegister
+) => {
+  const res = await fetch(baseUrl + '/verify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  });
+
   return await res.json();
 };
