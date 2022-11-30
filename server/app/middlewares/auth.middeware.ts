@@ -17,9 +17,8 @@ export default async function authMiddleware (req: MyRequest, res: Response, nex
 
   async function getToken () {
     try {
-      const authHeader = req.get('authorization');
-      if (!authHeader) throw new Error('No token!');
-      const token = authHeader.split(' ')[1];
+      const token = req.cookies.access_token;
+      if (!token) throw new Error('No token!');
       const tokenFromDb = await Token.findOne({where: {content: token}});
 
       if (tokenFromDb === null) throw new Error('Token not valid!');
