@@ -11,8 +11,7 @@ const includes: {[key: string]: object} = {
         },
         relationships.user.location
       ]
-    },
-    relationships.adopter.animals
+    }
   ],
   animal: [
     {
@@ -33,7 +32,17 @@ const includes: {[key: string]: object} = {
         relationships.user.location
       ]
     },
-    relationships.shelter.animals
+    {
+      association: relationships.shelter.animals,
+      include: [
+        {
+          association: relationships.animal.general,
+          include: [relationships.general.images]
+        },
+        relationships.animal.shelter,
+        relationships.animal.adopters
+      ],
+    }
   ]
 };
 
