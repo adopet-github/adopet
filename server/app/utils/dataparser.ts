@@ -34,7 +34,7 @@ const dataParser = {
       latitude: data.user.location.latitude,
       address: data.user.location.address,
       images: data.user.general.images,
-      animals: data.animals as unknown as Animal[],
+      animals: (data.animals as unknown as Animal[]).map(animal => dataParser.animal(animal as unknown as AnimalFromDb)),
       name: data.name
     };
 
