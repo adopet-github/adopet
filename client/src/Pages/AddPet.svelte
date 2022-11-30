@@ -3,9 +3,29 @@
   import Name from '../Components/Inputs/Name.svelte';
   import Number from '../Components/Inputs/Number.svelte';
   import CloseButton from '../Components/CloseButton.svelte';
+  import { createAnimal } from '../Services/animal';
+  import { userCredentials } from '../Stores/userCredentials';
+  import { navigate } from 'svelte-navigator';
 
+  console.log($userCredentials);
+
+  let petName: string;
   let petWeight: number;
   let petAge: number;
+  let petDescription: string;
+
+  const handleAddAnimal = async () => {
+    const pet = {
+      shelterId: $userCredentials.id,
+      description: petDescription,
+      name: petName,
+      age: petAge,
+      weight: petWeight
+    };
+    const res = await createAnimal(pet);
+    console.log(res);
+    navigate('/shelter/dashboard');
+  };
 </script>
 
 <div class="container glass glass1">
@@ -15,7 +35,7 @@
   <p style="color: var(--red); cursor: pointer">upload images</p>
   <div class="details">
     <label for="pet-name">Pet name:</label>
-    <Name nameType="Pet name" />
+    <Name nameType="Pet name" bind:value={petName} />
     <div class="ageWeightCont">
       <div>
         <Number bind:value={petWeight} label="Weight (kg): " />
@@ -25,8 +45,13 @@
       </div>
     </div>
     <label for="description">Description:</label>
-    <textarea id="description" name="description" rows="3" />
-    <span><Button text="add pet" /></span>
+    <textarea
+      id="description"
+      name="description"
+      rows="3"
+      bind:value={petDescription}
+    />
+    <span><Button text="add pet" on:click={handleAddAnimal} /></span>
   </div>
 </div>
 

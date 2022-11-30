@@ -12,7 +12,7 @@
 
   const navigate = useNavigate();
 
-  userCredentials.set({ name: 'alex' });
+  // userCredentials.set({ name: 'alex' });
 
   const handleDashViewToggle = () => {
     $dashView === 'allAnimals'

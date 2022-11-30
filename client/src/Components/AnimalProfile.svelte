@@ -1,18 +1,18 @@
 <script lang="ts">
   import CloseButton from './CloseButton.svelte';
   import Button from './Button.svelte';
+  import { selectedAnimal } from '../Stores/selectedAnimal';
+  import type { ShelterAnimal } from '../types/shelterAnimal';
 
-  let animalName: string = 'Jake';
-  let description: string =
-    'Jake is nearly 5 years old and is a mixed breed, weighing 30kgs and 100 percent love! We are looking for people who feel comfortable with big, high energy dogs and love going on walks.';
-  let age: number = 5;
-  let weight: number = 30;
+  console.log($selectedAnimal);
+
+  let { name, description, age, weight }: ShelterAnimal = $selectedAnimal;
 </script>
 
 <div class="card glass glass1">
   <CloseButton />
   <div class="heading-cont">
-    <h1>{animalName}</h1>
+    <h1>{name}</h1>
     <span><Button text={'edit'} /></span>
   </div>
   <div class="imgs-cont">
