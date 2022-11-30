@@ -1,4 +1,5 @@
 <script lang="ts">
+  // COMPONENTS
   import Button from '../Components/Button.svelte';
   import BooleanRadio from '../Components/Inputs/BooleanRadio.svelte';
   import Email from '../Components/Inputs/Email.svelte';
@@ -6,51 +7,95 @@
   import Number from '../Components/Inputs/Number.svelte';
   import CloseButton from '../Components/CloseButton.svelte';
   import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
+  import { toast, SvelteToast } from '@zerodevx/svelte-toast';
 
-  let accountType = 'adopter';
+  // UTILS
+  import { userCredentials } from '../Stores/userCredentials';
+  import { updateShelter } from '../Services/shelter';
+  import { updateAdopter } from '../Services/adopter';
 
-  let shelterName = '';
+  let accountType = $userCredentials.house_type ? 'adopter' : 'shelter';
+
   let shelterNameError: boolean;
-
-  let firstName = '';
   let firstNameError: boolean;
-
-  let lastName = '';
   let lastNameError: boolean;
-
-  let email = '';
   let emailError: boolean;
-
-  let age: number;
   let ageError: boolean;
-
-  let houseType: 'apartment' | 'house' | 'townhouse' | 'villa';
-
-  let hasPets: boolean;
   let hasPetsError: boolean;
-
-  let hasChildren: boolean;
   let hasChildrenError: boolean;
-
-  let timeAtHome: number;
   let timeAtHomeError: boolean;
+  let addressError: boolean;
 
-  const handleProfileView = () => {
-    accountType == 'adopter'
-      ? (accountType = 'shelter')
-      : (accountType = 'adopter');
+  let location: number[] = [];
+  let hasPets = $userCredentials.has_pets?.toString();
+  let hasChildren = $userCredentials.has_children?.toString();
+
+  const handleShelterUpdate = async () => {
+    if (location.length === 2) {
+      userCredentials.update((prev) => ({
+        ...prev,
+        latitude: location[0],
+        longitude: location[1]
+      }));
+    }
+    const updated = { ...$userCredentials };
+    delete updated.animals;
+    delete updated.images;
+    const res = await updateShelter(updated);
+    if (res.status === 200) {
+      toast.push('Updated successfully!', {
+        theme: {
+          '--toastColor': 'mintcream',
+          '--toastBackground': 'rgba(72,187,120,0.9)',
+          '--toastBarBackground': '#2F855A'
+        }
+      });
+    } else {
+      toast.push(`Error: ${res.message}`, {
+        theme: {
+          '--toastColor': 'mintcream',
+          '--toastBackground': '#d33e43',
+          '--toastBarBackground': 'mintcream'
+        }
+      });
+    }
+  };
+
+  const handleAdopterUpdate = async () => {
+    console.log('before', $userCredentials);
+    userCredentials.update((prev) => ({
+      ...prev,
+      latitude: location[0] ? location[0] : prev.latitude,
+      longitude: location[1] ? location[1] : prev.longitude,
+      has_pets: hasPets === 'true',
+      has_children: hasChildren === 'true'
+    }));
+
+    const updated = { ...$userCredentials };
+    delete updated.images;
+    const res = await updateAdopter(updated);
+    if (res.status === 200) {
+      toast.push('Updated successfully!', {
+        theme: {
+          '--toastColor': 'mintcream',
+          '--toastBackground': 'rgba(72,187,120,0.9)',
+          '--toastBarBackground': '#2F855A'
+        }
+      });
+    } else {
+      toast.push(`Error: ${res.message}`, {
+        theme: {
+          '--toastColor': 'mintcream',
+          '--toastBackground': '#d33e43',
+          '--toastBarBackground': 'mintcream'
+        }
+      });
+    }
   };
 </script>
 
 <div class="container">
   <div class="card glass glass1">
-    <span class="profile-btn"
-      ><Button
-        text="change profile type"
-        colour="white"
-        on:click={handleProfileView}
-      /></span
-    >
     <CloseButton />
     <div class="content-left">
       <h2>Edit profile</h2>
@@ -60,7 +105,7 @@
         {#if accountType === 'shelter'}
           <label for="Name">Shelter Name:</label>
           <Name
-            bind:value={shelterName}
+            bind:value={$userCredentials.name}
             nameType="Shelter name"
             bind:error={shelterNameError}
           />
@@ -68,23 +113,27 @@
           <label for="Name">First Name:</label>
           <Name
             nameType="First name"
-            bind:value={firstName}
+            bind:value={$userCredentials.first_name}
             bind:error={firstNameError}
           />
           <label for="Name">Last Name:</label>
           <Name
             nameType="Last name"
-            bind:value={lastName}
+            bind:value={$userCredentials.last_name}
             bind:error={lastNameError}
           />
         {/if}
 
         <label for="email">Email:</label>
-        <Email bind:value={email} bind:error={emailError} />
+        <Email bind:value={$userCredentials.email} bind:error={emailError} />
         <label for="address">Address: </label>
-        <AddressAutocomplete />
+        <AddressAutocomplete
+          bind:value={$userCredentials.address}
+          bind:error={addressError}
+          bind:location
+        />
         {#if accountType === 'shelter'}
-          <span><Button text="save" /></span>
+          <button on:click={handleShelterUpdate}><Button text="save" /></button>
         {/if}
       </div>
     </div>
@@ -93,19 +142,28 @@
       <div class="content-right">
         <div class="details">
           <label for="description">Description:</label>
-          <textarea id="description" name="description" rows="3" />
+          <textarea
+            id="description"
+            name="description"
+            rows="3"
+            bind:value={$userCredentials.description}
+          />
           <label for="House-type"> House type: </label>
           <div class="auth-input-container">
-            <select class="auth-input" bind:value={houseType}>
+            <select class="auth-input" bind:value={$userCredentials.house_type}>
               <option value="apartment">Apartment</option>
               <option value="house">House</option>
               <option value="townhouse">Townhouse</option>
               <option value="villa">Villa</option>
             </select>
           </div>
-          <Number bind:value={age} label="Your Age:" bind:error={ageError} />
           <Number
-            bind:value={timeAtHome}
+            bind:value={$userCredentials.age}
+            label="Your Age:"
+            bind:error={ageError}
+          />
+          <Number
+            bind:value={$userCredentials.time_at_home}
             label="Average hours at home daily:"
             bind:error={timeAtHomeError}
           />
@@ -120,12 +178,13 @@
               bind:error={hasChildrenError}
             />
           </div>
-          <span><Button text="save" /></span>
+          <button on:click={handleAdopterUpdate}><Button text="save" /></button>
         </div>
       </div>
     {/if}
   </div>
 </div>
+<SvelteToast />
 
 <style>
   .container {
@@ -190,15 +249,9 @@
     padding: 1rem;
   }
 
-  span {
+  button {
     width: 100%;
     margin-top: 1rem;
-  }
-
-  .profile-btn {
-    position: fixed;
-    top: 0;
-    left: 1rem;
-    width: 10%;
+    background-color: transparent;
   }
 </style>

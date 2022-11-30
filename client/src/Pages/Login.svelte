@@ -38,13 +38,13 @@
         navigate('/');
       } else if (profileRes.status === 200) {
         userCredentials.set(profileRes.data);
-        if (profileRes.data.house_type) {
-          setTimeout(() => {
+        setTimeout(() => {
+          if (profileRes.data.house_type) {
             navigate('/user/swipe');
-          }, 2000);
-        } else {
-          navigate('/shelter/dashboard');
-        }
+          } else {
+            navigate('/shelter/dashboard');
+          }
+        }, 2000);
       }
     } else if (res.status === 400) {
       error = 'Email or password incorrect';

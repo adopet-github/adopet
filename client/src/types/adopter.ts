@@ -1,7 +1,7 @@
 export type Adopter = {
   description: string;
   email: string;
-  password: string;
+  password?: string;
   first_name: string;
   last_name: string;
   age: number;
@@ -12,4 +12,5 @@ export type Adopter = {
   latitude: number;
   longitude: number;
   address: string;
+  id?: string;
 };
