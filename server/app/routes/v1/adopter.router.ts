@@ -69,4 +69,13 @@ router.put(
   controller.dislikeAnimal
 );
 
+router.get(
+  '/:id/matches',
+  authMiddleware,
+  isRoleMiddleware(AccountTypes.ADOPTER),
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  reflexiveMiddleware(),
+  controller.getMatches
+)
+
 export default router;

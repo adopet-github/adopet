@@ -1,5 +1,10 @@
-import { AdopterFromDb, AnimalFromDb, MatchFromDb, ShelterFromDb } from "../types/dboutputs";
-import { Adopter, Animal, Shelter } from "../types/models";
+import {
+  AdopterFromDb,
+  AnimalFromDb,
+  MatchFromDb,
+  ShelterFromDb
+} from '../types/dboutputs';
+import { Adopter, Animal, Shelter } from '../types/models';
 
 //TODO: FOR MESSAGES CREATED AT MUST BE
 
@@ -34,7 +39,9 @@ const dataParser = {
       latitude: data.user.location.latitude,
       address: data.user.location.address,
       images: data.user.general.images,
-      animals: (data.animals as unknown as Animal[]).map(animal => dataParser.animal(animal as unknown as AnimalFromDb)),
+      animals: (data.animals as unknown as Animal[]).map((animal) =>
+        dataParser.animal(animal as unknown as AnimalFromDb)
+      ),
       name: data.name
     };
 
@@ -48,10 +55,11 @@ const dataParser = {
       age: data.age,
       weight: data.weight,
       shelterId: data.shelterId,
+      shelterName: data.shelter.name,
       images: data.general.images,
-      adopters: (data.adopters as unknown as Adopter[]),
+      adopters: data.adopters as unknown as Adopter[],
       name: data.name
-    }
+    };
 
     return res;
   },
@@ -60,13 +68,13 @@ const dataParser = {
     const res: Adopter = {
       ...dataParser.adopter(data),
       like_date: data.adopter_animal?.createdAt
-    }
+    };
 
     return res;
   },
 
   shelterMatch: (data: MatchFromDb, adopter: AdopterFromDb) => {
-    const res: {adopter: Adopter, animal: Animal, match_date?: string} = {
+    const res: { adopter: Adopter; animal: Animal; date?: string } = {
       adopter: dataParser.adopter(adopter),
       animal: {
         name: data.name,
@@ -74,8 +82,8 @@ const dataParser = {
         weight: data.weight,
         images: data.general.images
       },
-      match_date: adopter.adopter_animal?.updatedAt
-    }
+      date: adopter.adopter_animal?.updatedAt
+    };
 
     return res;
   }
