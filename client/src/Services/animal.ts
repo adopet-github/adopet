@@ -1,3 +1,4 @@
+import type { Pet } from '../types/animal';
 import type { ShelterAnimal } from '../types/shelterAnimal';
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/api/v1/animal`;
@@ -46,4 +47,24 @@ export const addAnimalImage = async (image, id: string) => {
   } catch (error) {
     console.log('Error animal image:', error);
   }
+};
+
+export const updateAnimal = async (animal: ShelterAnimal) => {
+  const { id } = animal;
+  delete animal.id;
+  delete animal.shelterId;
+  delete animal.images;
+  delete animal.adopters;
+  console.log('animal in service', animal)
+  const token = localStorage.getItem('jwt');
+  console.log('id in service', id)
+  const res = await fetch(baseUrl + '/' + id, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(animal)
+  });
+  return await res.json();
 };

@@ -3,6 +3,7 @@
   import ListItem from './ListItem.svelte';
 
   const shelterAnimals = $userCredentials.animals;
+  console.log('sanimals', shelterAnimals);
 </script>
 
 <div class="list-container">

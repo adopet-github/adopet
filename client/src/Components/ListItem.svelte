@@ -8,6 +8,8 @@
 
   export let animal: ShelterAnimal;
 
+  console.log('list item amnimal', animal);
+
   let showDeleteWarning = false;
 
   const prewarnDelete = () => {
@@ -62,8 +64,8 @@
         text="view"
         on:click={() => {
           $dashView = 'oneAnimal';
-          console.log(animal);
-          $selectedAnimal = animal;
+          console.log('animal', animal);
+          selectedAnimal.set(animal);
         }}
       /></span
     >
