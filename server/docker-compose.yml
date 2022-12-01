@@ -1,18 +1,18 @@
 version: '3.8'
 services:
-  postgres:
-    image: postgres:15-alpine3.16
-    container_name: postgres
-    hostname: postgres
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: events
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
+  # postgres:
+  #   image: postgres:15-alpine3.16
+  #   container_name: postgres
+  #   hostname: postgres
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: events
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   restart: unless-stopped
 
   server:
     stdin_open: true
@@ -20,8 +20,8 @@ services:
       context: .
       dockerfile: ./express-docker/Dockerfile
     container_name: server
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres
     ports:
       - '4000:4000'
     restart: always
