@@ -1,4 +1,4 @@
-import Joi from "@hapi/joi";
+import Joi from 'joi';
 import { NextFunction, Request, Response } from "express";
 import { InputTypes } from "../enums";
 import constants from "../utils/constants";
