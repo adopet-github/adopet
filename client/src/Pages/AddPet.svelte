@@ -25,7 +25,13 @@
     };
     const res = await createAnimal(pet);
     userCredentials.update((previous) => {
-      const newAnimals = [...previous.animals, res.data.animal];
+      const newAnimal = {
+        ...res.data.animal,
+        description: res.data.description,
+        images: [],
+        adopters: []
+      };
+      const newAnimals = [...previous.animals, newAnimal];
       return {
         ...previous,
         animals: newAnimals

@@ -43,3 +43,16 @@ export const getShelterById = async (id:string) => {
 
   return await res.json();
 }
+export const addShelterImage = async (image: any, id: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(baseUrl + '/' + id + '/images', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ images: [image] })
+  });
+
+  return await res.json();
+};
