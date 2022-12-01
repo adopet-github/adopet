@@ -41,7 +41,7 @@
     align-items: center;
     justify-content: flex-start;
     gap: 10%;
-    overflow-x: scroll;
+    overflow-x: auto;
     padding: 1rem;
   }
 
