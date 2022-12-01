@@ -9,17 +9,26 @@
   import { selectedAnimal } from '../Stores/selectedAnimal';
   import { toast, SvelteToast } from '@zerodevx/svelte-toast';
   import { cloudinaryUpload } from '../Services/Cloudinary';
-  import { addAnimalImage } from '../Services/animal';
+  import { addAnimalImage, updateAnimal } from '../Services/animal';
   import { deleteImage } from '../Services/image';
 
-  let { name, description, age, weight } = $selectedAnimal;
+  // export let name;
+  // export let description;
+  // export let age;
+  // export let weight;
 
   let showAddImage = false;
   let isLoadingResponse = false;
 
   let fileInput;
+  export let editMode;
 
-  let editMode = false;
+  const handleAnimalProfileUpdate = async () => {
+    editMode ? (editMode = false) : (editMode = true),
+      console.log('here', $selectedAnimal);
+    const res = await updateAnimal({ ...$selectedAnimal });
+    console.log(res);
+  };
 
   const handleImageUpload = async () => {
     if (!fileInput.files[0]) {
@@ -100,16 +109,8 @@
 <div class="card glass glass1">
   <CloseButton />
   <div class="heading-cont">
-    <h1>{name}</h1>
-    <span
-      ><Button
-        text={'edit'}
-        on:click={() => {
-          editMode ? (editMode = false) : (editMode = true),
-            console.log(editMode);
-        }}
-      /></span
-    >
+    <input bind:value={$selectedAnimal.name} class="name" />
+    <span><Button text={'save'} on:click={handleAnimalProfileUpdate} /></span>
   </div>
   <div class="imgs-cont">
     <ImagesList
@@ -120,16 +121,24 @@
   </div>
   <div class="stat-cont">
     <div class="description">
-      <input value={description} />
+      <input bind:value={$selectedAnimal.description} />
     </div>
     <div class="stats">
-      <div class="age-cont"><p>🎂 <span>{age}</span> years old</p></div>
-      <div class="weight-cont"><p>⚖️ <span>{weight}</span> kg</p></div>
+      <div class="age-cont">
+        <p>
+          🎂 <span
+            ><input bind:value={$selectedAnimal.age} class="number" /></span
+          > years old
+        </p>
+      </div>
+      <div class="weight-cont">
+        <p>
+          ⚖️ <span
+            ><input bind:value={$selectedAnimal.weight} class="number" /></span
+          > kg
+        </p>
+      </div>
     </div>
-  </div>
-  <div class="enquiries">
-    <h2>Current enquiries</h2>
-    <p>List of people here</p>
   </div>
 </div>
 <SvelteToast />
@@ -161,7 +170,6 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    overflow-x: auto;
     width: 80%;
   }
 
@@ -227,5 +235,14 @@
     width: 100%;
     background: none;
     font-family: 'Satoshi Variable';
+    border: 1px dashed var(--red);
+    border-radius: 20px;
+    background-color: white;
+    padding: 0.5rem;
+  }
+
+  input.number {
+    width: 20%;
+    margin-bottom: 1rem;
   }
 </style>
