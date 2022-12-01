@@ -64,14 +64,6 @@ const controller = {
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-login: ', err);
     }
-    
-    if (response.status === constants.statusCodes.ok) {
-      const responseToken = response.token;
-      delete response.token;
-      return res
-        .cookie('access_token', responseToken, constants.cookieSettings)
-        .status(response.status).send(response);
-    }
 
     res.status(response.status).send(response);
   },
