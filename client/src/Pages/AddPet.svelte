@@ -24,6 +24,7 @@
       weight: petWeight
     };
     const res = await createAnimal(pet);
+    console.log(res);
     userCredentials.update((previous) => {
       const newAnimal = {
         ...res.data.animal,

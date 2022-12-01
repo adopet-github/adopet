@@ -47,3 +47,15 @@ export const addAnimalImage = async (image, id: string) => {
     console.log('Error animal image:', error);
   }
 };
+
+export const getAllAnimals = async () => {
+  const token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidHlwZSI6ImFkbWluIiwiaWF0IjoxNjY5NjQ1NTk2fQ.yvJclTGWcFt8_RyO8mGzYNR8_gl4eYi6ixWqOQqZikU';
+
+  const res = await fetch(baseUrl, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  return await res.json();
+};

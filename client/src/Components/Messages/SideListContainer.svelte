@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { getShelterById } from '../../Services/shelter';
+  import { getShelterById, getShelterMatches } from '../../Services/shelter';
   import { userCredentials } from '../../Stores/userCredentials';
   import type { Pet } from '../../types/animal';
   import MsgListItem from './MsgListItem.svelte';
@@ -8,6 +8,7 @@
   import LikeListItem from './LikeListItem.svelte';
 
   let likedAnimals: Array<Pet> = [];
+  let matches = [];
 
   onMount(async () => {
     const res = await getShelterById($userCredentials.id);
@@ -15,6 +16,13 @@
       likedAnimals = res.data.animals.filter((element) => {
         return element.adopters.length > 0;
       });
+    }
+  });
+
+  onMount(async () => {
+    const res = await getShelterMatches($userCredentials.id);
+    if (res.status === 200) {
+      matches = res.data;
     }
   });
 </script>
