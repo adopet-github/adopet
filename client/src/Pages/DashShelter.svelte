@@ -57,8 +57,15 @@
         on:click={handleAddPet}
       />
     </div>
-    <div class="div3"><DashStats desc={'pets'} stat={'10'} /></div>
-    <div class="div4"><DashStats desc={'open enquiries'} stat={'4'} /></div>
+    <div class="div3">
+      <DashStats
+        desc={$userCredentials.animals.length === 1 ? 'pet' : 'pets'}
+        stat={$userCredentials.animals ? $userCredentials.animals.length : 0}
+      />
+    </div>
+    <div class="div4">
+      <DashStats desc={'open enquiries'} stat={0} />
+    </div>
     <div class="div5"><DashStats desc={'most popular'} stat={'Rex'} /></div>
     <div class="div6">
       {#if $dashView === 'allAnimals'}
