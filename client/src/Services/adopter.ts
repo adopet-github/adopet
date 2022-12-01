@@ -42,3 +42,27 @@ export const addAdopterImage = async (image: any, id: string) => {
 
   return await res.json();
 };
+
+export const likeAnimal = async (adopterId: string, animalId: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(`${baseUrl}/${adopterId}/like/${animalId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return await res.json();
+};
+
+export const dislikeAnimal = async (adopterId: string, animalId: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(`${baseUrl}/${adopterId}/dislike/${animalId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return await res.json();
+};

@@ -30,19 +30,18 @@ export const updateShelter = async (shelter: Shelter) => {
   return await res.json();
 };
 
-export const getShelterById = async (id:string) => {
+export const getShelterById = async (id: string) => {
   const token = localStorage.getItem('jwt');
-  const admintoken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidHlwZSI6ImFkbWluIiwiaWF0IjoxNjY5NjQ1NTk2fQ.yvJclTGWcFt8_RyO8mGzYNR8_gl4eYi6ixWqOQqZikU'
   const res = await fetch(baseUrl + '/' + id, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${admintoken}`
-    },
+      Authorization: `Bearer ${token}`
+    }
   });
 
   return await res.json();
-}
+};
 export const addShelterImage = async (image: any, id: string) => {
   const token = localStorage.getItem('jwt');
   const res = await fetch(baseUrl + '/' + id + '/images', {
@@ -54,5 +53,16 @@ export const addShelterImage = async (image: any, id: string) => {
     body: JSON.stringify({ images: [image] })
   });
 
+  return await res.json();
+};
+
+export const getShelterMatches = async (id: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(baseUrl + '/' + id + '/matches', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
   return await res.json();
 };

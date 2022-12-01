@@ -1,44 +1,38 @@
 <script lang="ts">
   import SwipeCard from '../Components/SwipeCard.svelte';
-  import img1 from '../assets/imgs/mockdog/1.jpg';
-  import img2 from '../assets/imgs/mockdog/2.jpg';
-  import img3 from '../assets/imgs/mockdog/3.jpg';
-  import img4 from '../assets/imgs/mockdog/4.jpg';
   import { onMount } from 'svelte';
+  import { getAllAnimals } from '../Services/animal';
+  import { likeAnimal, dislikeAnimal } from '../Services/adopter';
+  import { userCredentials } from '../Stores/userCredentials';
 
   let infoOpen = true;
-  let outcome: false | 'yes' | 'no' = false;
 
   const toggleInfoOpen = () => {
     infoOpen = !infoOpen;
   };
 
-  let pets = [
-    [img1, img2, img3, img4],
-    [img4, img3, img2, img1],
-    [img2, img1, img4, img3],
-    [img3, img4, img1, img2],
-    [img1, img3, img4, img2]
-  ];
+  let animals = [];
 
-  const handleNo = () => {
+  onMount(async () => {
+    const res = await getAllAnimals();
+    console.log(res);
+    animals = res.data.filter((animal) => animal.images.length === 4);
+  });
+
+  const handleNo = async () => {
     if (!infoOpen) toggleInfoOpen();
-    outcome = 'no';
-    pets.shift();
-    pets = pets;
+    const res = await dislikeAnimal($userCredentials.id, animals[0].id);
+    console.log(res);
+    animals.shift();
+    animals = animals;
   };
 
-  const handleYes = () => {
+  const handleYes = async () => {
     if (!infoOpen) toggleInfoOpen();
-    const active = document.getElementById('active');
-    console.log(active);
-    console.log(active.style.transform);
-    // active.style.transform = 'scale(0) translateX(50%)';
-    console.log(active.style.transform);
-    // outcome = 'yes';
-    pets.shift();
-    pets = pets;
-    // active.style.transform = '';
+    const res = await likeAnimal($userCredentials.id, animals[0].id);
+    console.log(res);
+    animals.shift();
+    animals = animals;
   };
 </script>
 
@@ -50,8 +44,8 @@
 </svelte:head>
 
 <div class="container">
-  {#each pets as pet, i}
-    <SwipeCard {infoOpen} {outcome} index={i} {pet} />
+  {#each animals as animal, i}
+    <SwipeCard {infoOpen} index={i} {animal} />
   {/each}
   <div class="buttons">
     <button class="no" on:click={handleNo}>

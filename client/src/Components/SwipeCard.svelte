@@ -4,11 +4,10 @@
   let group: HTMLDivElement;
   let information: HTMLDivElement;
   export let infoOpen;
-  export let outcome: false | 'yes' | 'no';
 
   export let index: number;
-  // pet will be the pet object from backend
-  export let pet;
+
+  export let animal;
 
   onMount(() => {
     if (index !== 0) {
@@ -19,35 +18,11 @@
     }
   });
 
+  console.log(animal);
+
   afterUpdate(() => {
     handleInfoClick();
   });
-
-  // afterUpdate(() => {
-  //   if (outcome === 'yes') {
-  //     handleYes();
-  //   } else if (outcome === 'no') {
-  //     handleNo();
-  //   }
-  // });
-
-  // const handleYes = () => {
-  //   if (index === 0) {
-  //     console.log('yes');
-  //   } else if (index === 1) {
-  //     console.log(index, 'im next');
-  //   }
-  //   outcome = false;
-  // };
-
-  // const handleNo = () => {
-  //   if (index === 0) {
-  //     console.log('no');
-  //   } else if (index === 1) {
-  //     console.log(index, 'im next');
-  //   }
-  //   outcome = false;
-  // };
 
   const handleImageClick = (index: string) => {
     const card = document.getElementById(index);
@@ -84,37 +59,34 @@
 
 <div class="group" bind:this={group}>
   <div class="card" on:mousedown={() => handleImageClick('three')} id="three">
-    <img src={pet[0]} alt="pet" />
-    <div class="overlay"><i class="uil uil-map-marker" /> 7KM AWAY</div>
+    <img src={animal.images[0].url} alt="animal" />
+    <div class="overlay">
+      <i class="uil uil-map-marker" /> [[DISTANCE]] AWAY
+    </div>
   </div>
   <div class="card" on:mousedown={() => handleImageClick('two')} id="two">
-    <img src={pet[1]} alt="pet" />
-    <div class="overlay">5KG</div>
+    <img src={animal.images[1].url} alt="animal" />
+    <div class="overlay">{animal.weight} KG</div>
   </div>
   <div class="card" on:mousedown={() => handleImageClick('one')} id="one">
-    <img src={pet[2]} alt="pet" />
-    <div class="overlay">2 YEARS OLD</div>
+    <img src={animal.images[2].url} alt="animal" />
+    <div class="overlay">{animal.age} YEARS OLD</div>
   </div>
   <div class="card" on:mousedown={() => handleImageClick('zero')} id="zero">
-    <img src={pet[3]} alt="pet" />
-    <div class="overlay">BUSTER {index}</div>
+    <img src={animal.images[3].url} alt="animal" />
+    <div class="overlay">{animal.name}</div>
   </div>
 </div>
 <div class="information" bind:this={information}>
-  <h1>Buster from Shelter123</h1>
+  <h1>{animal.name} from [[SHELTER NAME]]</h1>
   <hr />
   <div class="details">
-    <h5><i class="uil uil-calender" /> 2 Years</h5>
-    <h5><i class="uil uil-weight" /> 5 KG</h5>
-    <h5><i class="uil uil-map-marker" /> 17 KM</h5>
+    <h5><i class="uil uil-calender" /> {animal.age} Years</h5>
+    <h5><i class="uil uil-weight" /> {animal.weight} KG</h5>
+    <h5><i class="uil uil-map-marker" /> [[DISTANCE]] KM</h5>
   </div>
   <p>
-    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque nesciunt,
-    ea suscipit velit dolorem sunt ipsam molestiae, odit excepturi pariatur nemo
-    earum possimus voluptatum officia porro in aut corrupti beatae sapiente
-    perspiciatis assumenda voluptatibus voluptates fugiat! Nostrum, quidem
-    repellendus aliquid ut doloremque molestias culpa officia asperiores
-    assumenda quasi a excepturi.
+    {animal.description}
   </p>
 </div>
 
