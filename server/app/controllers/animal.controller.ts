@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { MyResponse } from '../types/server';
+import { MyRequest, MyResponse } from '../types/server';
 import constants from '../utils/constants';
 import { animalSanitize, imageSanitize } from '../utils/sanitize';
 import models, { relationships } from '../models';
@@ -11,21 +11,82 @@ import { notFoundChecker } from '../utils/db';
 import { AdopterFromDb, AnimalFromDb } from '../types/dboutputs';
 import dataParser from '../utils/dataparser';
 import { v4 as uuidv4 } from 'uuid';
+import { decryptToken } from '../utils/jwt';
+import { getDistance } from 'geolib';
 
 const { General, Animal, Image, Shelter, Adopter, Adopter_Animal } = models;
 
 const controller = {
-  retrieveAll: async (req: Request, res: Response) => {
+  retrieveAll: async (req: MyRequest, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
     try {
-      const modelResponse = await Animal.findAll({ include: includes.animal });
+      if (req.query.distance === undefined) {
+        const modelResponse = await Animal.findAll({
+          include: includes.animal
+        });
 
+        response.data = (modelResponse as unknown as AnimalFromDb[]).map(
+          dataParser.animal
+        );
+      } else {
+        const shelters = await Shelter.findAll({
+          include: [
+            {
+              association: relationships.shelter.animals,
+              include: includes.animal
+            },
+            {
+              association: relationships.shelter.user,
+              include: [relationships.user.location]
+            }
+          ]
+        });
+        const decryptedToken = decryptToken(req.token as string) as unknown as {
+          id: string;
+        };
+        const adopter = await Adopter.findByPk(decryptedToken.id, {
+          include: includes.adopter
+        });
+        const unparsedAnimals = [];
+        const adopterLocation = (
+          adopter as unknown as {
+            user: { location: { latitude: number; longitude: number } };
+          }
+        ).user.location;
+        for (const shelter of shelters) {
+          const shelterLocation = (
+            shelter as unknown as {
+              user: { location: { latitude: number; longitude: number } };
+            }
+          ).user.location;
+          const distance = getDistance(
+            {
+              latitude: adopterLocation.latitude,
+              longitude: adopterLocation.longitude
+            },
+            {
+              latitude: shelterLocation.latitude,
+              longitude: shelterLocation.longitude
+            },
+            100
+          );
+          if (distance / 1000 <= Number(req.query.distance)) {
+            unparsedAnimals.push(
+              ...(
+                shelter as unknown as { animals: AnimalFromDb[] }
+              ).animals.map((animal) => ({
+                ...animal,
+                distance: distance / 1000
+              }))
+            );
+          }
+        }
+        response.data = (unparsedAnimals as unknown as AnimalFromDb[]).map(
+          dataParser.animal
+        );
+      }
       response.status = constants.statusCodes.ok;
       response.message = 'Animals retrieved successfully!';
-      response.data = (modelResponse as unknown as AnimalFromDb[]).map(
-        dataParser.animal
-      );
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-retrieveAll: ', err);
     }
@@ -35,7 +96,6 @@ const controller = {
 
   retrieveOne: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
     try {
       const { id } = req.params;
       const animal = await Animal.findByPk(id, {
@@ -67,7 +127,12 @@ const controller = {
     try {
       const shelter = await Shelter.findByPk(safeBody.shelterId);
 
-      notFoundChecker(shelter, safeBody.shelterId as string, response, 'Shelter');
+      notFoundChecker(
+        shelter,
+        safeBody.shelterId as string,
+        response,
+        'Shelter'
+      );
 
       const animal = await General.create(
         {
@@ -316,31 +381,37 @@ const controller = {
     try {
       const { id } = req.params;
       const animal = await Animal.findByPk(id, {
-        include: [{
-          association: relationships.animal.adopters,
-          through: {
-            where: {is_liked: true}
-          },
-          include: [
-            {
-              association: relationships.adopter.user,
-              include: [
-                {
-                  association: relationships.user.general,
-                  include: [relationships.general.images]
-                },
-                relationships.user.location
-              ]
-            }
-          ]
-        }],
+        include: [
+          {
+            association: relationships.animal.adopters,
+            through: {
+              where: { is_liked: true }
+            },
+            include: [
+              {
+                association: relationships.adopter.user,
+                include: [
+                  {
+                    association: relationships.user.general,
+                    include: [relationships.general.images]
+                  },
+                  relationships.user.location
+                ]
+              }
+            ]
+          }
+        ]
       });
 
-
-      const likes = (animal as unknown as {adopters: AdopterFromDb[]}).adopters.map(dataParser.animalLike);
+      const likes = (
+        animal as unknown as { adopters: AdopterFromDb[] }
+      ).adopters.map(dataParser.animalLike);
 
       response.status = constants.statusCodes.ok;
-      response.message = 'Likes retrieved successfully for ' + (animal as unknown as {name: string}).name + '!';
+      response.message =
+        'Likes retrieved successfully for ' +
+        (animal as unknown as { name: string }).name +
+        '!';
       response.data = likes;
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-getLikes: ', err);

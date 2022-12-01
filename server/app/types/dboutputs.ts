@@ -57,7 +57,7 @@ export type Animal = {
   generalId: string;
   shelterId: string;
   adopter_animal?: AdopterAnimal;
-  adopters?: Adopter[]
+  adopters?: Adopter[];
 };
 
 export type AdopterFromDb = {
@@ -74,7 +74,7 @@ export type AdopterFromDb = {
   userId: string;
   user: User;
   animals: Animal[];
-  adopter_animal?: AdopterAnimal
+  adopter_animal?: AdopterAnimal;
 };
 
 export type ShelterFromDb = {
@@ -123,6 +123,7 @@ export type AnimalFromDb = {
   general: General;
   shelter: Shelter;
   adopters: Adopter[];
+  distance?: number;
 };
 
 export type MatchFromDb = {

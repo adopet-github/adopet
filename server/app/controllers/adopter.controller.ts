@@ -403,7 +403,7 @@ const controller = {
           {
             association: relationships.adopter.animals,
             through: {
-              where: {is_matched: true}
+              where: { is_matched: true }
             },
             include: [
               {
@@ -415,16 +415,17 @@ const controller = {
                 include: [relationships.general.images]
               }
             ]
-          },
+          }
         ]
       });
 
       const parsedMatches = [];
 
-      for (const animal of (nonParsedMatches as unknown as {animals: MatchFromDb[]}).animals) {
-        for (const adopter of animal.adopters as AdopterFromDb[]) parsedMatches.push(
-          dataParser.shelterMatch(animal, adopter)
-        );
+      for (const animal of (
+        nonParsedMatches as unknown as { animals: MatchFromDb[] }
+      ).animals) {
+        for (const adopter of animal.adopters as AdopterFromDb[])
+          parsedMatches.push(dataParser.shelterMatch(animal, adopter));
       }
 
       response.status = constants.statusCodes.ok;
