@@ -5,4 +5,6 @@ export type ShelterAnimal = {
   age: number;
   weight: number;
   description: string;
+  images?: [];
+  adopters?: [];
 };

@@ -5,4 +5,5 @@ export type Pet = {
   description: string;
   distance: number;
   images: string[];
+  adopters: {}
 };

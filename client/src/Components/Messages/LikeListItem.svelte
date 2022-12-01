@@ -2,23 +2,26 @@
   import Time from 'svelte-time';
   import { dashView } from '../../Stores/dashView';
   import { viewAdopterProfile } from '../../Stores/viewAdopterProfile';
+  import type { Pet } from '../../types/animal';
 
-  let username = 'user';
-  let petName = 'pet';
-  let message = 'this should be a message preview';
+  export let animal: Pet;
+
+  $viewAdopterProfile = animal.adopters[0];
+
+  console.log('list item', animal);
+
   let msgDate: Date = new Date();
 </script>
 
-<button>
+<button on:click={() => ($dashView = 'match')}>
   <div class="list-item">
-    <div class="img-container">
-      <div class="dummy-img" />
+    <span class="dummy-img" />
+    <div class="match-details">
+      <p class="pet-name">{animal.name}</p>
+      <p class="match-username">{animal.adopters[0].first_name}</p>
+      <p class="match-date"><Time timestamp={msgDate} relative /></p>
     </div>
-    <div class="msg-details">
-      <p class="msg-username">{username}</p>
-      <p class="msg-preview">{message}</p>
-      <p class="msg-date"><Time timestamp={msgDate} relative /></p>
-    </div>
+    <span class="dummy-img2" />
   </div>
 </button>
 
@@ -43,7 +46,8 @@
     mix-blend-mode: multiply;
   }
 
-  .dummy-img {
+  .dummy-img,
+  .dummy-img2 {
     height: 60px;
     width: 60px;
     border-radius: 30px;
@@ -51,7 +55,11 @@
     background-color: var(--grey);
   }
 
-  .msg-details {
+  .dummy-img2 {
+    background-color: var(--red);
+  }
+
+  .match-details {
     padding: 0.5rem 0;
     position: relative;
     display: flex;
@@ -60,17 +68,25 @@
     flex: 1;
   }
 
-  .msg-username {
+  .match-username {
     color: var(--red);
     font-size: 0.8rem;
   }
 
-  .msg-preview {
+  .match-username {
+    font-size: 1.4rem;
+  }
+
+  .pet-name {
     font-size: 1rem;
     text-align: left;
   }
 
-  .msg-date {
+  .pet-name {
+    font-size: 0.8rem;
+  }
+
+  .match-date {
     font-size: 0.6rem;
     color: var(--lavender);
   }
@@ -79,18 +95,19 @@
     p {
       font-size: 0.8rem;
     }
-    .dummy-img {
+    .dummy-img,
+    .dummy-img2 {
       height: 30px;
       width: 30px;
       border-radius: 20px;
     }
 
-    .msg-username {
+    .match-username {
       color: var(--red);
       font-size: 0.8rem;
     }
 
-    .msg-date {
+    .match-date {
       font-size: 0.5rem;
       color: var(--lavender);
     }

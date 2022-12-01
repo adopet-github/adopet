@@ -3,7 +3,7 @@
   import Chat from '../Components/Chat.svelte';
   import DashStats from '../Components/DashStats.svelte';
   import ListCont from '../Components/ListCont.svelte';
-  import MsgListContainer from '../Components/Messages/MsgListContainer.svelte';
+  import SideListContainer from '../Components/Messages/SideListContainer.svelte';
   import { useNavigate } from 'svelte-navigator';
   import AnimalProfile from '../Components/AnimalProfile.svelte';
   import { dashView } from '../Stores/dashView';
@@ -46,7 +46,7 @@
         {/if}
       </div>
       <div class="list-container">
-        <MsgListContainer />
+        <SideListContainer />
       </div>
     </div>
     <div class="div2">
@@ -123,7 +123,6 @@
     border-radius: 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
   }
 
   .dash-headings {
@@ -132,7 +131,7 @@
 
   .list-container {
     height: auto;
-    overflow-y: scroll;
+    overflow-y: auto;
     /* margin-bottom: 8%; */
     border-bottom: 1px solid var(--lightgrey);
     border-top: 1px solid var(--lightgrey);

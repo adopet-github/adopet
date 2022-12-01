@@ -1,16 +1,19 @@
 <script lang="ts">
   import CloseButton from './CloseButton.svelte';
   import Button from './Button.svelte';
+  import { viewAdopterProfile } from '../Stores/viewAdopterProfile';
 
-  let adopterName: string = 'Adopter Name';
-  let adopterAddress: string = 'Sample address, Sample City';
-  let description: string =
-    'Adopter bio goes here, it should be quite long and take up a few lines and talk about how much they love pets and are the perfect candidate to adopt one of the animals';
-  let age: number = 25;
-  let hasPets: boolean = true;
-  let hasChildren: boolean = false;
-  let hoursHome: number = 10;
-  let houseType: string = 'apartment';
+  $viewAdopterProfile;
+
+  let adopterName: string =
+    $viewAdopterProfile.first_name + ' ' + $viewAdopterProfile.last_name;
+  let adopterAddress: string = $viewAdopterProfile.address;
+  let description: string = $viewAdopterProfile.description;
+  let age: number = $viewAdopterProfile.age;
+  let hasPets: boolean = $viewAdopterProfile.has_pets;
+  let hasChildren: boolean = $viewAdopterProfile.has_children;
+  let hoursHome: number = $viewAdopterProfile.time_at_home;
+  let houseType: string = $viewAdopterProfile.house_type;
 </script>
 
 <svelte:head>

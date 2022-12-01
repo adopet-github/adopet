@@ -13,4 +13,7 @@ export type Adopter = {
   longitude: number;
   address: string;
   id?: string;
+  google_id?: string;
+  userId: string;
+  adopter_animal?: {};
 };
