@@ -8,7 +8,7 @@ import { Model } from 'sequelize';
 import { Image as ImageType } from '../types/models';
 import includes from '../utils/includes';
 import { notFoundChecker } from '../utils/db';
-import { AnimalFromDb } from '../types/dboutputs';
+import { AdopterFromDb, AnimalFromDb } from '../types/dboutputs';
 import dataParser from '../utils/dataparser';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -67,7 +67,7 @@ const controller = {
     try {
       const shelter = await Shelter.findByPk(safeBody.shelterId);
 
-      notFoundChecker(shelter, safeBody.shelterId, response, 'Shelter');
+      notFoundChecker(shelter, safeBody.shelterId as string, response, 'Shelter');
 
       const animal = await General.create(
         {
@@ -305,6 +305,45 @@ const controller = {
       response.message = 'Adopter disliked successfully!';
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-likeAdopter: ', err);
+    }
+
+    res.status(response.status).send(response);
+  },
+
+  getLikes: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    try {
+      const { id } = req.params;
+      const animal = await Animal.findByPk(id, {
+        include: [{
+          association: relationships.animal.adopters,
+          through: {
+            where: {is_liked: true}
+          },
+          include: [
+            {
+              association: relationships.adopter.user,
+              include: [
+                {
+                  association: relationships.user.general,
+                  include: [relationships.general.images]
+                },
+                relationships.user.location
+              ]
+            }
+          ]
+        }],
+      });
+
+
+      const likes = (animal as unknown as {adopters: AdopterFromDb[]}).adopters.map(dataParser.animalLike);
+
+      response.status = constants.statusCodes.ok;
+      response.message = 'Likes retrieved successfully for ' + (animal as unknown as {name: string}).name + '!';
+      response.data = likes;
+    } catch (err) {
+      console.warn('ERROR AT ANIMAL-CONTROLLER-getLikes: ', err);
     }
 
     res.status(response.status).send(response);
