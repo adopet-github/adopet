@@ -42,7 +42,7 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 (async function bootstrap() {
-  await sequelize.sync({ force: true });
+  await sequelize.sync();
 
   server.listen(PORT, () => {
     console.log(`server running on ${PORT}`);
