@@ -39,6 +39,7 @@ export type Animal = General & {
   images?: Image[];
   adopters?: Adopter[];
   id?: string;
+  shelterName?: string;
 };
 
 export type Shelter = User &

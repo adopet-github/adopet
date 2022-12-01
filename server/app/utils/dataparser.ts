@@ -48,6 +48,7 @@ const dataParser = {
       age: data.age,
       weight: data.weight,
       shelterId: data.shelterId,
+      shelterName: data.shelter.name,
       images: data.general.images,
       adopters: (data.adopters as unknown as Adopter[]),
       name: data.name
