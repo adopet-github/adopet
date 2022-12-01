@@ -305,7 +305,7 @@ const controller = {
               {
                 association: relationships.animal.adopters,
                 through: {
-                  where: {is_matched: true}
+                  where: { is_matched: true }
                 },
                 include: includes.adopter
               },
@@ -314,16 +314,17 @@ const controller = {
                 include: [relationships.general.images]
               }
             ]
-          },
+          }
         ]
       });
 
       const parsedMatches = [];
 
-      for (const animal of (nonParsedMatches as unknown as {animals: MatchFromDb[]}).animals) {
-        for (const adopter of animal.adopters as AdopterFromDb[]) parsedMatches.push(
-          dataParser.shelterMatch(animal, adopter)
-        );
+      for (const animal of (
+        nonParsedMatches as unknown as { animals: MatchFromDb[] }
+      ).animals) {
+        for (const adopter of animal.adopters as AdopterFromDb[])
+          parsedMatches.push(dataParser.shelterMatch(animal, adopter));
       }
 
       response.status = constants.statusCodes.ok;
@@ -331,6 +332,49 @@ const controller = {
       response.data = parsedMatches;
     } catch (err) {
       console.warn('ERROR AT SHELTER-CONTROLLER-getMatches: ', err);
+    }
+
+    res.status(response.status).send(response);
+  },
+  getLikes: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    try {
+      const nonParsedLikes = await Shelter.findByPk(req.params.id, {
+        include: [
+          {
+            association: relationships.shelter.animals,
+            include: [
+              {
+                association: relationships.animal.adopters,
+                through: {
+                  where: { is_liked: true }
+                },
+                include: includes.adopter
+              },
+              {
+                association: relationships.animal.general,
+                include: [relationships.general.images]
+              }
+            ]
+          }
+        ]
+      });
+
+      const parsedLikes = [];
+
+      for (const animal of (
+        nonParsedLikes as unknown as { animals: MatchFromDb[] }
+      ).animals) {
+        for (const adopter of animal.adopters as AdopterFromDb[])
+          parsedLikes.push(dataParser.shelterMatch(animal, adopter));
+      }
+
+      response.status = constants.statusCodes.ok;
+      response.message = 'Likes retrieved successfully!';
+      response.data = parsedLikes;
+    } catch (err) {
+      console.warn('ERROR AT SHELTER-CONTROLLER-getLikes: ', err);
     }
 
     res.status(response.status).send(response);
