@@ -5,7 +5,6 @@
   const dispatch = createEventDispatcher();
 
   const handleDelete = (e) => {
-    console.log(e.detail.id);
     dispatch('deleteImage', {
       id: e.detail.id
     });

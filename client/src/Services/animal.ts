@@ -7,7 +7,7 @@ export const createAnimal = async (animal: ShelterAnimal) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'authorization': 'Bearer ' + localStorage.getItem('jwt')
+      authorization: 'Bearer ' + localStorage.getItem('jwt')
     },
     body: JSON.stringify(animal)
   });
@@ -21,11 +21,29 @@ export const deleteAnimal = async (id: string) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'authorization': 'Bearer ' + localStorage.getItem('jwt')
-      },
+        authorization: 'Bearer ' + localStorage.getItem('jwt')
+      }
     });
     return await res.json();
   } catch (error) {
-    console.log('ERROR: delete animal: ', error)
+    console.log('ERROR: delete animal: ', error);
   }
-}
+};
+
+export const addAnimalImage = async (image, id: string) => {
+  try {
+    const token = localStorage.getItem('jwt');
+    const res = await fetch(baseUrl + '/' + id + '/images', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ images: [image] })
+    });
+
+    return await res.json();
+  } catch (error) {
+    console.log('Error animal image:', error);
+  }
+};
