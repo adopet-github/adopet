@@ -27,9 +27,9 @@
       email,
       password
     };
-    isLoading = true;
     const res = await logIn(credentials);
     if (res.status === 200) {
+      isLoading = true;
       error = '';
       localStorage.setItem('jwt', res.token);
       // get profile

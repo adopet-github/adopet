@@ -25,6 +25,7 @@
     "vite": "^3.2.3"
   },
   "dependencies": {
+    "@cloudinary/url-gen": "^1.8.6",
     "dotenv": "^16.0.3",
     "svelte-navigator": "^3.2.2"
   }

@@ -17,7 +17,6 @@ export const createUser = async (user: Adopter) => {
 export const updateAdopter = async (adopter: Adopter) => {
   const { id } = adopter;
   delete adopter.id;
-  console.log('after', adopter);
   const token = localStorage.getItem('jwt');
   const res = await fetch(baseUrl + '/' + id, {
     method: 'PUT',
@@ -27,5 +26,19 @@ export const updateAdopter = async (adopter: Adopter) => {
     },
     body: JSON.stringify(adopter)
   });
+  return await res.json();
+};
+
+export const addAdopterImage = async (image: any, id: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(baseUrl + '/' + id + '/images', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ images: [image] })
+  });
+
   return await res.json();
 };
