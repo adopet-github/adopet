@@ -59,7 +59,7 @@
     </div>
     <div class="div3">
       <DashStats
-        desc={'pets'}
+        desc={$userCredentials.animals.length === 1 ? 'pet' : 'pets'}
         stat={$userCredentials.animals ? $userCredentials.animals.length : 0}
       />
     </div>
