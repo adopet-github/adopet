@@ -53,4 +53,13 @@ router.put(
   controller.addManyImages
 );
 
+router.get(
+  '/:id/matches',
+  authMiddleware,
+  isRoleMiddleware(AccountTypes.SHELTER),
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  reflexiveMiddleware(),
+  controller.getMatches
+)
+
 export default router;

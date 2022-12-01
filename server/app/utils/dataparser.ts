@@ -1,4 +1,4 @@
-import { AdopterFromDb, AnimalFromDb, ShelterFromDb } from "../types/dboutputs";
+import { AdopterFromDb, AnimalFromDb, MatchFromDb, ShelterFromDb } from "../types/dboutputs";
 import { Adopter, Animal, Shelter } from "../types/models";
 
 //TODO: FOR MESSAGES CREATED AT MUST BE
@@ -51,6 +51,30 @@ const dataParser = {
       images: data.general.images,
       adopters: (data.adopters as unknown as Adopter[]),
       name: data.name
+    }
+
+    return res;
+  },
+
+  animalLike: (data: AdopterFromDb) => {
+    const res: Adopter = {
+      ...dataParser.adopter(data),
+      like_date: data.adopter_animal?.createdAt
+    }
+
+    return res;
+  },
+
+  shelterMatch: (data: MatchFromDb, adopter: AdopterFromDb) => {
+    const res: {adopter: Adopter, animal: Animal, match_date?: string} = {
+      adopter: dataParser.adopter(adopter),
+      animal: {
+        name: data.name,
+        age: data.age,
+        weight: data.weight,
+        images: data.general.images
+      },
+      match_date: adopter.adopter_animal?.updatedAt
     }
 
     return res;

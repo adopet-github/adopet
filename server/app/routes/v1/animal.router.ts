@@ -68,5 +68,13 @@ router.put(
   selfShelterMiddleware('animalId'),
   controller.dislikeAdopter
 );
+router.get(
+  '/:id/likes',
+  authMiddleware,
+  isRoleMiddleware(AccountTypes.SHELTER),
+  joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
+  selfShelterMiddleware(),
+  controller.getLikes
+);
 
 export default router;

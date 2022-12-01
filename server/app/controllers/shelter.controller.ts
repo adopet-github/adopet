@@ -10,7 +10,7 @@ import { Image as ImageType } from '../types/models';
 import { notFoundChecker } from '../utils/db';
 import includes from '../utils/includes';
 import dataParser from '../utils/dataparser';
-import { ShelterFromDb } from '../types/dboutputs';
+import { AdopterFromDb, MatchFromDb, ShelterFromDb } from '../types/dboutputs';
 import { generateToken } from '../utils/jwt';
 import { genPasswordAndSalt } from '../utils/password';
 import { v4 as uuidv4 } from 'uuid';
@@ -290,6 +290,49 @@ const controller = {
     } catch (err) {
       console.warn('ERROR AT SHELTER-CONTROLLER-addManyImages: ', err);
     }
+    res.status(response.status).send(response);
+  },
+
+  getMatches: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    try {
+      const nonParsedMatches = await Shelter.findByPk(req.params.id, {
+        include: [
+          {
+            association: relationships.shelter.animals,
+            include: [
+              {
+                association: relationships.animal.adopters,
+                through: {
+                  where: {is_matched: true}
+                },
+                include: includes.adopter
+              },
+              {
+                association: relationships.animal.general,
+                include: [relationships.general.images]
+              }
+            ]
+          },
+        ]
+      });
+
+      const parsedMatches = [];
+
+      for (const animal of (nonParsedMatches as unknown as {animals: MatchFromDb[]}).animals) {
+        for (const adopter of animal.adopters as AdopterFromDb[]) parsedMatches.push(
+          dataParser.shelterMatch(animal, adopter)
+        );
+      }
+
+      response.status = constants.statusCodes.ok;
+      response.message = 'Matches retrieved successfully!';
+      response.data = parsedMatches;
+    } catch (err) {
+      console.warn('ERROR AT SHELTER-CONTROLLER-getMatches: ', err);
+    }
+
     res.status(response.status).send(response);
   }
 };

@@ -1,7 +1,7 @@
 import { HouseTypes } from '../enums';
 
 export type General = {
-  description: string;
+  description?: string;
 };
 
 export type Location = {
@@ -28,13 +28,14 @@ export type Adopter = User &
     google_id?: string;
     id?: string;
     images?: Image[];
+    like_date?: string;
   };
 
 export type Animal = General & {
   name: string;
   age: number;
   weight: number;
-  shelterId: string;
+  shelterId?: string;
   images?: Image[];
   adopters?: Adopter[];
   id?: string;

@@ -1,6 +1,7 @@
+import { Includeable } from "sequelize";
 import { relationships } from "../models";
 
-const includes: {[key: string]: object} = {
+const includes: {[key: string]: Includeable[]} = {
   adopter: [
     {
       association: relationships.adopter.user,

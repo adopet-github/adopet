@@ -70,5 +70,5 @@ export const relationships = {
   message: {
     animal: Message.belongsTo(Animal, cascade),
     adopter: Message.belongsTo(Adopter, cascade)
-  },
+  }
 };
