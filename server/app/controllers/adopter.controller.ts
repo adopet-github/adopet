@@ -133,14 +133,6 @@ const controller = {
       await transaction.rollback();
       console.warn('ERROR AT ADOPTER-CONTROLLER-create: ', err);
     }
-
-    if (response.status === constants.statusCodes.created) {
-      const responseToken = response.token;
-      delete response.token;
-      return res
-        .cookie('access_token', responseToken, constants.cookieSettings)
-        .status(response.status).send(response);
-    }
     res.status(response.status).send(response);
   },
 
