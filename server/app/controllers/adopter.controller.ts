@@ -10,7 +10,7 @@ import { Image as ImageType } from '../types/models';
 import { notFoundChecker } from '../utils/db';
 import includes from '../utils/includes';
 import dataParser from '../utils/dataparser';
-import { AdopterFromDb, MatchFromDb } from '../types/dboutputs';
+import { AdopterFromDb, AnimalFromDb, MatchFromDb } from '../types/dboutputs';
 import { generateToken } from '../utils/jwt';
 import { genPasswordAndSalt } from '../utils/password';
 import { v4 as uuidv4 } from 'uuid';
@@ -403,30 +403,26 @@ const controller = {
           {
             association: relationships.adopter.animals,
             through: {
-              where: { is_matched: true }
-            },
-            include: [
-              {
-                association: relationships.animal.adopters,
-                include: includes.adopter
-              },
-              {
-                association: relationships.animal.general,
-                include: [relationships.general.images]
+              where: {
+                is_matched: true,
+                adopterId: req.params.id
               }
-            ]
+            },
+            include: includes.animal
           }
         ]
       });
 
-      const parsedMatches = [];
+      const parsedMatches = (
+        nonParsedMatches as unknown as { animals: AnimalFromDb[] }
+      ).animals.map(dataParser.animal);
 
-      for (const animal of (
+      /* for (const animal of (
         nonParsedMatches as unknown as { animals: MatchFromDb[] }
       ).animals) {
         for (const adopter of animal.adopters as AdopterFromDb[])
           parsedMatches.push(dataParser.shelterMatch(animal, adopter));
-      }
+      } */
 
       response.status = constants.statusCodes.ok;
       response.message = 'Matches retrieved successfully!';

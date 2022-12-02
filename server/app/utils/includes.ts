@@ -1,7 +1,7 @@
-import { Includeable } from "sequelize";
-import { relationships } from "../models";
+import { Includeable } from 'sequelize';
+import { relationships } from '../models';
 
-const includes: {[key: string]: Includeable[]} = {
+const includes: { [key: string]: Includeable[] } = {
   adopter: [
     {
       association: relationships.adopter.user,
@@ -19,8 +19,7 @@ const includes: {[key: string]: Includeable[]} = {
       association: relationships.animal.general,
       include: [relationships.general.images]
     },
-    relationships.animal.shelter,
-    relationships.animal.adopters
+    relationships.animal.shelter
   ],
   shelter: [
     {
@@ -42,7 +41,7 @@ const includes: {[key: string]: Includeable[]} = {
         },
         relationships.animal.shelter,
         relationships.animal.adopters
-      ],
+      ]
     }
   ]
 };
