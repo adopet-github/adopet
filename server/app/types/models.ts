@@ -40,6 +40,7 @@ export type Animal = General & {
   adopters?: Adopter[];
   id?: string;
   shelterName?: string;
+  shelterDescription?: string;
   distance?: number;
 };
 

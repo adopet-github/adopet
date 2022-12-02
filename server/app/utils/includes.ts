@@ -19,7 +19,15 @@ const includes: { [key: string]: Includeable[] } = {
       association: relationships.animal.general,
       include: [relationships.general.images]
     },
-    relationships.animal.shelter
+    {
+      association: relationships.animal.shelter,
+      include: [
+        {
+          association: relationships.shelter.user,
+          include: [relationships.user.general]
+        }
+      ]
+    }
   ],
   shelter: [
     {

@@ -93,6 +93,7 @@ export type Shelter = {
   createdAt: string;
   updatedAt: string;
   userId: string;
+  user: User;
 };
 
 export type Adopter = {

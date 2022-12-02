@@ -56,6 +56,7 @@ const dataParser = {
       weight: data.weight,
       shelterId: data.shelterId,
       shelterName: data.shelter.name,
+      shelterDescription: data.shelter.user.general.description,
       images: data.general.images,
       name: data.name,
       distance: data.distance

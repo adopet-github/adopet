@@ -63,6 +63,7 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
     const { sanitizeCreate } = adopterSanitize;
 
+    console.log('req.body', req.body);
     const unsafeBody = req.body;
 
     const safeBody = sanitizeCreate(unsafeBody);
@@ -72,6 +73,8 @@ const controller = {
       const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
       safeBody.password = passSaltObj.password;
       safeBody.salt = passSaltObj.salt;
+      console.log('password', safeBody.password);
+      console.log('salt', safeBody.salt);
     }
     const transaction = await sequelize.transaction();
     try {
