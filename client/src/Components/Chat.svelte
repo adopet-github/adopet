@@ -1,19 +1,13 @@
 <script lang="ts">
   import { io } from 'socket.io-client';
 
-  import { afterUpdate, beforeUpdate } from 'svelte';
-  import { selectedAnimal } from '../Stores/selectedAnimal';
-  import { userCredentials } from '../Stores/userCredentials';
+  import { afterUpdate, beforeUpdate, onMount } from 'svelte';
   import Button from './Button.svelte';
   import CloseButton from './CloseButton.svelte';
-  import { createMessage } from '../Services/message';
+  import { createMessage, retrieveByMatch } from '../Services/message';
   import type { Message } from '../types/message';
-
-  let animalName = 'animalName';
-  let shelterName = 'shelterName';
-
-  console.log('user: ', $userCredentials);
-  console.log('animal: ', $selectedAnimal);
+  import { viewMatchChat } from '../Stores/viewMatchChat';
+  import { messagesByMatch } from '../Stores/messagesByMatch';
 
   let chat;
   let autoscroll;
@@ -22,13 +16,8 @@
   const socket = io();
 
   socket.on('message', () => {
-    console.log('from socket: ', socket);
+    console.log('from socket:  ', socket);
   });
-
-  let messages = [
-    { author: 'user', content: 'hello!', adopterId: '', animalId: '' },
-    { author: 'non-user', content: 'hey!', adopterId: '', animalId: '' }
-  ];
 
   beforeUpdate(() => {
     autoscroll =
@@ -46,10 +35,11 @@
       let message: Message = {
         author: 'shelter',
         content,
-        adopterId: $userCredentials.id,
-        animalId: $selectedAnimal.id
+        adopterId: $viewMatchChat.adopter.id,
+        animalId: $viewMatchChat.animal.id
       };
-      console.log(await createMessage(message));
+      $messagesByMatch = $messagesByMatch.concat(message);
+      await createMessage(message);
       event.target.value = '';
     }
 
@@ -59,37 +49,49 @@
       let message: Message = {
         author: 'shelter',
         content,
-        adopterId: $userCredentials.id,
-        animalId: $selectedAnimal.id
+        adopterId: $viewMatchChat.adopter.id,
+        animalId: $viewMatchChat.animal.id
       };
+      $messagesByMatch = $messagesByMatch.concat(message);
       await createMessage(message);
       value = '';
     }
   };
 </script>
 
-<div class="chat-container glass">
-  <div class="chat-top-menu">
-    <div class="img-container">
-      <div class="dummy-img" />
+{#if $viewMatchChat}
+  <div class="chat-container glass">
+    <div class="chat-top-menu">
+      <div class="img-container">
+        <div class="dummy-img" />
+      </div>
+      <p class="chat-title">
+        {$viewMatchChat.adopter.first_name}
+        <span>matched with</span>
+        {$viewMatchChat.animal.name}
+      </p>
+      <span><CloseButton /></span>
     </div>
-    <p class="chat-title">{animalName} <span>from</span> {shelterName}</p>
-    <span><CloseButton /></span>
+    <div class="chat-content" bind:this={chat}>
+      {#each $messagesByMatch as message}
+        {#if message.author === 'shelter'}
+          <div class="shelter-msg"><p>{message.content}</p></div>
+        {:else}
+          <div class="adopter-msg"><p>{message.content}</p></div>
+        {/if}
+      {/each}
+    </div>
+    <div class="chat-input-container">
+      <input
+        type="text"
+        class="chat-input"
+        on:keydown={handleSend}
+        bind:value
+      />
+      <span><Button text={'send'} on:click={handleSend} /></span>
+    </div>
   </div>
-  <div class="chat-content" bind:this={chat}>
-    {#each messages as message}
-      {#if message.author === 'user'}
-        <div class="user-msg"><p>{message.content}</p></div>
-      {:else}
-        <div class="non-user-msg">{message.content}</div>
-      {/if}
-    {/each}
-  </div>
-  <div class="chat-input-container">
-    <input type="text" class="chat-input" on:keydown={handleSend} bind:value />
-    <span><Button text={'send'} on:click={handleSend} /></span>
-  </div>
-</div>
+{/if}
 
 <style>
   .chat-container {
@@ -119,8 +121,7 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: solid 1px var(--lightgrey);
-    height: 10%;
-    margin-bottom: 1rem;
+    padding: 0.5rem 0;
   }
 
   .dummy-img {
@@ -135,11 +136,13 @@
     gap: 0.5rem;
     flex-direction: column;
     height: 80%;
+    border-bottom: solid 1px var(--lightgrey);
     overflow-y: auto;
+    padding: 0.5rem 0;
   }
 
-  .non-user-msg,
-  .user-msg {
+  .adopter-msg,
+  .shelter-msg {
     background-color: var(--lightgrey);
     max-width: 50%;
     min-width: 15%;
@@ -148,7 +151,7 @@
     align-self: flex-start;
   }
 
-  .user-msg {
+  .shelter-msg {
     align-self: flex-end;
     background-color: var(--red);
     color: var(--white);

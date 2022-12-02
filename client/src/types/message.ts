@@ -3,4 +3,5 @@ export type Message = {
   animalId: string;
   author: string;
   content: string;
+  createdAt?: string;
 };

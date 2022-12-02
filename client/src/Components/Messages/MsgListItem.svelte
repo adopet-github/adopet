@@ -1,5 +1,9 @@
 <script lang="ts">
   import Time from 'svelte-time';
+  import { retrieveByMatch } from '../../Services/message';
+  import { dashView } from '../../Stores/dashView';
+  import { messagesByMatch } from '../../Stores/messagesByMatch';
+  import { viewMatchChat } from '../../Stores/viewMatchChat';
 
   let message = 'this should be a message preview'; // preview of last message
   let msgDate: Date = new Date(); // needs to be time of last sent message
@@ -7,6 +11,19 @@
   // bold if not read
 
   export let match;
+
+  // console.log('match: ', match);
+
+  const handleGoToChatView = async () => {
+    viewMatchChat.set(match);
+    dashView.set('msgs');
+    let adopterId = $viewMatchChat.adopter.id;
+    let animalId = $viewMatchChat.animal.id;
+    const res = await retrieveByMatch({ adopterId, animalId });
+    if (res.status === 200) {
+      messagesByMatch.set(res.data);
+    }
+  };
 </script>
 
 <svelte:head>
@@ -16,7 +33,7 @@
   />
 </svelte:head>
 {#if match}
-  <button>
+  <button on:click={handleGoToChatView}>
     <div class="list-item">
       <div class="img-container">
         {#if match.adopter.images.length}

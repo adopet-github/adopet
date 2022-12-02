@@ -18,3 +18,18 @@ export const createMessage = async (message: Message) => {
   return await res.json();
 };
 
+export const retrieveByMatch = async (idObject: { adopterId: string; animalId: string; }) => {
+  const {adopterId, animalId} = idObject
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(baseUrl + adopterId + '/animal/' + animalId, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+  });
+
+  return await res.json();
+};
+
+

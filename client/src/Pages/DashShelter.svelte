@@ -10,8 +10,7 @@
   import AdopterProfile from '../Components/AdopterProfile.svelte';
   import { userCredentials } from '../Stores/userCredentials';
   import { animalLikes } from '../Stores/animalLikes';
-  import { onMount } from 'svelte';
-  import { getShelterMatches } from '../Services/shelter';
+  import { shelterMatches } from '../Stores/shelterMatches';
 
   const navigate = useNavigate();
 
@@ -25,15 +24,6 @@
   const handleAddPet = () => {
     navigate('/shelter/addpet');
   };
-
-  let matches = [];
-
-  onMount(async () => {
-    const res = await getShelterMatches($userCredentials.id);
-    if (res.status === 200) {
-      matches = res.data;
-    }
-  });
 </script>
 
 <div class="main-container">
@@ -56,7 +46,7 @@
         {/if}
       </div>
       <div class="list-container">
-        <SideListContainer {matches} />
+        <SideListContainer />
       </div>
     </div>
     <div class="div2">
@@ -78,7 +68,9 @@
     <div class="div4">
       <DashStats desc={'animal likes'} stat={$animalLikes.length} />
     </div>
-    <div class="div5"><DashStats desc={'matches'} stat={matches.length} /></div>
+    <div class="div5">
+      <DashStats desc={'matches'} stat={$shelterMatches.length} />
+    </div>
     <div class="div6">
       {#if $dashView === 'allAnimals'}
         <ListCont />
