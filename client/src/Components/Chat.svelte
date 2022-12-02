@@ -20,7 +20,7 @@
 
   socket.on('message', (msg) => {
     console.log('from socket:  ', msg);
-    $messagesByMatch = $messagesByMatch.concat(msg);
+    messagesByMatch.set($messagesByMatch.concat(msg));
   });
 
   beforeUpdate(() => {
@@ -65,7 +65,13 @@
   <div class="chat-container glass">
     <div class="chat-top-menu">
       <div class="img-container">
-        <div class="dummy-img" />
+        <img
+          src={$viewMatchChat.adopter.images[0]
+            ? $viewMatchChat.adopter.images[0].url
+            : ''}
+          alt="profile"
+        />
+        <!-- <div class="dummy-img" /> -->
       </div>
       <p class="chat-title">
         {$viewMatchChat.adopter.first_name}
@@ -146,11 +152,15 @@
     padding: 0.5rem 0;
   }
 
-  .dummy-img {
+  .img-container {
+    display: flex;
     height: 50px;
     width: 50px;
     border-radius: 25px;
-    background-color: var(--grey);
+  }
+
+  img {
+    flex: 1;
   }
 
   .chat-content {
