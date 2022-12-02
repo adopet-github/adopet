@@ -13,7 +13,9 @@
   let autoscroll;
   let value = '';
 
-  const socket = io();
+  const socket = io('http://localhost:4000');
+
+  socket.on('connect', () => console.log('sockets connected'));
 
   socket.on('message', () => {
     console.log('from socket:  ', socket);
