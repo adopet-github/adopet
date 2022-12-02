@@ -1,20 +1,27 @@
 <script lang="ts">
+  import { io } from 'socket.io-client';
+  import Time from 'svelte-time/src/Time.svelte';
+
   import { afterUpdate, beforeUpdate } from 'svelte';
-  import { userCredentials } from '../Stores/userCredentials';
   import Button from './Button.svelte';
   import CloseButton from './CloseButton.svelte';
-
-  let animalName = 'animalName';
-  let shelterName = 'shelterName';
+  import { createMessage } from '../Services/message';
+  import type { Message } from '../types/message';
+  import { viewMatchChat } from '../Stores/viewMatchChat';
+  import { messagesByMatch } from '../Stores/messagesByMatch';
 
   let chat;
   let autoscroll;
   let value = '';
 
-  let messages = [
-    { author: 'user', text: 'hello!' },
-    { author: 'non-user', text: 'hey!' }
-  ];
+  const socket = io('http://localhost:4000');
+
+  socket.on('connect', () => console.log('sockets connected'));
+
+  socket.on('message', (msg) => {
+    console.log('from socket:  ', msg);
+    $messagesByMatch = $messagesByMatch.concat(msg);
+  });
 
   beforeUpdate(() => {
     autoscroll =
@@ -25,51 +32,88 @@
     if (autoscroll) chat.scrollTo(0, chat.scrollHeight);
   });
 
-  function handleSend(event) {
+  const handleSend = async (event) => {
     if (event.key === 'Enter') {
-      const text = event.target.value;
-      if (!text) return;
-      messages = messages.concat({
-        author: 'user',
-        text
-      });
+      const content = event.target.value;
+      if (!content) return;
+      let message: Message = {
+        author: 'shelter',
+        content,
+        adopterId: $viewMatchChat.adopter.id,
+        animalId: $viewMatchChat.animal.id
+      };
+      await createMessage(message);
       event.target.value = '';
     }
 
     if (event.type === 'click') {
-      const text = value;
-      if (!text) return;
-      messages = messages.concat({
-        author: 'user',
-        text
-      });
+      const content = value;
+      if (!content) return;
+      let message: Message = {
+        author: 'shelter',
+        content,
+        adopterId: $viewMatchChat.adopter.id,
+        animalId: $viewMatchChat.animal.id
+      };
+      await createMessage(message);
       value = '';
     }
-  }
+  };
 </script>
 
-<div class="chat-container glass">
-  <div class="chat-top-menu">
-    <div class="img-container">
-      <div class="dummy-img" />
+{#if $viewMatchChat}
+  <div class="chat-container glass">
+    <div class="chat-top-menu">
+      <div class="img-container">
+        <div class="dummy-img" />
+      </div>
+      <p class="chat-title">
+        {$viewMatchChat.adopter.first_name}
+        <span>matched with</span>
+        {$viewMatchChat.animal.name}
+      </p>
+      <span><CloseButton /></span>
     </div>
-    <p class="chat-title">{animalName} <span>from</span> {shelterName}</p>
-    <span><CloseButton /></span>
+    <div class="chat-content" bind:this={chat}>
+      {#each $messagesByMatch as message}
+        {#if message.author === 'shelter'}
+          <div class="shelter-msg">
+            <p>{message.content}</p>
+            <p class="timestamp">
+              <Time
+                timestamp={message.createdAt}
+                format={message.createdAt === new Date()
+                  ? 'HH:MM'
+                  : 'HH:MM - DD/MM/YY'}
+              />
+            </p>
+          </div>
+        {:else}
+          <div class="adopter-msg">
+            <p>{message.content}</p>
+            <p class="timestamp">
+              <Time
+                timestamp={message.createdAt}
+                format={message.createdAt === new Date()
+                  ? 'HH:MM'
+                  : 'HH:MM - DD/MM/YY'}
+              />
+            </p>
+          </div>
+        {/if}
+      {/each}
+    </div>
+    <div class="chat-input-container">
+      <input
+        type="text"
+        class="chat-input"
+        on:keydown={handleSend}
+        bind:value
+      />
+      <span><Button text={'send'} on:click={handleSend} /></span>
+    </div>
   </div>
-  <div class="chat-content" bind:this={chat}>
-    {#each messages as message}
-      {#if message.author === 'user'}
-        <div class="user-msg"><p>{message.text}</p></div>
-      {:else}
-        <div class="non-user-msg">{message.text}</div>
-      {/if}
-    {/each}
-  </div>
-  <div class="chat-input-container">
-    <input type="text" class="chat-input" on:keydown={handleSend} bind:value />
-    <span><Button text={'send'} on:click={handleSend} /></span>
-  </div>
-</div>
+{/if}
 
 <style>
   .chat-container {
@@ -99,8 +143,7 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: solid 1px var(--lightgrey);
-    height: 10%;
-    margin-bottom: 1rem;
+    padding: 0.5rem 0;
   }
 
   .dummy-img {
@@ -115,11 +158,13 @@
     gap: 0.5rem;
     flex-direction: column;
     height: 80%;
+    border-bottom: solid 1px var(--lightgrey);
     overflow-y: auto;
+    padding: 0.5rem 0;
   }
 
-  .non-user-msg,
-  .user-msg {
+  .adopter-msg,
+  .shelter-msg {
     background-color: var(--lightgrey);
     max-width: 50%;
     min-width: 15%;
@@ -128,7 +173,7 @@
     align-self: flex-start;
   }
 
-  .user-msg {
+  .shelter-msg {
     align-self: flex-end;
     background-color: var(--red);
     color: var(--white);
@@ -154,5 +199,10 @@
     border-radius: 20px;
     background-color: var(--white);
     font-size: 1rem;
+  }
+
+  .timestamp {
+    font-size: 0.6rem;
+    opacity: 0.5;
   }
 </style>

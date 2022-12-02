@@ -8,8 +8,6 @@
 
   export let animal: ShelterAnimal;
 
-  console.log('list item amnimal', animal);
-
   let showDeleteWarning = false;
 
   const prewarnDelete = () => {
