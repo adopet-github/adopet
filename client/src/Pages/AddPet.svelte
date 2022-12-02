@@ -5,8 +5,9 @@
   import CloseButton from '../Components/CloseButton.svelte';
   import { createAnimal } from '../Services/animal';
   import { userCredentials } from '../Stores/userCredentials';
-  import { navigate } from 'svelte-navigator';
-  import { getProfile } from '../Services/auth';
+  import ImagesList from '../Components/Images/ImagesList.svelte';
+  import { selectedAnimal } from '../Stores/selectedAnimal';
+  import { dashView } from '../Stores/dashView';
 
   console.log($userCredentials);
 
@@ -42,15 +43,16 @@
     // const profile = await getProfile();
     // userCredentials.set(profile);
     console.log(res);
-    navigate('/shelter/dashboard');
+    dashView.set(['likes', 'allAnimals']);
   };
 </script>
 
 <div class="card glass glass1">
-  <CloseButton />
+  <CloseButton closeTo={'animalList'} />
   <h2>Add Pet</h2>
-  <div class="profile-img" />
-  <p style="color: var(--red); cursor: pointer">upload images</p>
+  <div class="imgs-cont">
+    <ImagesList images={$selectedAnimal.images} />
+  </div>
   <div class="details">
     <label for="pet-name">Pet name:</label>
     <Name nameType="Pet name" bind:value={petName} />
@@ -106,15 +108,6 @@
     justify-content: space-between;
     gap: 1rem;
     margin-top: 1rem;
-  }
-
-  .profile-img {
-    min-height: 10rem;
-    min-width: 10rem;
-    max-height: 10rem;
-    max-width: 10rem;
-    background-color: var(--grey);
-    border-radius: 100px;
   }
 
   h2 {
