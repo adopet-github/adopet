@@ -12,7 +12,7 @@
   import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
   import TextArea from '../Components/Inputs/TextArea.svelte';
   import { createShelter } from '../Services/shelter';
-  import type { Shelter } from '../types/shelter';
+  import type { CreateShelter } from '../types/shelter';
   import DogLoader from '../Components/Loaders/DogLoader.svelte';
   import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
   import { verifyRegisterCredentials } from '../Services/auth';
@@ -127,11 +127,11 @@
 
         isLoading = true;
         const res = await createShelter(
-          newUserCredentials as unknown as Shelter
+          newUserCredentials as unknown as CreateShelter
         );
         if (res.status === 201) {
           // CHANGE TO HTTP ONLY COOKIE FROM SERVER
-          userCredentials.set(newUserCredentials);
+          userCredentials.set({ ...newUserCredentials, id: res.data });
           localStorage.setItem('jwt', res.token);
           setTimeout(() => {
             navigate('/shelter/dashboard');

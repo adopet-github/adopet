@@ -1,47 +1,44 @@
 <script lang="ts">
-  import img4 from '../assets/imgs/mockdog/4.jpg';
-
   let newMessage = Math.random() > 0.5;
 
   const handleChatChange = () => {
     console.log('chat changed');
   };
+
+  export let match;
 </script>
 
-<button class="match" on:click={handleChatChange}>
-  <div class="img-cont">
-    <img src={img4} alt="animal" />
-    <div class="overlay" />
-    {#if newMessage}
-      <div class="notification" />
-    {/if}
-  </div>
-  <h1>Buster</h1>
-</button>
+{#if match}
+  <button class="match" on:click={handleChatChange}>
+    <div class="img-cont">
+      <img src={match.images[0].url} alt="animal" />
+      <div class="overlay" />
+      {#if newMessage}
+        <div class="notification" />
+      {/if}
+    </div>
+    <h1>{match.name}</h1>
+  </button>
+{/if}
 
 <style>
   .match {
-    min-width: 100px;
-    min-height: 140px;
-    max-height: 140px;
+    aspect-ratio: 1;
     display: grid;
     place-items: center;
     background: none;
+    padding: 1rem 0;
   }
 
   .img-cont {
     position: relative;
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100px;
-    max-height: 100px;
+    height: 120px;
+    aspect-ratio: 1;
   }
 
   img {
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100px;
-    max-height: 100px;
+    height: 100%;
+    aspect-ratio: 1;
     object-fit: cover;
     border-radius: 25%;
   }
@@ -67,19 +64,16 @@
   }
 
   .notification {
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     background-color: dodgerblue;
     border-radius: 50%;
     position: absolute;
-    top: 50%;
-    right: -5px;
+    top: 1px;
+    right: 1px;
     display: grid;
     place-items: center;
-    transform: translateY(-50%);
-    -webkit-box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.3);
+    z-index: 999;
   }
 
   button:focus {
