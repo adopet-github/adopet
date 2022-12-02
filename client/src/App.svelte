@@ -35,14 +35,11 @@
     if (res.status === 200) {
       console.log('user', res.data);
       userCredentials.set(res.data);
-      console.log($userCredentials);
     }
     setTimeout(() => {
       isLoading = false;
     }, 1000);
   });
-
-  console.log($userCredentials);
 </script>
 
 <main>

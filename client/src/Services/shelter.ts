@@ -66,3 +66,15 @@ export const getShelterMatches = async (id: string) => {
   });
   return await res.json();
 };
+
+export const getShelterLikes = async (id: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(`${baseUrl}/${id}/likes`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return await res.json();
+};

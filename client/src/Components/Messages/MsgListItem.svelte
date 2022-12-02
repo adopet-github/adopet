@@ -1,26 +1,44 @@
 <script lang="ts">
   import Time from 'svelte-time';
-  import { dashView } from '../../Stores/dashView';
-  import { viewAdopterProfile } from '../../Stores/viewAdopterProfile';
 
-  let username = 'user';
-  let petName = 'pet';
-  let message = 'this should be a message preview';
-  let msgDate: Date = new Date();
+  let message = 'this should be a message preview'; // preview of last message
+  let msgDate: Date = new Date(); // needs to be time of last sent message
+
+  // bold if not read
+
+  export let match;
 </script>
 
-<button>
-  <div class="list-item">
-    <div class="img-container">
-      <div class="dummy-img" />
+<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+  />
+</svelte:head>
+{#if match}
+  <button>
+    <div class="list-item">
+      <div class="img-container">
+        {#if match.adopter.images.length}
+          <img
+            class="dummy-img"
+            src={match.adopter.images[0].url}
+            alt={match.adopter.images[0].caption}
+          />
+        {:else}
+          <div class="dummy-img">
+            <i class="uil uil-user-circle" />
+          </div>
+        {/if}
+      </div>
+      <div class="msg-details">
+        <p class="msg-username">{match.adopter.first_name}</p>
+        <p class="msg-preview">{message}</p>
+        <p class="msg-date"><Time timestamp={msgDate} relative /></p>
+      </div>
     </div>
-    <div class="msg-details">
-      <p class="msg-username">{username}</p>
-      <p class="msg-preview">{message}</p>
-      <p class="msg-date"><Time timestamp={msgDate} relative /></p>
-    </div>
-  </div>
-</button>
+  </button>
+{/if}
 
 <style>
   button {
@@ -49,6 +67,9 @@
     border-radius: 30px;
     position: relative;
     background-color: var(--grey);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .msg-details {
@@ -73,6 +94,11 @@
   .msg-date {
     font-size: 0.6rem;
     color: var(--lavender);
+  }
+
+  i {
+    font-size: 3rem;
+    color: white;
   }
 
   @media only screen and (max-width: 992px) {
