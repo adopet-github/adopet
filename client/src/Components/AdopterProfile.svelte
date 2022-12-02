@@ -2,18 +2,43 @@
   import CloseButton from './CloseButton.svelte';
   import Button from './Button.svelte';
   import { viewAdopterProfile } from '../Stores/viewAdopterProfile';
+  import { acceptLike, rejectLike } from '../Services/animal';
+  import { animalLikes } from '../Stores/animalLikes';
+  import { dashView } from '../Stores/dashView';
 
-  $viewAdopterProfile;
+  const handleAcceptLike = async () => {
+    const res = await acceptLike(
+      $viewAdopterProfile.adopter_animal.id,
+      $viewAdopterProfile.id
+    );
+    if (res.status === 200) {
+      animalLikes.update((prev) => {
+        return prev.filter(
+          (obj) =>
+            obj.adopter.id !== $viewAdopterProfile.id &&
+            obj.animal.id !== $viewAdopterProfile.adopter_animal.id
+        );
+      });
+    }
+    dashView.set('allAnimals');
+  };
 
-  let adopterName: string =
-    $viewAdopterProfile.first_name + ' ' + $viewAdopterProfile.last_name;
-  let adopterAddress: string = $viewAdopterProfile.address;
-  let description: string = $viewAdopterProfile.description;
-  let age: number = $viewAdopterProfile.age;
-  let hasPets: boolean = $viewAdopterProfile.has_pets;
-  let hasChildren: boolean = $viewAdopterProfile.has_children;
-  let hoursHome: number = $viewAdopterProfile.time_at_home;
-  let houseType: string = $viewAdopterProfile.house_type;
+  const handleRejectLike = async () => {
+    const res = await rejectLike(
+      $viewAdopterProfile.adopter_animal.id,
+      $viewAdopterProfile.id
+    );
+    if (res.status === 200) {
+      animalLikes.update((prev) => {
+        return prev.filter(
+          (obj) =>
+            obj.adopter.id !== $viewAdopterProfile.id &&
+            obj.animal.id !== $viewAdopterProfile.adopter_animal.id
+        );
+      });
+    }
+    dashView.set('allAnimals');
+  };
 </script>
 
 <svelte:head>
@@ -25,38 +50,51 @@
 
 <div class="card glass glass1">
   <div class="pet-match-banner">
-    <p>Interested in: <span>pet name here</span></p>
+    <p>Interested in: <span>{$viewAdopterProfile.adopter_animal.name}</span></p>
   </div>
   <CloseButton />
   <div class="heading-cont">
-    <h2>{adopterName}</h2>
-    <p>{adopterAddress}</p>
+    <h2>{$viewAdopterProfile.first_name} {$viewAdopterProfile.last_name}</h2>
+    <p>{$viewAdopterProfile.address}</p>
   </div>
   <div class="imgs-cont">
-    <div class="dummy-img" />
-    <div class="dummy-img" />
-    <div class="dummy-img" />
-    <div class="dummy-img" />
+    {#if $viewAdopterProfile.images.length}
+      {#each $viewAdopterProfile.images as image}
+        <img class="img" src={image.url} alt={image.caption} />
+      {/each}
+    {:else}
+      <div class="no-images">
+        <i class="uil uil-user-circle" />
+      </div>
+      <p>{$viewAdopterProfile.first_name} doesn't have any photos yet...</p>
+    {/if}
   </div>
   <div class="stat-cont">
     <div class="description">
-      <p>{description}</p>
+      <p>{$viewAdopterProfile.description}</p>
     </div>
     <div class="pets-cont">
-      <p>🎂 <span>{age}</span> years old</p>
-      <p>{hasPets ? '✅ Has pets' : `❌ No pets`}</p>
-      <p>{hasChildren ? '✅ Has children' : `❌ No children`}</p>
-      <p>🕐 At home <span>~{hoursHome}</span> hours a day</p>
+      <p>🎂 <span>{$viewAdopterProfile.age}</span> years old</p>
+      <p>{$viewAdopterProfile.has_pets ? '✅ Has pets' : `❌ No pets`}</p>
       <p>
-        🏠 Lives in {houseType === 'apartment' ? 'an' : 'a'}
-        <span>{houseType}</span>
+        {$viewAdopterProfile.has_children
+          ? '✅ Has children'
+          : `❌ No children`}
+      </p>
+      <p>
+        🕐 At home <span>~{$viewAdopterProfile.time_at_home}</span> hours a day
+      </p>
+      <p>
+        🏠 Lives in {$viewAdopterProfile.house_type === 'apartment'
+          ? 'an'
+          : 'a'}
+        <span>{$viewAdopterProfile.house_type}</span>
       </p>
     </div>
   </div>
   <div class="btns-cont">
-    <Button text={'accept'} />
-    <Button text={'message'} colour={'white'} />
-    <Button text={'decline'} colour={'white'} />
+    <Button text={'accept'} on:click={handleAcceptLike} />
+    <Button text={'decline'} colour={'white'} on:click={handleRejectLike} />
   </div>
 </div>
 
@@ -90,12 +128,21 @@
     gap: 1rem;
     overflow-x: auto;
     width: 80%;
+    color: #9897a0;
   }
-  .dummy-img {
-    min-height: 10rem;
-    min-width: 10rem;
+  .img,
+  .no-images {
+    height: 10rem;
+    width: 10rem;
     background-color: var(--grey);
     border-radius: 20px;
+    display: grid;
+    place-items: center;
+  }
+
+  .no-images i {
+    color: white;
+    font-size: 7.5rem;
   }
   .stat-cont {
     display: flex;

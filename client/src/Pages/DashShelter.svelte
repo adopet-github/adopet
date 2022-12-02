@@ -9,6 +9,9 @@
   import { dashView } from '../Stores/dashView';
   import AdopterProfile from '../Components/AdopterProfile.svelte';
   import { userCredentials } from '../Stores/userCredentials';
+  import { animalLikes } from '../Stores/animalLikes';
+  import { onMount } from 'svelte';
+  import { getShelterMatches } from '../Services/shelter';
 
   const navigate = useNavigate();
 
@@ -17,13 +20,20 @@
       ? ($dashView = 'msgs')
       : ($dashView = 'allAnimals');
     $dashView === 'oneAnimal' ? ($dashView = 'allAnimals') : null;
-    console.log($dashView);
-    console.log($dashView.includes('Animal'));
   };
 
   const handleAddPet = () => {
     navigate('/shelter/addpet');
   };
+
+  let matches = [];
+
+  onMount(async () => {
+    const res = await getShelterMatches($userCredentials.id);
+    if (res.status === 200) {
+      matches = res.data;
+    }
+  });
 </script>
 
 <div class="main-container">
@@ -40,13 +50,13 @@
           on:click={handleDashViewToggle}
         />
         {#if $dashView == 'msgs'}
-          <h2>Messages</h2>
-        {:else}
           <h2>Matches</h2>
+        {:else}
+          <h2>Likes</h2>
         {/if}
       </div>
       <div class="list-container">
-        <SideListContainer />
+        <SideListContainer {matches} />
       </div>
     </div>
     <div class="div2">
@@ -66,9 +76,9 @@
       />
     </div>
     <div class="div4">
-      <DashStats desc={'open enquiries'} stat={0} />
+      <DashStats desc={'animal likes'} stat={$animalLikes.length} />
     </div>
-    <div class="div5"><DashStats desc={'most popular'} stat={'Rex'} /></div>
+    <div class="div5"><DashStats desc={'matches'} stat={matches.length} /></div>
     <div class="div6">
       {#if $dashView === 'allAnimals'}
         <ListCont />
