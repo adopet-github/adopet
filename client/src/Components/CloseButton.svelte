@@ -1,16 +1,13 @@
 <script lang="ts">
-  import { useNavigate } from 'svelte-navigator';
   import { dashView } from '../Stores/dashView';
-  const navigate = useNavigate();
 
   export let text: string = 'close';
-  export let path: string = '/shelter/dashboard';
+  export let closeTo: string = '';
 </script>
 
 <button
   on:click={() => {
-    $dashView = 'allAnimals';
-    navigate(path);
+    $dashView[1] = closeTo;
   }}>{text}</button
 >
 

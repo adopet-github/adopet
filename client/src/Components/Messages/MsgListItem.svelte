@@ -16,7 +16,7 @@
 
   const handleGoToChatView = async () => {
     viewMatchChat.set(match);
-    dashView.set('msgs');
+    dashView.set(['matches', 'chat']);
     let adopterId = $viewMatchChat.adopter.id;
     let animalId = $viewMatchChat.animal.id;
     const res = await retrieveByMatch({ adopterId, animalId });

@@ -15,10 +15,9 @@
   const navigate = useNavigate();
 
   const handleDashViewToggle = () => {
-    $dashView === 'allAnimals'
-      ? ($dashView = 'msgs')
-      : ($dashView = 'allAnimals');
-    $dashView === 'oneAnimal' ? ($dashView = 'allAnimals') : null;
+    $dashView[0] === 'matches'
+      ? ($dashView[0] = 'likes')
+      : ($dashView[0] = 'matches');
   };
 
   const handleAddPet = () => {
@@ -30,19 +29,19 @@
   <div class="grid-container">
     <div class="div1 glass">
       <div class="dash-headings">
-        {#if $dashView == 'msgs'}
+        {#if $dashView[0] == 'matches'}
           <h1>Message Dashboard</h1>
         {:else}
           <h1>Animal Dashboard</h1>
         {/if}
         <Button
-          text={$dashView === 'allAnimals' ? 'View messages' : 'View animals'}
+          text={$dashView[0] === 'matches' ? 'View Likes' : 'View Matches'}
           on:click={handleDashViewToggle}
         />
-        {#if $dashView == 'msgs'}
+        {#if $dashView[0] == 'matches'}
           <h2>Matches</h2>
         {:else}
-          <h2>Likes</h2>
+          <h2>Pending Likes</h2>
         {/if}
       </div>
       <div class="list-container">
@@ -72,11 +71,11 @@
       <DashStats desc={'matches'} stat={$shelterMatches.length} />
     </div>
     <div class="div6">
-      {#if $dashView === 'allAnimals'}
+      {#if $dashView[1] === 'animalList'}
         <ListCont />
-      {:else if $dashView === 'oneAnimal'}
+      {:else if $dashView[1] === 'animal'}
         <AnimalProfile />
-      {:else if $dashView === 'match'}
+      {:else if $dashView[1] === 'adopter'}
         <AdopterProfile />
       {:else}
         <Chat />

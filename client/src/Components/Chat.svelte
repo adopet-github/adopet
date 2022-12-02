@@ -9,6 +9,8 @@
   import type { Message } from '../types/message';
   import { viewMatchChat } from '../Stores/viewMatchChat';
   import { messagesByMatch } from '../Stores/messagesByMatch';
+  import { dashView } from '../Stores/dashView';
+  import { viewAdopterProfile } from '../Stores/viewAdopterProfile';
 
   let chat;
   let autoscroll;
@@ -65,12 +67,18 @@
   <div class="chat-container glass">
     <div class="chat-top-menu">
       <div class="img-container">
-        <img
-          src={$viewMatchChat.adopter.images[0]
-            ? $viewMatchChat.adopter.images[0].url
-            : ''}
-          alt="profile"
-        />
+        <button
+          on:click={() => {
+            viewAdopterProfile.set($viewMatchChat.adopter);
+            dashView.set(['matches', 'adopter']);
+          }}
+          ><img
+            src={$viewMatchChat.adopter.images[0]
+              ? $viewMatchChat.adopter.images[0].url
+              : ''}
+            alt="profile"
+          /></button
+        >
         <!-- <div class="dummy-img" /> -->
       </div>
       <p class="chat-title">
@@ -78,7 +86,7 @@
         <span>matched with</span>
         {$viewMatchChat.animal.name}
       </p>
-      <span><CloseButton /></span>
+      <span><CloseButton closeTo={'animalList'} /></span>
     </div>
     <div class="chat-content" bind:this={chat}>
       {#each $messagesByMatch as message}
@@ -160,7 +168,7 @@
   }
 
   img {
-    flex: 1;
+    width: inherit;
   }
 
   .chat-content {
@@ -214,5 +222,11 @@
   .timestamp {
     font-size: 0.6rem;
     opacity: 0.5;
+  }
+
+  button {
+    background: none;
+    width: 100%;
+    height: 100%;
   }
 </style>

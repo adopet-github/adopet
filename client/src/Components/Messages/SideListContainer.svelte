@@ -30,7 +30,7 @@
 </script>
 
 <div class="sidebar-list">
-  {#if $dashView === 'msgs'}
+  {#if $dashView[0] === 'matches'}
     {#each $shelterMatches as match}
       <MsgListItem {match} />
     {/each}

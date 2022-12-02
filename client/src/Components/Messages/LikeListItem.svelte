@@ -7,7 +7,7 @@
 
   const handleAdopterProfileView = () => {
     viewAdopterProfile.set({ ...like.adopter, adopter_animal: like.animal });
-    dashView.set('match');
+    dashView.set(['likes', 'adopter']);
   };
 </script>
 

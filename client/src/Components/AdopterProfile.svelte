@@ -20,7 +20,7 @@
         );
       });
     }
-    dashView.set('allAnimals');
+    dashView.set(['likes', 'allAnimals']);
   };
 
   const handleRejectLike = async () => {
@@ -37,7 +37,7 @@
         );
       });
     }
-    dashView.set('allAnimals');
+    dashView.set(['likes', 'allAnimals']);
   };
 </script>
 
@@ -49,10 +49,15 @@
 </svelte:head>
 
 <div class="card glass glass1">
-  <div class="pet-match-banner">
-    <p>Interested in: <span>{$viewAdopterProfile.adopter_animal.name}</span></p>
-  </div>
-  <CloseButton />
+  {#if $viewAdopterProfile.adopter_animal}
+    <div class="pet-match-banner">
+      <p>
+        Interested in: <span>{$viewAdopterProfile.adopter_animal.name}</span>
+      </p>
+    </div>
+    <CloseButton closeTo={'animalList'} />
+  {/if}
+  <CloseButton closeTo={'chat'} />
   <div class="heading-cont">
     <h2>{$viewAdopterProfile.first_name} {$viewAdopterProfile.last_name}</h2>
     <p>{$viewAdopterProfile.address}</p>
@@ -92,10 +97,12 @@
       </p>
     </div>
   </div>
-  <div class="btns-cont">
-    <Button text={'accept'} on:click={handleAcceptLike} />
-    <Button text={'decline'} colour={'white'} on:click={handleRejectLike} />
-  </div>
+  {#if $viewAdopterProfile.adopter_animal}
+    <div class="btns-cont">
+      <Button text={'accept'} on:click={handleAcceptLike} />
+      <Button text={'decline'} colour={'white'} on:click={handleRejectLike} />
+    </div>
+  {/if}
 </div>
 
 <style>

@@ -61,7 +61,7 @@
       ><Button
         text="view"
         on:click={() => {
-          $dashView = 'oneAnimal';
+          $dashView[1] = 'oneAnimal';
           console.log('animal', animal);
           selectedAnimal.set(animal);
         }}
