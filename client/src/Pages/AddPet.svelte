@@ -51,7 +51,7 @@
   <CloseButton closeTo={'animalList'} />
   <h2>Add Pet</h2>
   <div class="imgs-cont">
-    <ImagesList images={$selectedAnimal.images} />
+    <ImagesList />
   </div>
   <div class="details">
     <label for="pet-name">Pet name:</label>
@@ -92,13 +92,15 @@
     overflow: hidden;
   }
 
+  .imgs-cont {
+    width: 80%;
+  }
+
   .details {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    width: 70%;
-    gap: 0.5rem;
   }
 
   .ageWeightCont {

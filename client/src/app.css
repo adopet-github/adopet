@@ -165,7 +165,7 @@ textarea:focus {
   font-family: 'Satoshi-Variable', sans-serif;
 }
 
-@media only screen and (max-height: 750px) {
+@media only screen and (min-height: 750px) {
   h1 {
     font-size: 1.6rem;
   }
