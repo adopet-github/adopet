@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
-import { MyResponse } from "../types/server";
-import constants from "../utils/constants";
-import models, { relationships } from "../models";
-import { notFoundChecker } from "../utils/db";
+import { NextFunction, Request, Response } from 'express';
+import { MyResponse } from '../types/server';
+import constants from '../utils/constants';
+import models, { relationships } from '../models';
+import { notFoundChecker } from '../utils/db';
 const { User } = models;
 
 export default async function isGoogleMiddleware (req: Request, res: Response, next: NextFunction) {

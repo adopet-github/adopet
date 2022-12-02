@@ -1,8 +1,8 @@
-import { NextFunction, Response } from "express";
-import { AccountTypes } from "../enums";
-import { MyRequest } from "../types/server";
-import constants from "../utils/constants";
-import { decryptToken } from "../utils/jwt";
+import { NextFunction, Response } from 'express';
+import { AccountTypes } from '../enums';
+import { MyRequest } from '../types/server';
+import constants from '../utils/constants';
+import { decryptToken } from '../utils/jwt';
 
 export default function isRoleMiddleware (role: AccountTypes) {
   return (req: MyRequest, res: Response, next: NextFunction) => {
