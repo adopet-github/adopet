@@ -9,7 +9,7 @@
       id: e.detail.id
     });
   };
-
+  export let button = true;
   export let images = [];
 </script>
 
@@ -24,7 +24,7 @@
   {#each images as image}
     <Image {image} on:deleteImage={handleDelete} />
   {/each}
-  {#if images.length < 4}
+  {#if images.length < 4 && button === true}
     <button on:click={() => dispatch('openAddImage')}>
       <i class="uil uil-plus" />
     </button>
@@ -41,7 +41,7 @@
     align-items: center;
     justify-content: flex-start;
     gap: 10%;
-    overflow-x: scroll;
+    overflow-x: auto;
     padding: 1rem;
   }
 
