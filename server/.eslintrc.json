@@ -15,5 +15,8 @@
     },
     "plugins": [
       "@typescript-eslint"
-    ]
+    ],
+    "rules": {
+      "quotes": ["error", "single", { "avoidEscape": true }]
+    }
   }
