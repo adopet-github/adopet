@@ -108,7 +108,7 @@ const controller = {
       const responseToken = await Token.create({
         id: uuidv4(),
         content: generateToken({
-          id: (shelter as unknown as { user: { shelter: { id: number } } }).user
+          id: (shelter as unknown as { user: { shelter: { id: string } } }).user
             .shelter.id,
           type: 'shelter'
         })
@@ -119,6 +119,9 @@ const controller = {
 
       await transaction.commit();
       response.status = constants.statusCodes.created;
+      response.data = (
+        shelter as unknown as { user: { shelter: { id: string } } }
+      ).user.shelter.id;
       response.message = 'Shelter created succesfully!';
     } catch (err) {
       await transaction.rollback();

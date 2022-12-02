@@ -10,7 +10,7 @@ import { Image as ImageType } from '../types/models';
 import { notFoundChecker } from '../utils/db';
 import includes from '../utils/includes';
 import dataParser from '../utils/dataparser';
-import { AdopterFromDb, AnimalFromDb, MatchFromDb } from '../types/dboutputs';
+import { AdopterFromDb, AnimalFromDb } from '../types/dboutputs';
 import { generateToken } from '../utils/jwt';
 import { genPasswordAndSalt } from '../utils/password';
 import { v4 as uuidv4 } from 'uuid';
@@ -117,7 +117,7 @@ const controller = {
       const responseToken = await Token.create({
         id: uuidv4(),
         content: generateToken({
-          id: (adopter as unknown as { user: { adopter: { id: number } } }).user
+          id: (adopter as unknown as { user: { adopter: { id: string } } }).user
             .adopter.id,
           type: 'adopter'
         })
@@ -128,6 +128,9 @@ const controller = {
 
       await transaction.commit();
       response.status = constants.statusCodes.created;
+      response.data = (
+        adopter as unknown as { user: { adopter: { id: string } } }
+      ).user.adopter.id;
       response.message = 'Adopter created succesfully!';
     } catch (err) {
       await transaction.rollback();
