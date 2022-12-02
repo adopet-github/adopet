@@ -1,10 +1,11 @@
 <script lang="ts">
   import { io } from 'socket.io-client';
+  import Time from 'svelte-time/src/Time.svelte';
 
-  import { afterUpdate, beforeUpdate, onMount } from 'svelte';
+  import { afterUpdate, beforeUpdate } from 'svelte';
   import Button from './Button.svelte';
   import CloseButton from './CloseButton.svelte';
-  import { createMessage, retrieveByMatch } from '../Services/message';
+  import { createMessage } from '../Services/message';
   import type { Message } from '../types/message';
   import { viewMatchChat } from '../Stores/viewMatchChat';
   import { messagesByMatch } from '../Stores/messagesByMatch';
@@ -17,8 +18,9 @@
 
   socket.on('connect', () => console.log('sockets connected'));
 
-  socket.on('message', () => {
-    console.log('from socket:  ', socket);
+  socket.on('message', (msg) => {
+    console.log('from socket:  ', msg);
+    $messagesByMatch = $messagesByMatch.concat(msg);
   });
 
   beforeUpdate(() => {
@@ -40,7 +42,6 @@
         adopterId: $viewMatchChat.adopter.id,
         animalId: $viewMatchChat.animal.id
       };
-      $messagesByMatch = $messagesByMatch.concat(message);
       await createMessage(message);
       event.target.value = '';
     }
@@ -54,7 +55,6 @@
         adopterId: $viewMatchChat.adopter.id,
         animalId: $viewMatchChat.animal.id
       };
-      $messagesByMatch = $messagesByMatch.concat(message);
       await createMessage(message);
       value = '';
     }
@@ -77,9 +77,29 @@
     <div class="chat-content" bind:this={chat}>
       {#each $messagesByMatch as message}
         {#if message.author === 'shelter'}
-          <div class="shelter-msg"><p>{message.content}</p></div>
+          <div class="shelter-msg">
+            <p>{message.content}</p>
+            <p class="timestamp">
+              <Time
+                timestamp={message.createdAt}
+                format={message.createdAt === new Date()
+                  ? 'HH:MM'
+                  : 'HH:MM - DD/MM/YY'}
+              />
+            </p>
+          </div>
         {:else}
-          <div class="adopter-msg"><p>{message.content}</p></div>
+          <div class="adopter-msg">
+            <p>{message.content}</p>
+            <p class="timestamp">
+              <Time
+                timestamp={message.createdAt}
+                format={message.createdAt === new Date()
+                  ? 'HH:MM'
+                  : 'HH:MM - DD/MM/YY'}
+              />
+            </p>
+          </div>
         {/if}
       {/each}
     </div>
@@ -179,5 +199,10 @@
     border-radius: 20px;
     background-color: var(--white);
     font-size: 1rem;
+  }
+
+  .timestamp {
+    font-size: 0.6rem;
+    opacity: 0.5;
   }
 </style>
