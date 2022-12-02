@@ -81,7 +81,8 @@ const dataParser = {
         name: data.name,
         age: data.age,
         weight: data.weight,
-        images: data.general.images
+        images: data.general.images,
+        id: data.id
       },
       date: adopter.adopter_animal?.updatedAt
     };
