@@ -56,8 +56,9 @@
       </p>
     </div>
     <CloseButton closeTo={'animalList'} />
+  {:else}
+    <CloseButton text={'back'} closeTo={'chat'} />
   {/if}
-  <CloseButton closeTo={'chat'} />
   <div class="heading-cont">
     <h2>{$viewAdopterProfile.first_name} {$viewAdopterProfile.last_name}</h2>
     <p>{$viewAdopterProfile.address}</p>
