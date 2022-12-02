@@ -59,10 +59,12 @@
   let imageIdToDelete;
   let imageUrlToDelete;
   let showDeleteImage = false;
+
   const handleDeleteImageOpen = (e) => {
     showDeleteImage = true;
     imageIdToDelete = e.detail.id;
-    imageUrlToDelete = e.detail.id;
+    imageUrlToDelete = e.detail.url;
+    console.log(imageUrlToDelete);
   };
 
   const handleImageDelete = async () => {
@@ -74,9 +76,7 @@
         images: prev.images.filter((image) => image.id !== imageIdToDelete)
       }));
     } else {
-      images = images.filter((element) => {
-        element.url !== imageUrlToDelete;
-      });
+      images = images.filter((element) => element.url != imageUrlToDelete);
     }
     showDeleteImage = false;
   };

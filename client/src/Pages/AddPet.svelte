@@ -9,12 +9,16 @@
   import { selectedAnimal } from '../Stores/selectedAnimal';
   import { dashView } from '../Stores/dashView';
 
+  $selectedAnimal.id = '';
+
   console.log($userCredentials);
 
   let petName: string;
   let petWeight: number;
   let petAge: number;
   let petDescription: string;
+  let images = [];
+  $: console.log('images:', images);
 
   const handleAddAnimal = async () => {
     const pet = {
@@ -30,7 +34,7 @@
       const newAnimal = {
         ...res.data.animal,
         description: res.data.description,
-        images: [],
+        images,
         adopters: []
       };
       const newAnimals = [...previous.animals, newAnimal];
@@ -51,7 +55,7 @@
   <CloseButton closeTo={'animalList'} />
   <h2>Add Pet</h2>
   <div class="imgs-cont">
-    <ImagesList />
+    <ImagesList bind:images />
   </div>
   <div class="details">
     <label for="pet-name">Pet name:</label>
