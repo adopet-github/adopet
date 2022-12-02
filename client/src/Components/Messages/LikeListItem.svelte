@@ -2,26 +2,51 @@
   import Time from 'svelte-time';
   import { dashView } from '../../Stores/dashView';
   import { viewAdopterProfile } from '../../Stores/viewAdopterProfile';
-  import type { Pet } from '../../types/animal';
 
-  export let animal: Pet;
+  export let like;
 
-  $viewAdopterProfile = animal.adopters[0];
-
-  console.log('list item', animal);
-
-  let msgDate: Date = new Date();
+  const handleAdopterProfileView = () => {
+    viewAdopterProfile.set({ ...like.adopter, adopter_animal: like.animal });
+    dashView.set('match');
+  };
 </script>
 
-<button on:click={() => ($dashView = 'match')}>
+<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+  />
+</svelte:head>
+
+<button on:click={handleAdopterProfileView}>
   <div class="list-item">
-    <span class="dummy-img" />
+    {#if like.adopter.images.length}
+      <img
+        class="dummy-img"
+        src={like.adopter.images[0].url}
+        alt={like.adopter.images[0].caption}
+      />
+    {:else}
+      <div class="dummy-img">
+        <i class="uil uil-user-circle" />
+      </div>
+    {/if}
     <div class="match-details">
-      <p class="pet-name">{animal.name}</p>
-      <p class="match-username">{animal.adopters[0].first_name}</p>
-      <p class="match-date"><Time timestamp={msgDate} relative /></p>
+      <p class="pet-name">{like.animal.name}</p>
+      <p class="match-username">{like.adopter.first_name}</p>
+      <p class="match-date"><Time timestamp={like.date} relative /></p>
     </div>
-    <span class="dummy-img2" />
+    {#if like.animal.images.length}
+      <img
+        class="dummy-img2"
+        src={like.animal.images[0].url}
+        alt={like.animal.images[0].caption}
+      />
+    {:else}
+      <div class="dummy-img2">
+        <i class="uil uil-user-circle" />
+      </div>
+    {/if}
   </div>
 </button>
 
@@ -53,6 +78,10 @@
     border-radius: 30px;
     position: relative;
     background-color: var(--grey);
+    display: grid;
+    place-items: center;
+    color: white;
+    font-size: 2.5rem;
   }
 
   .dummy-img2 {

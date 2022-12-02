@@ -1,4 +1,5 @@
 export type Adopter = {
+  images?: any[];
   description: string;
   email: string;
   password?: string;
@@ -15,5 +16,5 @@ export type Adopter = {
   id?: string;
   google_id?: string;
   userId: string;
-  adopter_animal?: {};
+  adopter_animal?: any;
 };

@@ -59,3 +59,23 @@ export const getAllAnimals = async () => {
 
   return await res.json();
 };
+
+export const acceptLike = async (animalId: string, adopterId: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(`${baseUrl}/${animalId}/match/${adopterId}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  return await res.json();
+};
+
+export const rejectLike = async (animalId: string, adopterId: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(`${baseUrl}/${animalId}/dislike/${adopterId}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  return await res.json();
+};
