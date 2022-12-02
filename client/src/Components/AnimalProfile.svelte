@@ -86,12 +86,12 @@
 
   .imgs-cont {
     max-width: 80%;
-    height: 10rem;
     border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .stat-cont {
@@ -111,7 +111,7 @@
   }
 
   .img {
-    flex: 1;
+    /* flex: 1; */
     border-radius: 1rem;
   }
 

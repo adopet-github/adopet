@@ -1,19 +1,33 @@
 <script lang="ts">
+  import { io } from 'socket.io-client';
+
   import { afterUpdate, beforeUpdate } from 'svelte';
+  import { selectedAnimal } from '../Stores/selectedAnimal';
   import { userCredentials } from '../Stores/userCredentials';
   import Button from './Button.svelte';
   import CloseButton from './CloseButton.svelte';
+  import { createMessage } from '../Services/message';
+  import type { Message } from '../types/message';
 
   let animalName = 'animalName';
   let shelterName = 'shelterName';
+
+  console.log('user: ', $userCredentials);
+  console.log('animal: ', $selectedAnimal);
 
   let chat;
   let autoscroll;
   let value = '';
 
+  const socket = io();
+
+  socket.on('message', () => {
+    console.log('from socket: ', socket);
+  });
+
   let messages = [
-    { author: 'user', text: 'hello!' },
-    { author: 'non-user', text: 'hey!' }
+    { author: 'user', content: 'hello!', adopterId: '', animalId: '' },
+    { author: 'non-user', content: 'hey!', adopterId: '', animalId: '' }
   ];
 
   beforeUpdate(() => {
@@ -25,27 +39,33 @@
     if (autoscroll) chat.scrollTo(0, chat.scrollHeight);
   });
 
-  function handleSend(event) {
+  const handleSend = async (event) => {
     if (event.key === 'Enter') {
-      const text = event.target.value;
-      if (!text) return;
-      messages = messages.concat({
-        author: 'user',
-        text
-      });
+      const content = event.target.value;
+      if (!content) return;
+      let message: Message = {
+        author: 'shelter',
+        content,
+        adopterId: $userCredentials.id,
+        animalId: $selectedAnimal.id
+      };
+      console.log(await createMessage(message));
       event.target.value = '';
     }
 
     if (event.type === 'click') {
-      const text = value;
-      if (!text) return;
-      messages = messages.concat({
-        author: 'user',
-        text
-      });
+      const content = value;
+      if (!content) return;
+      let message: Message = {
+        author: 'shelter',
+        content,
+        adopterId: $userCredentials.id,
+        animalId: $selectedAnimal.id
+      };
+      await createMessage(message);
       value = '';
     }
-  }
+  };
 </script>
 
 <div class="chat-container glass">
@@ -59,9 +79,9 @@
   <div class="chat-content" bind:this={chat}>
     {#each messages as message}
       {#if message.author === 'user'}
-        <div class="user-msg"><p>{message.text}</p></div>
+        <div class="user-msg"><p>{message.content}</p></div>
       {:else}
-        <div class="non-user-msg">{message.text}</div>
+        <div class="non-user-msg">{message.content}</div>
       {/if}
     {/each}
   </div>
