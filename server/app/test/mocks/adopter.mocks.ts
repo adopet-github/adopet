@@ -1,9 +1,9 @@
 const adopterMocks: {
   validCreateObject: { [key: string]: unknown };
   invalidObject: { [key: string]: unknown };
-  validAdopterLogin: object;
-  validAdopterLogin2: object;
-  validShelterLogin: object;
+  validLogin: object;
+  validLogin2: object;
+  validNonModelLogin: object;
   validUpdateObject: { [key: string]: unknown };
 } = {
   validCreateObject: {
@@ -37,18 +37,18 @@ const adopterMocks: {
     password: 'lolxd777'
   },
 
-  validAdopterLogin: {
+  validLogin: {
     email: 'ericlorpal11@gmail.com',
     password: 'Lolxd777!'
   },
 
-  validAdopterLogin2: {
+  validLogin2: {
     email: 'ericlorpal7@gmail.com',
     password: 'Lolxd777!'
   },
 
-  validShelterLogin: {
-    email: 'shelter@test.com',
+  validNonModelLogin: {
+    email: 'shelter12@test.com',
     password: 'Sheltersecurepassword12'
   },
 

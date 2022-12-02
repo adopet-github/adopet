@@ -2,11 +2,11 @@ import request from 'supertest';
 import dotenv from 'dotenv';
 import { server } from '../../app';
 dotenv.config();
-import adopterMocks from '../mocks/adopter.mocks';
+import shelterMocks from '../mocks/shelter.mocks';
 import constants from '../../utils/constants';
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN as string;
 
-const model = 'Adopter';
+const model = 'Shelter';
 
 describe(`${model} controller`, () => {
   afterAll(() => {
@@ -27,7 +27,7 @@ describe(`${model} controller`, () => {
       it(`Should not be allowed to retrieve all ${model.toLowerCase()}s if is not an admin`, async () => {
         const loginResponse = await request(server)
           .post('/api/v1/auth/login')
-          .send(adopterMocks.validLogin);
+          .send(shelterMocks.validLogin);
 
         expect(loginResponse.status).toEqual(constants.statusCodes.ok);
         expect(loginResponse.body).toHaveProperty('token');
@@ -61,24 +61,24 @@ describe(`${model} controller`, () => {
   });
 
   describe('Retrieve one', () => {
-    let adopterId = '';
-    let adopterToken = '';
+    let shelterId = '';
+    let shelterToken = '';
 
     beforeEach(async () => {
       const loginResponse = await request(server)
         .post('/api/v1/auth/login')
-        .send(adopterMocks.validLogin);
+        .send(shelterMocks.validLogin);
 
       expect(loginResponse.status).toEqual(constants.statusCodes.ok);
       expect(loginResponse.body).toHaveProperty('token');
-      adopterId = loginResponse.body.data;
-      adopterToken = loginResponse.body.token;
+      shelterId = loginResponse.body.data;
+      shelterToken = loginResponse.body.token;
     });
 
     describe('Invalid', () => {
       it('Should give you unauthorized when you are not logged in', async () => {
         const response = await request(server).get(
-          `/api/v1/${model.toLowerCase()}/` + adopterId
+          `/api/v1/${model.toLowerCase()}/` + shelterId
         );
         const { status, body } = response;
 
@@ -86,15 +86,15 @@ describe(`${model} controller`, () => {
         expect(body.message).toEqual('Unauthorized');
       });
 
-      it(`Should not be allowed to retrieve an ${model.toLowerCase()} if is not an admin or a shelter`, async () => {
+      it(`Should not be allowed to retrieve an ${model.toLowerCase()} if is not an admin or an adopter`, async () => {
         const response = await request(server)
-          .get(`/api/v1/${model.toLowerCase()}/` + adopterId)
-          .set('Authorization', 'Bearer ' + adopterToken);
+          .get(`/api/v1/${model.toLowerCase()}/` + shelterId)
+          .set('Authorization', 'Bearer ' + shelterToken);
         const { status, body } = response;
 
         expect(status).toEqual(constants.statusCodes.unAuthorized);
         expect(body.message).toEqual(
-          'You have to be a shelter to perform this operation'
+          'You have to be a adopter to perform this operation'
         );
       });
       it('Should receive a 404 message when the adopter is not found', async () => {
@@ -116,7 +116,7 @@ describe(`${model} controller`, () => {
       it(`Should be allowed to retrieve an ${model.toLowerCase()} if is a shelter`, async () => {
         const loginResponse = await request(server)
           .post('/api/v1/auth/login')
-          .send(adopterMocks.validNonModelLogin);
+          .send(shelterMocks.validNonModelLogin);
 
         expect(loginResponse.status).toEqual(constants.statusCodes.ok);
         expect(loginResponse.body).toHaveProperty('token');
@@ -124,7 +124,7 @@ describe(`${model} controller`, () => {
         const shelterToken = loginResponse.body.token;
 
         const response = await request(server)
-          .get(`/api/v1/${model.toLowerCase()}/` + adopterId)
+          .get(`/api/v1/${model.toLowerCase()}/` + shelterId)
           .set('Authorization', 'Bearer ' + shelterToken);
         const { status, body } = response;
 
@@ -135,7 +135,7 @@ describe(`${model} controller`, () => {
 
       it(`Should be allowed to retrieve an ${model.toLowerCase()} if is a shelter`, async () => {
         const response = await request(server)
-          .get(`/api/v1/${model.toLowerCase()}/` + adopterId)
+          .get(`/api/v1/${model.toLowerCase()}/` + shelterId)
           .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
         const { status, body } = response;
 
@@ -149,11 +149,11 @@ describe(`${model} controller`, () => {
   describe('Create', () => {
     describe('Invalid', () => {
       it(`Should not create an ${model.toLowerCase()} if attributes are missing`, async () => {
-        for (const key of Object.keys(adopterMocks.validCreateObject)) {
+        for (const key of Object.keys(shelterMocks.validCreateObject)) {
           const response = await request(server)
             .post(`/api/v1/${model.toLowerCase()}`)
             .send({
-              [key]: adopterMocks.validCreateObject[key]
+              [key]: shelterMocks.validCreateObject[key]
             });
           const { status, body } = response;
           expect(status).toEqual(constants.statusCodes.badRequest);
@@ -164,8 +164,8 @@ describe(`${model} controller`, () => {
 
       it(`Should not create an ${model.toLowerCase()} if invalid attributes are passed`, async () => {
         const obj: { [key: string]: unknown } = {};
-        for (const key of Object.keys(adopterMocks.invalidObject)) {
-          obj[key] = adopterMocks.invalidObject[key];
+        for (const key of Object.keys(shelterMocks.invalidObject)) {
+          obj[key] = shelterMocks.invalidObject[key];
           const response = await request(server)
             .post(`/api/v1/${model.toLowerCase()}`)
             .send(obj);
@@ -175,13 +175,13 @@ describe(`${model} controller`, () => {
             key.toLowerCase().split('_')[0]
           );
           expect(body.token).toBeUndefined();
-          if (key !== 'password')
-            obj[key] = adopterMocks.validCreateObject[key];
+          if (key !== 'address')
+            obj[key] = shelterMocks.validCreateObject[key];
         }
 
         const response = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
-          .send(adopterMocks.invalidObject);
+          .send(shelterMocks.invalidObject);
         const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.badRequest);
         expect(body.token).toBeUndefined();
@@ -192,12 +192,12 @@ describe(`${model} controller`, () => {
       it(`Should create an ${model.toLowerCase()} if valid attributes are provided`, async () => {
         const response = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
-          .send(adopterMocks.validCreateObject);
+          .send(shelterMocks.validCreateObject);
 
         expect(response.status).toEqual(constants.statusCodes.created);
         expect(response.body).toHaveProperty('token');
         expect(response.body).toHaveProperty('data');
-        expect(response.body.message).toEqual('Adopter created succesfully!');
+        expect(response.body.message).toEqual(`${model} created succesfully!`);
         const createdId = response.body.data;
         const token = response.body.token;
 
@@ -207,31 +207,31 @@ describe(`${model} controller`, () => {
 
         expect(responseDelete.status).toEqual(constants.statusCodes.ok);
         expect(responseDelete.body.message).toEqual(
-          'Adopter deleted succesfully!'
+          `${model} deleted succesfully!`
         );
       });
     });
   });
 
   describe('Update', () => {
-    let adopterId = '';
-    let adopterToken = '';
+    let shelterId = '';
+    let shelterToken = '';
 
     beforeEach(async () => {
       const loginResponse = await request(server)
         .post('/api/v1/auth/login')
-        .send(adopterMocks.validLogin);
+        .send(shelterMocks.validLogin);
 
       expect(loginResponse.status).toEqual(constants.statusCodes.ok);
       expect(loginResponse.body).toHaveProperty('token');
-      adopterId = loginResponse.body.data;
-      adopterToken = loginResponse.body.token;
+      shelterId = loginResponse.body.data;
+      shelterToken = loginResponse.body.token;
     });
 
     describe('Invalid', () => {
       it('Should give you unauthorized when you are not logged in', async () => {
         const response = await request(server).put(
-          `/api/v1/${model.toLowerCase()}/` + adopterId
+          `/api/v1/${model.toLowerCase()}/` + shelterId
         );
         const { status, body } = response;
 
@@ -242,7 +242,7 @@ describe(`${model} controller`, () => {
       it(`Should not let update a ${model.toLowerCase()} if the user is a shelter`, async () => {
         const loginResponse = await request(server)
           .post('/api/v1/auth/login')
-          .send(adopterMocks.validNonModelLogin);
+          .send(shelterMocks.validNonModelLogin);
 
         expect(loginResponse.status).toEqual(constants.statusCodes.ok);
         expect(loginResponse.body).toHaveProperty('token');
@@ -250,7 +250,7 @@ describe(`${model} controller`, () => {
         const shelterToken = loginResponse.body.token;
 
         const response = await request(server)
-          .put(`/api/v1/${model.toLowerCase()}/${adopterId}`)
+          .put(`/api/v1/${model.toLowerCase()}/${shelterId}`)
           .set('Authorization', 'Bearer ' + shelterToken);
         const { status, body } = response;
 
@@ -263,7 +263,7 @@ describe(`${model} controller`, () => {
       it(`Should not be able to update a ${model.toLowerCase()} if the ${model.toLowerCase()} logged in is not the same as the one trying to be updated`, async () => {
         const loginResponse = await request(server)
           .post('/api/v1/auth/login')
-          .send(adopterMocks.validLogin2);
+          .send(shelterMocks.validLogin2);
 
         expect(loginResponse.status).toEqual(constants.statusCodes.ok);
         expect(loginResponse.body).toHaveProperty('token');
@@ -271,7 +271,7 @@ describe(`${model} controller`, () => {
         const shelterToken = loginResponse.body.token;
 
         const response = await request(server)
-          .put(`/api/v1/${model.toLowerCase()}/${adopterId}`)
+          .put(`/api/v1/${model.toLowerCase()}/${shelterId}`)
           .set('Authorization', 'Bearer ' + shelterToken);
         const { status, body } = response;
 
@@ -281,11 +281,11 @@ describe(`${model} controller`, () => {
         );
       });
       it(`Should not update a ${model.toLowerCase()} if invalid attributes are passed`, async () => {
-        for (const key of Object.keys(adopterMocks.invalidObject)) {
+        for (const key of Object.keys(shelterMocks.invalidObject)) {
           const response = await request(server)
-            .put(`/api/v1/${model.toLowerCase()}/${adopterId}`)
-            .set('Authorization', 'Bearer ' + adopterToken)
-            .send({ [key]: adopterMocks.invalidObject[key] });
+            .put(`/api/v1/${model.toLowerCase()}/${shelterId}`)
+            .set('Authorization', 'Bearer ' + shelterToken)
+            .send({ [key]: shelterMocks.invalidObject[key] });
           const { status, body } = response;
           expect(status).toEqual(constants.statusCodes.badRequest);
           expect(body.message[0].toLowerCase()).toContain(
@@ -294,9 +294,9 @@ describe(`${model} controller`, () => {
         }
 
         const response = await request(server)
-          .put(`/api/v1/${model.toLowerCase()}/${adopterId}`)
-          .set('Authorization', 'Bearer ' + adopterToken)
-          .send(adopterMocks.invalidObject);
+          .put(`/api/v1/${model.toLowerCase()}/${shelterId}`)
+          .set('Authorization', 'Bearer ' + shelterToken)
+          .send(shelterMocks.invalidObject);
         const { status } = response;
         expect(status).toEqual(constants.statusCodes.badRequest);
       });
@@ -317,39 +317,39 @@ describe(`${model} controller`, () => {
     });
     describe('Valid', () => {
       it(`Should be able to edit a ${model.toLowerCase()} if valid attributes are passed`, async () => {
-        for (const key of Object.keys(adopterMocks.validUpdateObject)) {
+        for (const key of Object.keys(shelterMocks.validUpdateObject)) {
           const response = await request(server)
-            .put(`/api/v1/${model.toLowerCase()}/${adopterId}`)
-            .set('Authorization', 'Bearer ' + adopterToken)
-            .send({ [key]: adopterMocks.validUpdateObject[key] });
+            .put(`/api/v1/${model.toLowerCase()}/${shelterId}`)
+            .set('Authorization', 'Bearer ' + shelterToken)
+            .send({ [key]: shelterMocks.validUpdateObject[key] });
           const { status, body } = response;
           expect(status).toEqual(constants.statusCodes.ok);
           expect(body.message).toEqual(`${model} updated succesfully!`);
         }
 
         const response = await request(server)
-          .put(`/api/v1/${model.toLowerCase()}/${adopterId}`)
-          .set('Authorization', 'Bearer ' + adopterToken)
-          .send(adopterMocks.validUpdateObject);
+          .put(`/api/v1/${model.toLowerCase()}/${shelterId}`)
+          .set('Authorization', 'Bearer ' + shelterToken)
+          .send(shelterMocks.validUpdateObject);
         const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.ok);
         expect(body.message).toEqual(`${model} updated succesfully!`);
       });
       it(`Should let update a ${model.toLowerCase()} if the user is an admin`, async () => {
-        for (const key of Object.keys(adopterMocks.validUpdateObject)) {
+        for (const key of Object.keys(shelterMocks.validUpdateObject)) {
           const response = await request(server)
-            .put(`/api/v1/${model.toLowerCase()}/${adopterId}`)
+            .put(`/api/v1/${model.toLowerCase()}/${shelterId}`)
             .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
-            .send({ [key]: adopterMocks.validUpdateObject[key] });
+            .send({ [key]: shelterMocks.validUpdateObject[key] });
           const { status, body } = response;
           expect(status).toEqual(constants.statusCodes.ok);
           expect(body.message).toEqual(`${model} updated succesfully!`);
         }
 
         const response = await request(server)
-          .put(`/api/v1/${model.toLowerCase()}/${adopterId}`)
+          .put(`/api/v1/${model.toLowerCase()}/${shelterId}`)
           .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
-          .send(adopterMocks.validUpdateObject);
+          .send(shelterMocks.validUpdateObject);
         const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.ok);
         expect(body.message).toEqual(`${model} updated succesfully!`);
@@ -358,50 +358,50 @@ describe(`${model} controller`, () => {
   });
 
   describe('Delete', () => {
-    let adopterToken = '';
+    let shelterToken = '';
 
     beforeEach(async () => {
       const loginResponse = await request(server)
         .post('/api/v1/auth/login')
-        .send(adopterMocks.validLogin);
+        .send(shelterMocks.validLogin);
 
       expect(loginResponse.status).toEqual(constants.statusCodes.ok);
       expect(loginResponse.body).toHaveProperty('token');
-      adopterToken = loginResponse.body.token;
+      shelterToken = loginResponse.body.token;
     });
 
     describe('Invalid', () => {
-      let deletedAdopterId = '';
+      let deletedShelterId = '';
       // HOOKS
       beforeAll(async () => {
         const createResponse = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
-          .send(adopterMocks.validCreateObject);
+          .send(shelterMocks.validCreateObject);
 
         expect(createResponse.status).toEqual(constants.statusCodes.created);
         expect(createResponse.body).toHaveProperty('token');
         expect(createResponse.body).toHaveProperty('data');
         expect(createResponse.body.message).toEqual(
-          'Adopter created succesfully!'
+          `${model} created succesfully!`
         );
-        deletedAdopterId = createResponse.body.data;
+        deletedShelterId = createResponse.body.data;
       });
 
       afterAll(async () => {
         const responseDelete = await request(server)
-          .delete(`/api/v1/${model.toLowerCase()}/` + deletedAdopterId)
+          .delete(`/api/v1/${model.toLowerCase()}/` + deletedShelterId)
           .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
 
         expect(responseDelete.status).toEqual(constants.statusCodes.ok);
         expect(responseDelete.body.message).toEqual(
-          'Adopter deleted succesfully!'
+          `${model} deleted succesfully!`
         );
       });
 
       // ASSERTIONS
       it('Should throw an error when the id has invalid format', async () => {
         const responseDelete = await request(server)
-          .delete(`/api/v1/${model.toLowerCase()}/` + deletedAdopterId + '1')
+          .delete(`/api/v1/${model.toLowerCase()}/` + deletedShelterId + '1')
           .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
 
         expect(responseDelete.status).toEqual(constants.statusCodes.badRequest);
@@ -411,10 +411,12 @@ describe(`${model} controller`, () => {
       });
       it(`Should not be able to delete another ${model.toLowerCase()}`, async () => {
         const responseDelete = await request(server)
-          .delete(`/api/v1/${model.toLowerCase()}/` + deletedAdopterId)
-          .set('Authorization', 'Bearer ' + adopterToken);
+          .delete(`/api/v1/${model.toLowerCase()}/` + deletedShelterId)
+          .set('Authorization', 'Bearer ' + shelterToken);
 
-        expect(responseDelete.status).toEqual(constants.statusCodes.unAuthorized);
+        expect(responseDelete.status).toEqual(
+          constants.statusCodes.unAuthorized
+        );
         expect(responseDelete.body.message).toEqual(
           'You can only perform this operation for yourself'
         );
@@ -432,7 +434,6 @@ describe(`${model} controller`, () => {
           `${model} with id ${nonExistingId} not found.`
         );
       });
-
     });
     describe('Valid', () => {
       let deletedAdopterId = '';
@@ -441,13 +442,13 @@ describe(`${model} controller`, () => {
       beforeEach(async () => {
         const createResponse = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
-          .send(adopterMocks.validCreateObject);
+          .send(shelterMocks.validCreateObject);
 
         expect(createResponse.status).toEqual(constants.statusCodes.created);
         expect(createResponse.body).toHaveProperty('token');
         expect(createResponse.body).toHaveProperty('data');
         expect(createResponse.body.message).toEqual(
-          'Adopter created succesfully!'
+          `${model} created succesfully!`
         );
         deletedAdopterId = createResponse.body.data;
         deletedAdopterToken = createResponse.body.token;
@@ -460,7 +461,7 @@ describe(`${model} controller`, () => {
 
         expect(responseDelete.status).toEqual(constants.statusCodes.ok);
         expect(responseDelete.body.message).toEqual(
-          'Adopter deleted succesfully!'
+          `${model} deleted succesfully!`
         );
       });
       it('Should be able to be deleted by the admin', async () => {
@@ -470,7 +471,7 @@ describe(`${model} controller`, () => {
 
         expect(responseDelete.status).toEqual(constants.statusCodes.ok);
         expect(responseDelete.body.message).toEqual(
-          'Adopter deleted succesfully!'
+          `${model} deleted succesfully!`
         );
       });
     });

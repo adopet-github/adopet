@@ -269,7 +269,6 @@ const controller = {
       notFoundChecker(animal, id, response, 'Animal');
 
       const { images } = req.body;
-      console.log(images);
       const mappedImages = images.map((image: ImageType) => ({
         ...sanitizeCreate(image),
         id: uuidv4(),
