@@ -46,7 +46,7 @@
   };
 </script>
 
-<div class="container glass glass1">
+<div class="card glass glass1">
   <CloseButton />
   <h2>Add Pet</h2>
   <div class="profile-img" />
@@ -74,19 +74,20 @@
 </div>
 
 <style>
-  .container {
-    height: fit-content;
+  .card {
+    height: 100%;
     position: relative;
-    width: 500px;
+    width: 100%;
     border-radius: 20px;
-    margin: auto;
-    margin-top: 4rem;
-    padding: 1rem 1rem 4rem 1rem;
+    padding: 1rem;
+    padding-bottom: 2.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     color: var(--black);
+    gap: 1rem;
+    overflow: hidden;
   }
 
   .details {
