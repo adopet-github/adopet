@@ -66,3 +66,13 @@ export const dislikeAnimal = async (adopterId: string, animalId: string) => {
 
   return await res.json();
 };
+
+export const getAdopterMatches = async (id: string) => {
+  const token = localStorage.getItem('jwt');
+  const res = await fetch(`${baseUrl}/${id}/matches`, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  return await res.json();
+};

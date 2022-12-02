@@ -1,8 +1,19 @@
 <script>
+  import { onMount } from 'svelte';
   import Chat from '../Components/Chat.svelte';
   import Match from '../Components/Match.svelte';
+  import { getAdopterMatches } from '../Services/adopter';
+  import { userCredentials } from '../Stores/userCredentials';
 
-  let matches = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let matches = [];
+
+  onMount(async () => {
+    const res = await getAdopterMatches($userCredentials.id);
+    console.log(res);
+    if (res.status === 200) {
+      matches = res.data;
+    }
+  });
 </script>
 
 <div class="container">
@@ -37,7 +48,6 @@
   }
 
   .matches-container {
-    padding: 1rem;
     display: flex;
     gap: 1rem;
     overflow-x: scroll;

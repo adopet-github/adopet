@@ -34,8 +34,9 @@
   let timeAtHome: number;
   let timeAtHomeError: boolean;
 
-  let description: string;
+  let description: string = '';
   let descriptionError: boolean;
+  $: charsLeft = 255 - description.length;
 
   const handleOnboarding = async () => {
     if (!age || age > 99) {
@@ -54,7 +55,7 @@
       timeAtHomeError = true;
     }
 
-    if (!description) {
+    if (!description || description.length > 255) {
       descriptionError = true;
     }
 
@@ -80,11 +81,13 @@
       const res = await createUser($userCredentials as Adopter);
       if (res.status === 201) {
         // CHANGE TO HTTP ONLY COOKIE FROM SERVER
+        userCredentials.update((prev) => ({ ...prev, id: res.data }));
         localStorage.setItem('jwt', res.token);
         setTimeout(() => {
           navigate('/user/swipe');
         }, 2000);
       } else {
+        isLoading = false;
         console.log(res);
       }
     }
@@ -143,6 +146,9 @@
           <div class="description">
             <p>Add a description of yourself:</p>
             <TextArea bind:value={description} bind:error={descriptionError} />
+            <p class="characters-left {charsLeft < 0 && 'error-chars'}">
+              {charsLeft} characters left
+            </p>
           </div>
           <button on:click={handleOnboarding}>
             <Button text="Continue" />
@@ -185,6 +191,14 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+  }
+
+  .characters-left {
+    text-align: right;
+  }
+
+  .error-chars {
+    color: var(--red);
   }
 
   .form {

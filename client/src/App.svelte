@@ -27,6 +27,7 @@
   import { getProfile } from './Services/auth';
   import { userCredentials } from './Stores/userCredentials';
   import { Router, Route } from 'svelte-navigator';
+  import PawsLoader from './Components/Loaders/PawsLoader.svelte';
 
   let isLoading = true;
 
