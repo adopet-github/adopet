@@ -6,6 +6,7 @@
   import { deleteAnimal } from '../Services/animal';
   import { userCredentials } from '../Stores/userCredentials';
   import { shelterMatches } from '../Stores/shelterMatches';
+  import { animalLikes } from '../Stores/animalLikes';
 
   import ProfilePic from './ProfilePic.svelte';
 
@@ -14,15 +15,21 @@
   console.log('animal id', animal.name, animal.id);
 
   let totalMatches;
+  let totalLikes;
 
   const calculatePetMatches = () => {
     totalMatches = $shelterMatches.filter((match) => {
       return match.animal.id === animal.id;
     });
   };
+  const calculatePetLikes = () => {
+    totalLikes = $animalLikes.filter((match) => {
+      return match.animal.id === animal.id;
+    });
+  };
 
   calculatePetMatches();
-  console.log('total', totalMatches);
+  calculatePetLikes();
 
   let showDeleteWarning = false;
 
@@ -71,7 +78,8 @@
     <p class="animal-name">{animal.name}</p>
     <p class="animal-id">{animal.id}</p>
   </div>
-  <p>{totalMatches.length} matches</p>
+  <p>{totalLikes.length} {totalLikes.length !== 1 ? 'likes' : 'like'}</p>
+  <p>{totalMatches.length} {totalMatches.length !== 1 ? 'matches' : 'match'}</p>
   <div class="btns-container">
     <span
       ><Button
