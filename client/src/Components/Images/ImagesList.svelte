@@ -10,6 +10,7 @@
   import { userCredentials } from '../../Stores/userCredentials';
   import { addShelterImage, updateShelter } from '../../Services/shelter';
   import { addAdopterImage, updateAdopter } from '../../Services/adopter';
+  import Button from '../Button.svelte';
 
   let showAddImage = false;
   let isLoadingResponse = false;
@@ -119,30 +120,35 @@
   />
 </svelte:head>
 {#if showAddImage}
-  <div class="add-image-container glass">
-    <div class="add-image">
+  <div class="warning-container glass">
+    <div class="warning">
       <ImageInput bind:fileInput />
       <div class="buttons">
-        <button class="cancel-add" on:click={() => (showAddImage = false)}>
-          CANCEL
-        </button>
-        <button class="add-img-btn" on:click={handleImageUpload}>
-          {isLoadingResponse ? 'UPLOADING...' : 'ADD'}
-        </button>
+        <Button
+          text="CANCEL"
+          colour={'white'}
+          on:click={() => (showAddImage = false)}
+        />
+        <Button
+          text={isLoadingResponse ? 'UPLOADING...' : 'ADD'}
+          on:click={handleImageUpload}
+        />
       </div>
     </div>
   </div>
 {:else if showDeleteImage}
-  <div class="delete-image-container glass">
-    <div class="delete-image">
-      <p>Are you sure you want to delete this image?</p>
+  <div class="warning-container glass">
+    <div class="warning">
+      <p class="warn-msg">Are you sure you want to delete this image?</p>
+      <p class="smallprint">This action cannot be undone</p>
       <div class="buttons">
-        <button class="cancel-add" on:click={() => (showDeleteImage = false)}>
-          CANCEL
-        </button>
-        <button class="add-img-btn" on:click={handleImageDelete}>
-          {isLoadingResponse ? 'DELETING...' : 'DELETE'}
-        </button>
+        <Button text="CANCEL" on:click={() => (showDeleteImage = false)} />
+
+        <Button
+          text={isLoadingResponse ? 'DELETING...' : 'DELETE'}
+          colour={'white'}
+          on:click={handleImageDelete}
+        />
       </div>
     </div>
   </div>
@@ -175,6 +181,7 @@
 
   .add-img {
     height: 100%;
+    width: auto;
     aspect-ratio: 1;
     background: none;
     color: var(--red);
@@ -184,26 +191,39 @@
     outline: none;
   }
 
-  .add-image-container,
-  .delete-image-container {
-    display: grid;
-    place-items: center;
+  .warning-container {
+    display: flex;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 999;
     height: 100%;
     width: 100%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
   }
 
-  .add-image,
-  .delete-image {
+  .warning {
     display: flex;
     flex-direction: column;
+    padding: 10rem;
     margin: auto;
     border-radius: 20px;
     font-size: 2rem;
+    display: flex;
     gap: 1rem;
+  }
+
+  .warn-msg {
+    font-size: 1.6rem;
+  }
+
+  .smallprint {
+    font-size: 1rem;
+    text-align: center;
+    color: var(--red);
+    font-weight: 900;
   }
 
   .buttons {
@@ -216,13 +236,5 @@
     outline: none;
     background-color: transparent;
     width: 30%;
-  }
-
-  .add-img-btn {
-    background-color: var(--red);
-    color: white;
-    padding: 1rem 0;
-    border-radius: 1rem;
-    font-weight: bold;
   }
 </style>

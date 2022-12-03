@@ -11,9 +11,10 @@
 
   // UTILS
   import { userCredentials } from '../Stores/userCredentials';
-  import { addShelterImage, updateShelter } from '../Services/shelter';
-  import { addAdopterImage, updateAdopter } from '../Services/adopter';
+  import { updateShelter } from '../Services/shelter';
+  import { updateAdopter } from '../Services/adopter';
   import ImagesList from '../Components/Images/ImagesList.svelte';
+  import { navigate } from 'svelte-navigator';
 
   let accountType = $userCredentials.house_type ? 'adopter' : 'shelter';
 
@@ -96,7 +97,7 @@
 
 <div class="container">
   <div class="card glass glass1">
-    <CloseButton />
+    <CloseButton on:click={() => navigate(-1)} />
     <div class="content-left">
       <h2>Edit profile</h2>
       <div class="images">
@@ -145,7 +146,7 @@
               bind:value={$userCredentials.description}
             />
             <button on:click={handleShelterUpdate}
-              ><Button text="save" /></button
+              ><Button text="save" on:click={() => navigate(-1)} /></button
             >
           </div>
         {/if}

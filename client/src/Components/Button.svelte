@@ -24,6 +24,8 @@
     width: 100%;
     border-radius: 20px;
     font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
   }
   button.primary {
     background: #d33e43;
