@@ -180,6 +180,12 @@ describe('Likes and dislikes', () => {
         expect(response.status).toEqual(constants.statusCodes.ok);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toEqual('Animal liked successfully!');
+
+        const coveragePurposedRetrieve = await request(server)
+          .get(`/api/v1/animal/${animalId}/likes`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(coveragePurposedRetrieve.status).toEqual(constants.statusCodes.ok);
       });
     });
   });

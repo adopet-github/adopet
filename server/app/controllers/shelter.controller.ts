@@ -328,6 +328,8 @@ const controller = {
         ]
       });
 
+      notFoundChecker(nonParsedMatches, req.params.id, response, 'Shelter');
+
       const parsedMatches = [];
 
       for (const animal of (
