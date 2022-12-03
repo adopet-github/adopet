@@ -5,7 +5,6 @@
   import Email from '../Components/Inputs/Email.svelte';
   import Name from '../Components/Inputs/Name.svelte';
   import Number from '../Components/Inputs/Number.svelte';
-  import CloseButton from '../Components/CloseButton.svelte';
   import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
   import { toast, SvelteToast } from '@zerodevx/svelte-toast';
 
@@ -15,6 +14,7 @@
   import { updateAdopter } from '../Services/adopter';
   import ImagesList from '../Components/Images/ImagesList.svelte';
   import { navigate } from 'svelte-navigator';
+  import { dashView } from '../Stores/dashView';
 
   let accountType = $userCredentials.house_type ? 'adopter' : 'shelter';
 
@@ -97,7 +97,6 @@
 
 <div class="container">
   <div class="card glass glass1">
-    <CloseButton on:click={() => navigate(-1)} />
     <div class="content-left">
       <h2>Edit profile</h2>
       <div class="images">
@@ -146,7 +145,13 @@
               bind:value={$userCredentials.description}
             />
             <button on:click={handleShelterUpdate}
-              ><Button text="save" on:click={() => navigate(-1)} /></button
+              ><Button
+                text="save"
+                on:click={() => {
+                  $dashView[1] = 'animalList';
+                  navigate(-1);
+                }}
+              /></button
             >
           </div>
         {/if}

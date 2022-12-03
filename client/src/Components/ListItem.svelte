@@ -5,8 +5,12 @@
   import { selectedAnimal } from '../Stores/selectedAnimal';
   import { deleteAnimal } from '../Services/animal';
   import { userCredentials } from '../Stores/userCredentials';
+  import { Background } from '@cloudinary/url-gen/qualifiers';
+  import ProfilePic from './ProfilePic.svelte';
 
   export let animal: ShelterAnimal;
+
+  console.log(animal);
 
   let showDeleteWarning = false;
 
@@ -50,11 +54,11 @@
   </div>
 {/if}
 <div class="list-item glass">
-  <div class="img-container">
-    <div class="dummy-img" />
+  <ProfilePic img={animal.images[0] ? animal.images[0].url : ''} />
+  <div class="name-id-cont">
+    <p class="animal-name">{animal.name}</p>
+    <p class="animal-id">{animal.id}</p>
   </div>
-  <p>{animal.name}</p>
-  <p>{animal.id}</p>
   <p>enquiries</p>
   <div class="btns-container">
     <span
@@ -104,13 +108,6 @@
     align-items: center;
   }
 
-  .dummy-img {
-    height: 60px;
-    width: 60px;
-    border-radius: 30px;
-    background-color: var(--grey);
-  }
-
   .btns-container {
     display: flex;
     align-items: center;
@@ -126,5 +123,24 @@
     text-align: center;
     color: var(--red);
     font-weight: 900;
+  }
+
+  .name-id-cont {
+    position: relative;
+    width: 20%;
+  }
+
+  .animal-name {
+    font-weight: 800;
+    text-transform: capitalize;
+  }
+
+  .animal-id {
+    font-size: 0.5rem;
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    opacity: 0.2;
   }
 </style>

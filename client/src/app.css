@@ -56,6 +56,10 @@ button:focus-visible {
   box-sizing: border-box;
 }
 
+button:focus {
+  outline: none;
+}
+
 button,
 input,
 select,
@@ -159,7 +163,7 @@ textarea:focus {
   font-family: 'Satoshi-Variable', sans-serif;
 }
 
-@media only screen and (min-height: 750px) {
+@media only screen and (max-height: 750px) {
   h1 {
     font-size: 1.6rem;
   }
@@ -183,6 +187,7 @@ textarea:focus {
 
   textarea {
     padding: 0.5rem;
+    flex: 1;
   }
 
   .auth-input-container i {

@@ -45,4 +45,10 @@
     min-width: 20%;
     max-width: 40%;
   }
+
+  @media only screen and (max-height: 750px) {
+    input {
+      padding: 0.5rem 0.5rem;
+    }
+  }
 </style>

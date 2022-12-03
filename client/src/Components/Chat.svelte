@@ -11,6 +11,7 @@
   import { messagesByMatch } from '../Stores/messagesByMatch';
   import { dashView } from '../Stores/dashView';
   import { viewAdopterProfile } from '../Stores/viewAdopterProfile';
+  import ProfilePic from './ProfilePic.svelte';
 
   let chat;
   let autoscroll;
@@ -72,11 +73,10 @@
             viewAdopterProfile.set($viewMatchChat.adopter);
             dashView.set(['matches', 'adopter']);
           }}
-          ><img
-            src={$viewMatchChat.adopter.images[0]
+          ><ProfilePic
+            img={$viewMatchChat.adopter.images[0]
               ? $viewMatchChat.adopter.images[0].url
               : ''}
-            alt="profile"
           /></button
         >
         <!-- <div class="dummy-img" /> -->
@@ -162,13 +162,9 @@
 
   .img-container {
     display: flex;
-    height: 50px;
-    width: 50px;
+    height: 60px;
+    width: 60px;
     border-radius: 25px;
-  }
-
-  img {
-    width: inherit;
   }
 
   .chat-content {

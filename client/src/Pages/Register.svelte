@@ -131,7 +131,11 @@
         );
         if (res.status === 201) {
           // CHANGE TO HTTP ONLY COOKIE FROM SERVER
-          userCredentials.set({ ...newUserCredentials, id: res.data });
+          userCredentials.set({
+            ...newUserCredentials,
+            id: res.data,
+            animals: []
+          });
           localStorage.setItem('jwt', res.token);
           setTimeout(() => {
             navigate('/shelter/dashboard');

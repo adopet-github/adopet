@@ -47,7 +47,7 @@
     // const profile = await getProfile();
     // userCredentials.set(profile);
     console.log(res);
-    dashView.set(['likes', 'allAnimals']);
+    dashView.set(['likes', 'animalList']);
   };
 </script>
 

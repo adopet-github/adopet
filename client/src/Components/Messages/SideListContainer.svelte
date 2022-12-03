@@ -39,7 +39,9 @@
       <LikeListItem {like} />
     {/each}
   {:else}
-    <p>No likes at the moment 🐈🐕</p>
+    <div class="no-likes">
+      <p>No likes at the moment 🐈🐕</p>
+    </div>
   {/if}
 </div>
 
@@ -49,5 +51,11 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+  }
+
+  .no-likes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

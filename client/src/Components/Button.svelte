@@ -45,7 +45,7 @@
     background: linear-gradient(180deg, #afafaf 0%, #797979 100%);
   }
 
-  @media only screen and (max-width: 992px) {
+  @media only screen and (max-height: 750px) {
     button {
       padding: 0.5rem;
       font-size: 0.8rem;
