@@ -402,15 +402,15 @@ const controller = {
         ]
       });
 
+      notFoundChecker(animal, id, response, 'Animal');
+
       const likes = (
         animal as unknown as { adopters: AdopterFromDb[] }
       ).adopters.map(dataParser.animalLike);
 
       response.status = constants.statusCodes.ok;
       response.message =
-        'Likes retrieved successfully for ' +
-        (animal as unknown as { name: string }).name +
-        '!';
+        'Likes retrieved successfully!';
       response.data = likes;
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-getLikes: ', err);
