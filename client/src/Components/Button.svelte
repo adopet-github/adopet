@@ -51,4 +51,11 @@
       font-size: 0.8rem;
     }
   }
+
+  @media only screen and (max-width: 992px) {
+    button {
+      padding: 0.5rem;
+      font-size: 0.8rem;
+    }
+  }
 </style>

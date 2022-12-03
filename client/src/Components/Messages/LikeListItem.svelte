@@ -14,15 +14,21 @@
 
 <button on:click={handleAdopterProfileView}>
   <div class="list-item">
-    <ProfilePic
-      img={like.adopter.images[0] ? like.adopter.images[0].url : ''}
-    />
+    <span
+      ><ProfilePic
+        img={like.adopter.images[0] ? like.adopter.images[0].url : ''}
+      /></span
+    >
     <div class="match-details">
       <p class="pet-name">{like.animal.name} was liked by</p>
       <p class="match-username">{like.adopter.first_name}</p>
       <p class="match-date"><Time timestamp={like.date} relative /></p>
     </div>
-    <ProfilePic img={like.animal.images[0] ? like.animal.images[0].url : ''} />
+    <span
+      ><ProfilePic
+        img={like.animal.images[0] ? like.animal.images[0].url : ''}
+      /></span
+    >
   </div>
 </button>
 
@@ -93,6 +99,10 @@
     .match-date {
       font-size: 0.5rem;
       color: var(--lavender);
+    }
+
+    span {
+      display: none;
     }
   }
 </style>

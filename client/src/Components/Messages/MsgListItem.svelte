@@ -6,7 +6,9 @@
   import { viewMatchChat } from '../../Stores/viewMatchChat';
   import ProfilePic from '../ProfilePic.svelte';
 
-  let message = 'this should be a message preview'; // preview of last message
+  let text = 'this should be a message preview';
+
+  let message = text.substring(0, 25) + '...'; // preview of last message
   let msgDate: Date = new Date(); // needs to be time of last sent message
 
   // bold if not read
@@ -30,19 +32,23 @@
 {#if match}
   <button on:click={handleGoToChatView}>
     <div class="list-item">
-      <ProfilePic
-        img={match.adopter.images[0] ? match.adopter.images[0].url : ''}
-      />
+      <span
+        ><ProfilePic
+          img={match.adopter.images[0] ? match.adopter.images[0].url : ''}
+        /></span
+      >
       <div class="msg-details">
         <p class="msg-username">
-          {match.adopter.first_name} regarding {match.animal.name}
+          {match.adopter.first_name} → {match.animal.name}
         </p>
         <p class="msg-preview">{message}</p>
         <p class="msg-date"><Time timestamp={msgDate} relative /></p>
       </div>
-      <ProfilePic
-        img={match.animal.images[0] ? match.animal.images[0].url : ''}
-      />
+      <span
+        ><ProfilePic
+          img={match.animal.images[0] ? match.animal.images[0].url : ''}
+        /></span
+      >
     </div>
   </button>
 {/if}
@@ -80,6 +86,7 @@
   .msg-username {
     color: var(--red);
     font-size: 0.8rem;
+    text-align: left;
   }
 
   .msg-preview {
@@ -90,13 +97,20 @@
   .msg-date {
     font-size: 0.6rem;
     color: var(--lavender);
+    text-align: left;
+  }
+
+  @media only screen and (max-width: 1280px) {
+    .msg-preview {
+      font-size: 0.8rem;
+      text-align: left;
+    }
   }
 
   @media only screen and (max-width: 992px) {
     p {
       font-size: 0.8rem;
     }
-
     .msg-username {
       color: var(--red);
       font-size: 0.8rem;
@@ -105,6 +119,10 @@
     .msg-date {
       font-size: 0.5rem;
       color: var(--lavender);
+    }
+
+    span {
+      display: none;
     }
   }
 </style>

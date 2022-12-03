@@ -78,20 +78,24 @@
     <p class="animal-name">{animal.name}</p>
     <p class="animal-id">{animal.id}</p>
   </div>
-  <p>{totalLikes.length} {totalLikes.length !== 1 ? 'likes' : 'like'}</p>
-  <p>{totalMatches.length} {totalMatches.length !== 1 ? 'matches' : 'match'}</p>
+  <p class="likes-matches">
+    {totalLikes.length}
+    {totalLikes.length !== 1 ? 'likes' : 'like'}
+  </p>
+  <p class="likes-matches">
+    {totalMatches.length}
+    {totalMatches.length !== 1 ? 'matches' : 'match'}
+  </p>
   <div class="btns-container">
-    <span
-      ><Button
-        text="view"
-        on:click={() => {
-          $dashView[1] = 'animal';
-          console.log('animal', animal);
-          selectedAnimal.set(animal);
-        }}
-      /></span
-    >
-    <span><Button text="X" on:click={prewarnDelete} /></span>
+    <Button
+      text="view"
+      on:click={() => {
+        $dashView[1] = 'animal';
+        console.log('animal', animal);
+        selectedAnimal.set(animal);
+      }}
+    />
+    <Button text="X" on:click={prewarnDelete} />
   </div>
 </div>
 
@@ -132,10 +136,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .btns-container > span {
-    margin-left: 10px;
+    gap: 1rem;
   }
 
   .smallprint {
@@ -163,5 +164,26 @@
     top: 100%;
     left: 0;
     opacity: 0.2;
+  }
+
+  @media only screen and (max-width: 1280px) {
+    .list-item {
+      padding: 0.5rem 1.5rem;
+    }
+    .animal-name {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media only screen and (max-width: 992px) {
+    .btns-container {
+      gap: 0.5rem;
+    }
+    .animal-id {
+      display: none;
+    }
+    .likes-matches {
+      font-size: 0.8rem;
+    }
   }
 </style>

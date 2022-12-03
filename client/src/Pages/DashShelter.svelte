@@ -174,4 +174,14 @@
       grid-area: 2 / 4 / 11 / 12;
     }
   }
+
+  @media only screen and (max-width: 992px) {
+    h1 {
+      font-size: 1.2rem;
+    }
+
+    h2 {
+      font-size: 1rem;
+    }
+  }
 </style>
