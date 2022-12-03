@@ -6,7 +6,8 @@
 
   const handleImageDelete = () => {
     dispatch('deleteImage', {
-      id: image.id
+      id: image.id,
+      url: image.url
     });
   };
 </script>

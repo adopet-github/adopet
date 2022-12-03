@@ -62,6 +62,7 @@ export const getAllAnimals = async () => {
 export const updateAnimal = async (animal: ShelterAnimal) => {
   const { id } = animal;
   delete animal.id;
+  delete animal.shelterName;
   delete animal.shelterId;
   delete animal.images;
   delete animal.adopters;

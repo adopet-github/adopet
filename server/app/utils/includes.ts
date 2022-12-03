@@ -56,6 +56,7 @@ const includes: { [key: string]: Includeable[] } = {
             }
           ]
         },
+        relationships.animal.shelter,
         relationships.animal.adopters
       ]
     }

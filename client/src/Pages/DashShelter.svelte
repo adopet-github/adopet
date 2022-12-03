@@ -11,6 +11,7 @@
   import { userCredentials } from '../Stores/userCredentials';
   import { animalLikes } from '../Stores/animalLikes';
   import { shelterMatches } from '../Stores/shelterMatches';
+  import AddPet from './AddPet.svelte';
 
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@
   };
 
   const handleAddPet = () => {
-    navigate('/shelter/addpet');
+    $dashView[1] = 'addPet';
   };
 </script>
 
@@ -77,6 +78,8 @@
         <AnimalProfile />
       {:else if $dashView[1] === 'adopter'}
         <AdopterProfile />
+      {:else if $dashView[1] === 'addPet'}
+        <AddPet />
       {:else}
         <Chat />
       {/if}

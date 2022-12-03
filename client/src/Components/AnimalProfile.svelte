@@ -20,7 +20,7 @@
   <AnimalProfileEdit bind:editMode />
 {:else}
   <div class="card glass glass1">
-    <CloseButton />
+    <CloseButton closeTo={'animalList'} />
     <div class="heading-cont">
       <h1>{$selectedAnimal.name}</h1>
       <span

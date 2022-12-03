@@ -45,6 +45,19 @@
       next.dataset.status = 'active';
       activeIndex = nextIndex;
     }, 300);
+
+    removeIds();
+  };
+
+  const removeIds = () => {
+    const zero = document.getElementById('zero');
+    zero.removeAttribute('id');
+    const one = document.getElementById('one');
+    one.removeAttribute('id');
+    const two = document.getElementById('two');
+    two.removeAttribute('id');
+    const three = document.getElementById('three');
+    three.removeAttribute('id');
   };
 
   const handleYes = async () => {
@@ -70,6 +83,8 @@
       next.dataset.status = 'active';
       activeIndex = nextIndex;
     }, 300);
+
+    removeIds();
   };
 </script>
 
@@ -81,26 +96,22 @@
 </svelte:head>
 
 <div class="container">
-  {#if animals.length}
-    <div class="groups">
-      {#each animals as animal, i}
-        <SwipeCard {infoOpen} index={i} {animal} />
-      {/each}
-    </div>
-    <div class="buttons">
-      <button class="no" on:click={handleNo}>
-        <i class="uil uil-times" />
-      </button>
-      <button class="info" on:click={toggleInfoOpen}>
-        <i class="uil uil-info" />
-      </button>
-      <button class="yes" on:click={handleYes}>
-        <i class="uil uil-heart" />
-      </button>
-    </div>
-  {:else}
-    <h1>WE"RE SEARCHING FOR YOUR PERFECT MATCH, COME BACK LATER</h1>
-  {/if}
+  <div class="groups">
+    {#each animals as animal, i}
+      <SwipeCard {infoOpen} index={i} {animal} {activeIndex} />
+    {/each}
+  </div>
+  <div class="buttons">
+    <button class="no" on:click={handleNo}>
+      <i class="uil uil-times" />
+    </button>
+    <button class="info" on:click={toggleInfoOpen}>
+      <i class="uil uil-info" />
+    </button>
+    <button class="yes" on:click={handleYes}>
+      <i class="uil uil-heart" />
+    </button>
+  </div>
 </div>
 
 <style>
