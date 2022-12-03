@@ -371,6 +371,8 @@ const controller = {
         ]
       });
 
+      notFoundChecker(nonParsedLikes, req.params.id, response, 'Shelter');
+
       const parsedLikes = [];
 
       for (const animal of (
