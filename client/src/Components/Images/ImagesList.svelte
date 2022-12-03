@@ -7,6 +7,9 @@
   import { deleteImage } from '../../Services/image';
   import { selectedAnimal } from '../../Stores/selectedAnimal';
   import ImageInput from '../Inputs/ImageInput.svelte';
+  import { userCredentials } from '../../Stores/userCredentials';
+  import { addShelterImage, updateShelter } from '../../Services/shelter';
+  import { addAdopterImage, updateAdopter } from '../../Services/adopter';
 
   let showAddImage = false;
   let isLoadingResponse = false;
@@ -22,6 +25,8 @@
   // };
   export let button = true;
   export let images = [];
+  export let type = 'animal';
+  let accountType = $userCredentials.house_type ? 'adopter' : 'shelter';
 
   const handleImageUpload = async () => {
     if (!fileInput.files[0]) {
@@ -41,16 +46,32 @@
       caption: 'no cap',
       url: url
     };
-    if ($selectedAnimal.id) {
-      const serverRes = await addAnimalImage(image, $selectedAnimal.id);
-      console.log(serverRes);
-      selectedAnimal.update((prev) => ({
+    let serverRes;
+    if (type === 'profile') {
+      if (accountType === 'adopter') {
+        serverRes = await addAdopterImage(image, $userCredentials.id);
+        console.log(serverRes);
+      } else {
+        serverRes = await addShelterImage(image, $userCredentials.id);
+        console.log(serverRes);
+      }
+
+      userCredentials.update((prev) => ({
         ...prev,
         images: [...prev.images, { ...image, id: serverRes.data.id }]
       }));
     } else {
-      images = [...images, image];
-      console.log(images);
+      if ($selectedAnimal.id) {
+        const serverRes = await addAnimalImage(image, $selectedAnimal.id);
+        console.log(serverRes);
+        selectedAnimal.update((prev) => ({
+          ...prev,
+          images: [...prev.images, { ...image, id: serverRes.data.id }]
+        }));
+      } else {
+        images = [...images, image];
+        console.log(images);
+      }
     }
     showAddImage = false;
     isLoadingResponse = false;
@@ -68,15 +89,24 @@
   };
 
   const handleImageDelete = async () => {
-    if (imageIdToDelete) {
+    if (type === 'animal') {
+      if (imageIdToDelete) {
+        const res = await deleteImage(imageIdToDelete);
+        console.log(res);
+        selectedAnimal.update((prev) => ({
+          ...prev,
+          images: prev.images.filter((image) => image.id !== imageIdToDelete)
+        }));
+      } else {
+        images = images.filter((element) => element.url != imageUrlToDelete);
+      }
+    } else {
       const res = await deleteImage(imageIdToDelete);
       console.log(res);
-      selectedAnimal.update((prev) => ({
+      userCredentials.update((prev) => ({
         ...prev,
         images: prev.images.filter((image) => image.id !== imageIdToDelete)
       }));
-    } else {
-      images = images.filter((element) => element.url != imageUrlToDelete);
     }
     showDeleteImage = false;
   };

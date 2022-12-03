@@ -26,8 +26,6 @@
   let hasChildrenError: boolean;
   let timeAtHomeError: boolean;
   let addressError: boolean;
-  let images = [];
-  $: console.log('images:', images);
 
   let location: number[] = [];
   let hasPets = $userCredentials.has_pets?.toString();
@@ -102,7 +100,7 @@
     <div class="content-left">
       <h2>Edit profile</h2>
       <div class="images">
-        <ImagesList bind:images />
+        <ImagesList images={$userCredentials.images} type={'profile'} />
       </div>
       <div class="details">
         <div class="left">
