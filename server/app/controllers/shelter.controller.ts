@@ -157,6 +157,13 @@ const controller = {
 
       notFoundChecker(shelter, id, response, 'Shelter');
 
+      const shelterPassword = safeBody.password;
+      if (shelterPassword) {
+        const passSaltObj = await genPasswordAndSalt(shelterPassword as string);
+        safeBody.password = passSaltObj.password;
+        safeBody.salt = passSaltObj.salt;
+      }
+
       const user = await User.findByPk(
         (shelter as unknown as { user: { id: number } }).user.id,
         {

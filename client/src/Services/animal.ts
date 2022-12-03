@@ -1,4 +1,3 @@
-import type { Pet } from '../types/animal';
 import type { ShelterAnimal } from '../types/shelterAnimal';
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/api/v1/animal`;
@@ -58,7 +57,7 @@ export const getAllAnimals = async () => {
     headers: { Authorization: `Bearer ${token}` }
   });
   return await res.json();
-}
+};
 
 export const updateAnimal = async (animal: ShelterAnimal) => {
   const { id } = animal;
@@ -67,9 +66,9 @@ export const updateAnimal = async (animal: ShelterAnimal) => {
   delete animal.shelterId;
   delete animal.images;
   delete animal.adopters;
-  console.log('animal in service', animal)
+  console.log('animal in service', animal);
   const token = localStorage.getItem('jwt');
-  console.log('id in service', id)
+  console.log('id in service', id);
   const res = await fetch(baseUrl + '/' + id, {
     method: 'PUT',
     headers: {

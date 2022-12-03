@@ -61,6 +61,7 @@ const controller = {
       response.message = `${type[0].toUpperCase()}${type.slice(
         1
       )} logged in successfully!`;
+      response.data = id;
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-login: ', err);
     }

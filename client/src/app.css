@@ -143,12 +143,6 @@ textarea:focus {
   pointer-events: none;
 }
 
-/* ACTIVE SWIPE */
-/*
-#active {
-  transition: transform 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
-} */
-
 /* AUTOCOMPLETE STYLING */
 
 .pac-container {
@@ -194,4 +188,32 @@ textarea:focus {
   .auth-input-container i {
     top: 12%;
   }
+}
+
+/* Styles for swipe animations */
+
+.group[data-status='unknown'] {
+  transform: scale(0) !important;
+}
+
+.group[data-status='active'] {
+  transition-delay: 200ms !important;
+}
+
+.group[data-status='right'] {
+  transform: translateX(50%) scale(0) !important;
+}
+
+.group[data-status='left'] {
+  transform: translateX(-50%) scale(0) !important;
+}
+
+.group[data-status='move-left'] {
+  transform: translateX(-100%) scale(0) !important;
+  transition: none !important;
+}
+
+.group[data-status='move-right'] {
+  transform: translateX(100%) scale(0) !important;
+  transition: none !important;
 }
