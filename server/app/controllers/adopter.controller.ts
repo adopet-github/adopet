@@ -423,6 +423,8 @@ const controller = {
         ]
       });
 
+      notFoundChecker(nonParsedMatches, req.params.id, response, 'Adopter');
+
       const parsedMatches = (
         nonParsedMatches as unknown as { animals: AnimalFromDb[] }
       ).animals.map(dataParser.animal);
