@@ -9,16 +9,15 @@
 
   export let animal;
 
+  console.log(index, animal.id);
+
   onMount(() => {
-    if (index !== 0) {
-      group.style.transform = 'scale(0)';
-      information.style.transform = 'scale(0)';
+    if (index === 0) {
+      group.setAttribute('data-status', 'active');
     } else {
-      group.setAttribute('id', 'active');
+      group.setAttribute('data-status', 'unknown');
     }
   });
-
-  console.log(animal);
 
   afterUpdate(() => {
     handleInfoClick();
@@ -40,11 +39,11 @@
   const handleInfoClick = async () => {
     if (!infoOpen && index === 0) {
       information.style.transform = 'scale(1) translateY(-50%)';
-      group.style.left = '25%';
+      group.style.transform = 'translateX(-90%)';
       group.classList.add('no-hover');
     } else {
       information.style.transform = 'scale(0)';
-      group.style.left = '50%';
+      group.style.transform = 'translateX(0%)';
       group.classList.remove('no-hover');
     }
   };
@@ -57,7 +56,7 @@
   />
 </svelte:head>
 
-<div class="group" bind:this={group}>
+<div class="group" bind:this={group} id={animal.id} data-index={index}>
   <div class="card" on:mousedown={() => handleImageClick('three')} id="three">
     <img src={animal.images[0].url} alt="animal" />
     <div class="overlay">
@@ -78,7 +77,7 @@
   </div>
 </div>
 <div class="information" bind:this={information}>
-  <h1>{animal.name} from [[SHELTER NAME]]</h1>
+  <h1>{animal.name} from {animal.shelterName}</h1>
   <hr />
   <div class="details">
     <h5><i class="uil uil-calender" /> {animal.age} Years</h5>
@@ -92,11 +91,8 @@
 
 <style>
   .group {
-    top: 50%;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    transition: left 300ms cubic-bezier(0.16, 0.89, 0.61, 0.99);
+    transition: transform 400ms cubic-bezier(0.16, 0.89, 0.61, 0.99);
   }
 
   .group,

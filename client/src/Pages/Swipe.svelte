@@ -18,21 +18,58 @@
     console.log(res);
     animals = res.data.filter((animal) => animal.images.length === 4);
   });
+  let activeIndex = 0;
 
   const handleNo = async () => {
     if (!infoOpen) toggleInfoOpen();
-    const res = await dislikeAnimal($userCredentials.id, animals[0].id);
+    const res = await dislikeAnimal(
+      $userCredentials.id,
+      animals[activeIndex].id
+    );
     console.log(res);
-    animals.shift();
-    animals = animals;
+
+    const nextIndex = activeIndex + 1;
+
+    const current = document.querySelector(
+      `[data-index="${activeIndex}"]`
+    ) as HTMLElement;
+    const next = document.querySelector(
+      `[data-index="${nextIndex}"]`
+    ) as HTMLElement;
+
+    current.dataset.status = 'left';
+
+    next.dataset.status = 'move-right';
+
+    setTimeout(() => {
+      next.dataset.status = 'active';
+      activeIndex = nextIndex;
+    }, 300);
   };
 
   const handleYes = async () => {
     if (!infoOpen) toggleInfoOpen();
-    const res = await likeAnimal($userCredentials.id, animals[0].id);
+
+    const res = await likeAnimal($userCredentials.id, animals[activeIndex].id);
     console.log(res);
-    animals.shift();
-    animals = animals;
+
+    const nextIndex = activeIndex + 1;
+
+    const current = document.querySelector(
+      `[data-index="${activeIndex}"]`
+    ) as HTMLElement;
+    const next = document.querySelector(
+      `[data-index="${nextIndex}"]`
+    ) as HTMLElement;
+
+    current.dataset.status = 'right';
+
+    next.dataset.status = 'move-left';
+
+    setTimeout(() => {
+      next.dataset.status = 'active';
+      activeIndex = nextIndex;
+    }, 300);
   };
 </script>
 
@@ -44,20 +81,26 @@
 </svelte:head>
 
 <div class="container">
-  {#each animals as animal, i}
-    <SwipeCard {infoOpen} index={i} {animal} />
-  {/each}
-  <div class="buttons">
-    <button class="no" on:click={handleNo}>
-      <i class="uil uil-times" />
-    </button>
-    <button class="info" on:click={toggleInfoOpen}>
-      <i class="uil uil-info" />
-    </button>
-    <button class="yes" on:click={handleYes}>
-      <i class="uil uil-heart" />
-    </button>
-  </div>
+  {#if animals.length}
+    <div class="groups">
+      {#each animals as animal, i}
+        <SwipeCard {infoOpen} index={i} {animal} />
+      {/each}
+    </div>
+    <div class="buttons">
+      <button class="no" on:click={handleNo}>
+        <i class="uil uil-times" />
+      </button>
+      <button class="info" on:click={toggleInfoOpen}>
+        <i class="uil uil-info" />
+      </button>
+      <button class="yes" on:click={handleYes}>
+        <i class="uil uil-heart" />
+      </button>
+    </div>
+  {:else}
+    <h1>WE"RE SEARCHING FOR YOUR PERFECT MATCH, COME BACK LATER</h1>
+  {/if}
 </div>
 
 <style>
@@ -74,6 +117,11 @@
     place-items: center;
     align-items: flex-end;
     padding-bottom: 3rem;
+  }
+
+  .groups {
+    width: 300px;
+    aspect-ratio: 5 / 7;
   }
   .buttons {
     display: flex;

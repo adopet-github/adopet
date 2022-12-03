@@ -63,7 +63,6 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
     const { sanitizeCreate } = adopterSanitize;
 
-    console.log('req.body', req.body);
     const unsafeBody = req.body;
 
     const safeBody = sanitizeCreate(unsafeBody);
@@ -73,8 +72,6 @@ const controller = {
       const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
       safeBody.password = passSaltObj.password;
       safeBody.salt = passSaltObj.salt;
-      console.log('password', safeBody.password);
-      console.log('salt', safeBody.salt);
     }
     const transaction = await sequelize.transaction();
     try {
@@ -154,6 +151,8 @@ const controller = {
 
       const safeBody = sanitizeUpdate(unsafeBody);
 
+      
+      
       const adopter = await Adopter.findByPk(id, {
         include: [
           {
@@ -165,9 +164,16 @@ const controller = {
           }
         ]
       });
-
+      
       notFoundChecker(adopter, id, response, 'Adopter');
-
+      
+      const adopterPassword = safeBody.password;
+      if (adopterPassword) {
+        const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
+        safeBody.password = passSaltObj.password;
+        safeBody.salt = passSaltObj.salt;
+      }
+      
       const user = await User.findByPk(
         (adopter as unknown as { user: { id: number } }).user.id,
         {
@@ -181,8 +187,6 @@ const controller = {
       const location = await Location.findByPk(
         (user as unknown as { location: { id: number } }).location.id
       );
-
-      console.log((location as unknown as { id: number }).id);
 
       await (adopter as Model).update(
         {
