@@ -10,8 +10,6 @@
 
   export let animal: ShelterAnimal;
 
-  console.log(animal);
-
   let showDeleteWarning = false;
 
   const prewarnDelete = () => {
@@ -133,6 +131,7 @@
   .animal-name {
     font-weight: 800;
     text-transform: capitalize;
+    font-size: 1.4rem;
   }
 
   .animal-id {

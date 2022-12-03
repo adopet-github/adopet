@@ -8,4 +8,5 @@ export type ShelterAnimal = {
   weight: number;
   description: string;
   adopters?: [];
+  shelterDescription?: string;
 };

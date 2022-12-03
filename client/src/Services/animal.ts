@@ -60,12 +60,14 @@ export const getAllAnimals = async () => {
 };
 
 export const updateAnimal = async (animal: ShelterAnimal) => {
+  console.log('animal in service', animal);
   const { id } = animal;
   delete animal.id;
   delete animal.shelterName;
   delete animal.shelterId;
   delete animal.images;
   delete animal.adopters;
+  delete animal.shelterDescription;
   console.log('animal in service', animal);
   const token = localStorage.getItem('jwt');
   console.log('id in service', id);
