@@ -7,6 +7,22 @@ import { notFoundChecker } from '../utils/db';
 const { Image } = models;
 
 const controller = {
+  retrieveAll: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    try {
+      const modelResponse = await Image.findAll();
+
+      response.status = constants.statusCodes.ok;
+      response.message = 'Images retrieved successfully!';
+      response.data = modelResponse;
+    } catch (err) {
+      console.warn('ERROR AT IMAGE-CONTROLLER-delete: ', err);
+    }
+
+    res.status(response.status).send(response);
+  },
+
   delete: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
