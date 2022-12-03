@@ -6,6 +6,7 @@
   export let infoOpen;
 
   export let index: number;
+  export let activeIndex;
 
   export let animal;
 
@@ -25,6 +26,7 @@
 
   const handleImageClick = (index: string) => {
     const card = document.getElementById(index);
+    console.log('card', card);
     const parent = card.parentElement;
     const cards = parent.children as HTMLCollectionOf<HTMLElement>;
     for (let c of cards) {
@@ -37,7 +39,7 @@
   };
 
   const handleInfoClick = async () => {
-    if (!infoOpen && index === 0) {
+    if (!infoOpen && index === activeIndex) {
       information.style.transform = 'scale(1) translateY(-50%)';
       group.style.transform = 'translateX(-90%)';
       group.classList.add('no-hover');
@@ -47,6 +49,8 @@
       group.classList.remove('no-hover');
     }
   };
+
+  console.log(animal);
 </script>
 
 <svelte:head>
@@ -85,8 +89,9 @@
     <h5><i class="uil uil-map-marker" /> [[DISTANCE]] KM</h5>
   </div>
   <p>
-    {animal.description}
+    Pet: {animal.description}
   </p>
+  <p>Shelter: {animal.shelterDescription}</p>
 </div>
 
 <style>
