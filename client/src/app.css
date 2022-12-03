@@ -196,10 +196,6 @@ textarea:focus {
   transform: scale(0) !important;
 }
 
-.group[data-status='active'] {
-  transition-delay: 200ms !important;
-}
-
 .group[data-status='right'] {
   transform: translateX(50%) scale(0) !important;
 }
