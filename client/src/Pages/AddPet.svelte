@@ -9,12 +9,16 @@
   import { selectedAnimal } from '../Stores/selectedAnimal';
   import { dashView } from '../Stores/dashView';
 
+  $selectedAnimal.id = '';
+
   console.log($userCredentials);
 
   let petName: string;
   let petWeight: number;
   let petAge: number;
   let petDescription: string;
+  let images = [];
+  $: console.log('images:', images);
 
   const handleAddAnimal = async () => {
     const pet = {
@@ -30,7 +34,7 @@
       const newAnimal = {
         ...res.data.animal,
         description: res.data.description,
-        images: [],
+        images,
         adopters: []
       };
       const newAnimals = [...previous.animals, newAnimal];
@@ -51,27 +55,31 @@
   <CloseButton closeTo={'animalList'} />
   <h2>Add Pet</h2>
   <div class="imgs-cont">
-    <ImagesList images={$selectedAnimal.images} />
+    <ImagesList bind:images />
   </div>
   <div class="details">
-    <label for="pet-name">Pet name:</label>
-    <Name nameType="Pet name" bind:value={petName} />
-    <div class="ageWeightCont">
-      <div>
-        <Number bind:value={petWeight} label="Weight (kg): " />
-      </div>
-      <div>
-        <Number bind:value={petAge} label="Age of pet: " />
+    <div class="details-left">
+      <label for="pet-name">Pet name:</label>
+      <Name nameType="Pet name" bind:value={petName} />
+      <div class="ageWeightCont">
+        <div>
+          <Number bind:value={petWeight} label="Weight (kg): " />
+        </div>
+        <div>
+          <Number bind:value={petAge} label="Age of pet: " />
+        </div>
       </div>
     </div>
-    <label for="description">Description:</label>
-    <textarea
-      id="description"
-      name="description"
-      rows="3"
-      bind:value={petDescription}
-    />
-    <span><Button text="add pet" on:click={handleAddAnimal} /></span>
+    <div class="details-right">
+      <label for="description">Description:</label>
+      <textarea
+        id="description"
+        name="description"
+        rows="3"
+        bind:value={petDescription}
+      />
+      <span><Button text="add pet" on:click={handleAddAnimal} /></span>
+    </div>
   </div>
 </div>
 
@@ -92,19 +100,32 @@
     overflow: hidden;
   }
 
+  .imgs-cont {
+    width: 80%;
+  }
+
   .details {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .details-left {
+    width: 50%;
+  }
+
+  .details-right {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    width: 70%;
-    gap: 0.5rem;
+    justify-content: space-between;
+    width: 50%;
   }
 
   .ageWeightCont {
     display: flex;
+    flex-direction: column;
     width: 100%;
-    align-items: center;
     justify-content: space-between;
     gap: 1rem;
     margin-top: 1rem;
