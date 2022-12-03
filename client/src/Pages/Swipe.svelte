@@ -4,6 +4,7 @@
   import { getAllAnimals } from '../Services/animal';
   import { likeAnimal, dislikeAnimal } from '../Services/adopter';
   import { userCredentials } from '../Stores/userCredentials';
+  import PawsLoader from '../Components/Loaders/PawsLoader.svelte';
 
   let infoOpen = true;
 
@@ -36,6 +37,11 @@
     const next = document.querySelector(
       `[data-index="${nextIndex}"]`
     ) as HTMLElement;
+
+    if (!next) {
+      activeIndex = nextIndex;
+      return;
+    }
 
     current.dataset.status = 'left';
 
@@ -75,6 +81,11 @@
       `[data-index="${nextIndex}"]`
     ) as HTMLElement;
 
+    if (!next) {
+      activeIndex = nextIndex;
+      return;
+    }
+
     current.dataset.status = 'right';
 
     next.dataset.status = 'move-left';
@@ -82,6 +93,7 @@
     setTimeout(() => {
       next.dataset.status = 'active';
       activeIndex = nextIndex;
+      console.log('index', activeIndex, 'len', animals.length);
     }, 300);
 
     removeIds();
@@ -95,26 +107,63 @@
   />
 </svelte:head>
 
-<div class="container">
-  <div class="groups">
-    {#each animals as animal, i}
-      <SwipeCard {infoOpen} index={i} {animal} {activeIndex} />
-    {/each}
+{#if activeIndex >= animals.length}
+  <div class="no-animals-cont">
+    <PawsLoader />
+    <div class="text">
+      <h1>No pets available at the moment</h1>
+      <p>We're searching for your perfect match...</p>
+    </div>
   </div>
-  <div class="buttons">
-    <button class="no" on:click={handleNo}>
-      <i class="uil uil-times" />
-    </button>
-    <button class="info" on:click={toggleInfoOpen}>
-      <i class="uil uil-info" />
-    </button>
-    <button class="yes" on:click={handleYes}>
-      <i class="uil uil-heart" />
-    </button>
+{:else}
+  <div class="container">
+    <div class="groups">
+      {#each animals as animal, i}
+        <SwipeCard {infoOpen} index={i} {animal} {activeIndex} />
+      {/each}
+    </div>
+    <div class="buttons">
+      <button class="no" on:click={handleNo}>
+        <i class="uil uil-times" />
+      </button>
+      <button class="info" on:click={toggleInfoOpen}>
+        <i class="uil uil-info" />
+      </button>
+      <button class="yes" on:click={handleYes}>
+        <i class="uil uil-heart" />
+      </button>
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
+  .no-animals-cont {
+    color: black;
+    background: rgb(235, 224, 224);
+    background: linear-gradient(
+      45deg,
+      rgba(235, 224, 224, 1) 0%,
+      rgba(255, 242, 237, 1) 100%
+    );
+    height: 92vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10rem;
+  }
+
+  .no-animals-cont h1 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .no-animals-cont p {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
   .container {
     color: black;
     background: rgb(235, 224, 224);
