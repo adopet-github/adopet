@@ -17,7 +17,9 @@
     userCredentials.update((prev) => ({
       ...prev,
       animals: prev.animals.map((animal) => {
-        if (animal.id === $selectedAnimal.id) return $selectedAnimal;
+        console.log(animal);
+        if (animal.id === $selectedAnimal.id)
+          return { ...$selectedAnimal, id: animal.id };
         else return animal;
       })
     }));
