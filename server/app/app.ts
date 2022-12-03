@@ -18,9 +18,9 @@ const limiter = rateLimit({
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 
-const app = express();
+export const app = express();
 
-app.use(limiter);
+if (process.env.ENVIRONMENT === 'production') app.use(limiter);
 
 app.use(cors()).use(express.json());
 
@@ -37,16 +37,13 @@ app.use('/', (req, res) => {
   });
 });
 
-const server = http.createServer(app);
+export const server = http.createServer(app);
 
-const io = new Server(server);
+const io = new Server(server, { cors: { origin: 'http://localhost:5173' } });
 
-(async function bootstrap() {
-  await sequelize.sync();
-
-  server.listen(PORT, () => {
-    console.log(`server running on ${PORT}`);
-  });
-})();
+server.listen(PORT, () => {
+  sequelize.sync();
+  console.log(`server running on ${PORT}`);
+});
 
 export default io;

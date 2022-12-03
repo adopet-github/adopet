@@ -13,18 +13,16 @@ services:
   #   volumes:
   #     - postgres-data:/var/lib/postgresql/data
   #   restart: unless-stopped
-
   server:
     stdin_open: true
     build:
       context: .
       dockerfile: ./express-docker/Dockerfile
     container_name: server
-    # depends_on:
-    #   - postgres
+    #depends_on:
+    #  - postgres
     ports:
       - '4000:4000'
     restart: always
-
 volumes:
   postgres-data:

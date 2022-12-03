@@ -47,6 +47,15 @@ const includes: { [key: string]: Includeable[] } = {
           association: relationships.animal.general,
           include: [relationships.general.images]
         },
+        {
+          association: relationships.animal.shelter,
+          include: [
+            {
+              association: relationships.shelter.user,
+              include: [relationships.user.general]
+            }
+          ]
+        },
         relationships.animal.shelter,
         relationships.animal.adopters
       ]

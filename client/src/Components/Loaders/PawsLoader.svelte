@@ -68,10 +68,6 @@
     --bg-dark: #0f172a;
     --light: #edf2f7;
   }
-  body {
-    padding: 0;
-    margin: 0;
-  }
   .container {
     display: flex;
     flex-direction: column;

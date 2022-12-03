@@ -14,8 +14,6 @@ export function notFoundChecker(
   type: string
 ) {
   if (entity === null || entity === 0) {
-    console.log(entity);
-
     response.status = constants.statusCodes.notFound;
     response.message = `${type} with id ${id} not found.`;
     throw new Error(response.message);
