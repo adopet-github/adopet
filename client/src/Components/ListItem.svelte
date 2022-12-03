@@ -5,10 +5,24 @@
   import { selectedAnimal } from '../Stores/selectedAnimal';
   import { deleteAnimal } from '../Services/animal';
   import { userCredentials } from '../Stores/userCredentials';
-  import { Background } from '@cloudinary/url-gen/qualifiers';
+  import { shelterMatches } from '../Stores/shelterMatches';
+
   import ProfilePic from './ProfilePic.svelte';
 
   export let animal: ShelterAnimal;
+
+  console.log('animal id', animal.name, animal.id);
+
+  let totalMatches;
+
+  const calculatePetMatches = () => {
+    totalMatches = $shelterMatches.filter((match) => {
+      return match.animal.id === animal.id;
+    });
+  };
+
+  calculatePetMatches();
+  console.log('total', totalMatches);
 
   let showDeleteWarning = false;
 
@@ -57,7 +71,7 @@
     <p class="animal-name">{animal.name}</p>
     <p class="animal-id">{animal.id}</p>
   </div>
-  <p>enquiries</p>
+  <p>{totalMatches.length} matches</p>
   <div class="btns-container">
     <span
       ><Button
