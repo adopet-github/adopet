@@ -14,10 +14,6 @@
   import { addShelterImage, updateShelter } from '../Services/shelter';
   import { addAdopterImage, updateAdopter } from '../Services/adopter';
   import ImagesList from '../Components/Images/ImagesList.svelte';
-  import ImageInput from '../Components/Inputs/ImageInput.svelte';
-  import { cloudinaryUpload } from '../Services/Cloudinary';
-  import { deleteImage } from '../Services/image';
-  import AddPet from './AddPet.svelte';
 
   let accountType = $userCredentials.house_type ? 'adopter' : 'shelter';
 
@@ -30,16 +26,12 @@
   let hasChildrenError: boolean;
   let timeAtHomeError: boolean;
   let addressError: boolean;
+  let images = [];
+  $: console.log('images:', images);
 
   let location: number[] = [];
   let hasPets = $userCredentials.has_pets?.toString();
   let hasChildren = $userCredentials.has_children?.toString();
-
-  let file;
-  let showAddImage = false;
-  let showDeleteImage = false;
-
-  let isLoadingResponse = false;
 
   const handleShelterUpdate = async () => {
     if (location.length === 2) {
@@ -102,102 +94,15 @@
       });
     }
   };
-
-  let fileInput;
-
-  const handleImageUpload = async () => {
-    if (!fileInput.files[0]) {
-      toast.push('Please choose an image to upload', {
-        theme: {
-          '--toastColor': 'mintcream',
-          '--toastBackground': '#d33e43',
-          '--toastBarBackground': 'mintcream'
-        }
-      });
-      return;
-    }
-    isLoadingResponse = true;
-    const res = await cloudinaryUpload(fileInput.files[0]);
-    const url = res.secure_url;
-
-    const image = {
-      caption: 'no cap',
-      url: url
-    };
-    let serverRes;
-    if (accountType === 'adopter') {
-      serverRes = await addAdopterImage(image, $userCredentials.id);
-      console.log(serverRes);
-    } else {
-      serverRes = await addShelterImage(image, $userCredentials.id);
-      console.log(serverRes);
-    }
-
-    userCredentials.update((prev) => ({
-      ...prev,
-      images: [...prev.images, { ...image, id: serverRes.data.id }]
-    }));
-    showAddImage = false;
-    isLoadingResponse = false;
-  };
-
-  let imageIdToDelete;
-  const handleDeleteImageOpen = (e) => {
-    showDeleteImage = true;
-    imageIdToDelete = e.detail.id;
-  };
-
-  const handleImageDelete = async () => {
-    const res = await deleteImage(imageIdToDelete);
-    console.log(res);
-    userCredentials.update((prev) => ({
-      ...prev,
-      images: prev.images.filter((image) => image.id !== imageIdToDelete)
-    }));
-    showDeleteImage = false;
-  };
 </script>
 
-{#if showAddImage}
-  <div class="add-image-container glass">
-    <div class="add-image">
-      <ImageInput bind:file bind:fileInput />
-      <div class="buttons">
-        <button class="cancel-add" on:click={() => (showAddImage = false)}>
-          CANCEL
-        </button>
-        <button class="add-img-btn" on:click={handleImageUpload}>
-          {isLoadingResponse ? 'UPLOADING...' : 'ADD'}
-        </button>
-      </div>
-    </div>
-  </div>
-{:else if showDeleteImage}
-  <div class="delete-image-container glass">
-    <div class="delete-image">
-      <p>Are you sure you want to delete this image?</p>
-      <div class="buttons">
-        <button class="cancel-add" on:click={() => (showDeleteImage = false)}>
-          CANCEL
-        </button>
-        <button class="add-img-btn" on:click={handleImageDelete}>
-          {isLoadingResponse ? 'DELETING...' : 'DELETE'}
-        </button>
-      </div>
-    </div>
-  </div>
-{/if}
 <div class="container">
   <div class="card glass glass1">
     <CloseButton />
     <div class="content-left">
       <h2>Edit profile</h2>
       <div class="images">
-        <ImagesList
-          images={$userCredentials.images}
-          on:openAddImage={() => (showAddImage = true)}
-          on:deleteImage={handleDeleteImageOpen}
-        />
+        <ImagesList bind:images />
       </div>
       <div class="details">
         <div class="left">
@@ -378,49 +283,6 @@
     width: 100%;
     margin-top: 1rem;
     background-color: transparent;
-  }
-
-  .add-image-container,
-  .delete-image-container {
-    display: grid;
-    place-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    height: 100vh;
-    width: 100vw;
-  }
-
-  .add-image,
-  .delete-image {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    border-radius: 20px;
-    font-size: 2rem;
-    display: flex;
-    gap: 1rem;
-  }
-
-  .delete-image {
-    color: black;
-  }
-
-  .buttons {
-    display: flex;
-    gap: 2rem;
-  }
-
-  button {
     outline: none;
-  }
-
-  .add-img-btn {
-    background-color: var(--red);
-    color: white;
-    padding: 1rem 0;
-    border-radius: 1rem;
-    font-weight: bold;
   }
 </style>

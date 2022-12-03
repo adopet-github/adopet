@@ -17,10 +17,11 @@
     userCredentials.update((prev) => ({
       ...prev,
       animals: prev.animals.map((animal) => {
-        console.log(animal);
-        if (animal.id === $selectedAnimal.id)
+        if (animal.id === $selectedAnimal.id) {
           return { ...$selectedAnimal, id: animal.id };
-        else return animal;
+        } else {
+          return animal;
+        }
       })
     }));
   };
