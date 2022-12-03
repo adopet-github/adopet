@@ -58,24 +58,28 @@
     <ImagesList bind:images />
   </div>
   <div class="details">
-    <label for="pet-name">Pet name:</label>
-    <Name nameType="Pet name" bind:value={petName} />
-    <div class="ageWeightCont">
-      <div>
-        <Number bind:value={petWeight} label="Weight (kg): " />
-      </div>
-      <div>
-        <Number bind:value={petAge} label="Age of pet: " />
+    <div class="details-left">
+      <label for="pet-name">Pet name:</label>
+      <Name nameType="Pet name" bind:value={petName} />
+      <div class="ageWeightCont">
+        <div>
+          <Number bind:value={petWeight} label="Weight (kg): " />
+        </div>
+        <div>
+          <Number bind:value={petAge} label="Age of pet: " />
+        </div>
       </div>
     </div>
-    <label for="description">Description:</label>
-    <textarea
-      id="description"
-      name="description"
-      rows="3"
-      bind:value={petDescription}
-    />
-    <span><Button text="add pet" on:click={handleAddAnimal} /></span>
+    <div class="details-right">
+      <label for="description">Description:</label>
+      <textarea
+        id="description"
+        name="description"
+        rows="3"
+        bind:value={petDescription}
+      />
+      <span><Button text="add pet" on:click={handleAddAnimal} /></span>
+    </div>
   </div>
 </div>
 
@@ -101,16 +105,27 @@
   }
 
   .details {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .details-left {
+    width: 50%;
+  }
+
+  .details-right {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: space-between;
+    width: 50%;
   }
 
   .ageWeightCont {
     display: flex;
+    flex-direction: column;
     width: 100%;
-    align-items: center;
     justify-content: space-between;
     gap: 1rem;
     margin-top: 1rem;
