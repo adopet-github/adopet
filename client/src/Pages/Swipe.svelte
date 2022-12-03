@@ -44,7 +44,20 @@
     setTimeout(() => {
       next.dataset.status = 'active';
       activeIndex = nextIndex;
-    }, 1000);
+    }, 300);
+
+    removeIds();
+  };
+
+  const removeIds = () => {
+    const zero = document.getElementById('zero');
+    zero.removeAttribute('id');
+    const one = document.getElementById('one');
+    one.removeAttribute('id');
+    const two = document.getElementById('two');
+    two.removeAttribute('id');
+    const three = document.getElementById('three');
+    three.removeAttribute('id');
   };
 
   const handleYes = async () => {
@@ -70,6 +83,8 @@
       next.dataset.status = 'active';
       activeIndex = nextIndex;
     }, 300);
+
+    removeIds();
   };
 </script>
 
