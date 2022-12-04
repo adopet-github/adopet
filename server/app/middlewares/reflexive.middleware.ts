@@ -12,7 +12,10 @@ export default function reflexiveMiddleware(paramsKey = 'id') {
       type: AccountTypes;
     };
 
-    if (decryptedToken.id === req.params[paramsKey] || decryptedToken.type === AccountTypes.ADMIN) {
+    if (
+      decryptedToken.id === req.params[paramsKey] ||
+      decryptedToken.type === AccountTypes.ADMIN
+    ) {
       next();
       return;
     }

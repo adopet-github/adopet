@@ -17,7 +17,12 @@ router.post(
   userExistsMiddleware,
   controller.create
 );
-router.get('/', authMiddleware, isRoleMiddleware(AccountTypes.ADMIN), controller.retrieveAll);
+router.get(
+  '/',
+  authMiddleware,
+  isRoleMiddleware(AccountTypes.ADMIN),
+  controller.retrieveAll
+);
 router.get(
   '/:id',
   authMiddleware,
@@ -76,6 +81,6 @@ router.get(
   joiMiddleware(globalSchema.validateId, InputTypes.PARAMS),
   reflexiveMiddleware(),
   controller.getMatches
-)
+);
 
 export default router;

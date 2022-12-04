@@ -76,15 +76,8 @@ export const adopterSanitize = {
 
 export const shelterSanitize = {
   sanitizeCreate: (unsafeBody: Shelter): Shelter => {
-    const {
-      description,
-      email,
-      password,
-      name,
-      latitude,
-      longitude,
-      address
-    } = unsafeBody;
+    const { description, email, password, name, latitude, longitude, address } =
+      unsafeBody;
     return {
       description,
       email,
@@ -96,15 +89,8 @@ export const shelterSanitize = {
     };
   },
   sanitizeUpdate: (unsafeBody: Shelter) => {
-    const {
-      description,
-      email,
-      password,
-      name,
-      latitude,
-      longitude,
-      address
-    } = unsafeBody;
+    const { description, email, password, name, latitude, longitude, address } =
+      unsafeBody;
     return removeUndefinedKeysFromObject({
       description,
       email,

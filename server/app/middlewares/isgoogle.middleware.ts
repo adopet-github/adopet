@@ -5,17 +5,21 @@ import models, { relationships } from '../models';
 import { notFoundChecker } from '../utils/db';
 const { User } = models;
 
-export default async function isGoogleMiddleware (req: Request, res: Response, next: NextFunction) {
-  const response = {...constants.fallbackResponse} as MyResponse;
+export default async function isGoogleMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const response = { ...constants.fallbackResponse } as MyResponse;
 
   try {
     const user = await User.findOne({
-      where: {email: req.body.email},
+      where: { email: req.body.email },
       include: [relationships.user.adopter]
     });
     notFoundChecker(user, 'userid', response, 'User');
 
-    const password = (user as unknown as {password: string | null}).password;
+    const password = (user as unknown as { password: string | null }).password;
 
     if (password === null) {
       response.status = constants.statusCodes.badRequest;
@@ -25,7 +29,6 @@ export default async function isGoogleMiddleware (req: Request, res: Response, n
 
     next();
     return;
-
   } catch (err) {
     if (response.status === constants.statusCodes.notFound) {
       response.status = constants.statusCodes.badRequest;

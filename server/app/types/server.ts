@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request } from 'express';
 
 export type MyResponse = {
   status: number;
@@ -9,4 +9,4 @@ export type MyResponse = {
 
 export type MyRequest = Request & {
   token?: string;
-}
+};

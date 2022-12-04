@@ -14,7 +14,7 @@ const User = sequelize.define('user', {
   salt: {
     type: DataTypes.STRING,
     allowNull: true
-  },
+  }
 });
 
 export default User;

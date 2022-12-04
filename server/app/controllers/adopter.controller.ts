@@ -151,8 +151,6 @@ const controller = {
 
       const safeBody = sanitizeUpdate(unsafeBody);
 
-      
-      
       const adopter = await Adopter.findByPk(id, {
         include: [
           {
@@ -164,16 +162,16 @@ const controller = {
           }
         ]
       });
-      
+
       notFoundChecker(adopter, id, response, 'Adopter');
-      
+
       const adopterPassword = safeBody.password;
       if (adopterPassword) {
         const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
         safeBody.password = passSaltObj.password;
         safeBody.salt = passSaltObj.salt;
       }
-      
+
       const user = await User.findByPk(
         (adopter as unknown as { user: { id: number } }).user.id,
         {

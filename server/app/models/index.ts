@@ -25,7 +25,7 @@ export default {
   Shelter,
   User,
   Message,
-  Token 
+  Token
 };
 
 export const relationships = {
