@@ -175,8 +175,7 @@ describe(`${model} controller`, () => {
             key.toLowerCase().split('_')[0]
           );
           expect(body.token).toBeUndefined();
-          if (key !== 'address')
-            obj[key] = shelterMocks.validCreateObject[key];
+          if (key !== 'address') obj[key] = shelterMocks.validCreateObject[key];
         }
 
         const response = await request(server)

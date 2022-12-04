@@ -16,7 +16,7 @@ const Adopter = sequelize.define('adopter', {
   google_id: {
     type: DataTypes.STRING,
     allowNull: true
-  },
+  }
 });
 
 export default Adopter;

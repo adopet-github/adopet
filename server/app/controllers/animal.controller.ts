@@ -409,8 +409,7 @@ const controller = {
       ).adopters.map(dataParser.animalLike);
 
       response.status = constants.statusCodes.ok;
-      response.message =
-        'Likes retrieved successfully!';
+      response.message = 'Likes retrieved successfully!';
       response.data = likes;
     } catch (err) {
       console.warn('ERROR AT ANIMAL-CONTROLLER-getLikes: ', err);

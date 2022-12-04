@@ -122,11 +122,12 @@ const controller = {
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-logout: ', err);
     }
-    
+
     if (response.status === constants.statusCodes.ok) {
       return res
         .clearCookie('access_token')
-        .status(response.status).send(response);
+        .status(response.status)
+        .send(response);
     }
 
     res.status(response.status).send(response);
@@ -205,7 +206,8 @@ const controller = {
           httpOnly: true,
           secure: process.env.ENVIRONMENT === 'production'
         })
-        .status(response.status).send(response);
+        .status(response.status)
+        .send(response);
     }
     res.status(response.status).send(response);
   },

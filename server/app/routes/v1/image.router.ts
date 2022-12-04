@@ -7,13 +7,12 @@ import joiMiddleware from '../../middlewares/joi.middleware';
 import globalSchema from '../../schemas/global.schema';
 const router = Router();
 
-
 router.get(
   '/',
   authMiddleware,
   isRoleMiddleware(AccountTypes.ADMIN),
   controller.retrieveAll
-)
+);
 router.delete(
   '/:id',
   authMiddleware,

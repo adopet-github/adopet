@@ -10,12 +10,16 @@ const schema = {
         Joi.object()
           .keys({
             caption: Joi.string().max(255).required(),
-            url: Joi.string().uri().regex(/^(https:\/\/res.cloudinary.com\/dyi6bn4vh\/image\/upload\/)[a-z0-9/.]+$/)
-            .messages({
-              'string.pattern.base':
-                'Url origin not valid'
-            })
-            .max(255).required()
+            url: Joi.string()
+              .uri()
+              .regex(
+                /^(https:\/\/res.cloudinary.com\/dyi6bn4vh\/image\/upload\/)[a-z0-9/.]+$/
+              )
+              .messages({
+                'string.pattern.base': 'Url origin not valid'
+              })
+              .max(255)
+              .required()
           })
           .optional()
       )

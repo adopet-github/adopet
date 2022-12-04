@@ -18,7 +18,12 @@ router.post(
   selfShelterMiddleware('shelterId', InputTypes.BODY),
   controller.create
 );
-router.get('/', authMiddleware, isRoleMiddleware(AccountTypes.ADOPTER), controller.retrieveAll);
+router.get(
+  '/',
+  authMiddleware,
+  isRoleMiddleware(AccountTypes.ADOPTER),
+  controller.retrieveAll
+);
 router.get(
   '/:id',
   authMiddleware,

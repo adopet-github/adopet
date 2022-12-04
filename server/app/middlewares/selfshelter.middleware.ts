@@ -21,7 +21,7 @@ export default function selfShelterMiddleware(
     try {
       if (
         (objectToCheck === 'body' &&
-        decryptedToken.id === req.body.shelterId) ||
+          decryptedToken.id === req.body.shelterId) ||
         decryptedToken.type === AccountTypes.ADMIN
       ) {
         next();

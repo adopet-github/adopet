@@ -414,7 +414,9 @@ describe(`${model} controller`, () => {
           .delete(`/api/v1/${model.toLowerCase()}/` + deletedAdopterId)
           .set('Authorization', 'Bearer ' + adopterToken);
 
-        expect(responseDelete.status).toEqual(constants.statusCodes.unAuthorized);
+        expect(responseDelete.status).toEqual(
+          constants.statusCodes.unAuthorized
+        );
         expect(responseDelete.body.message).toEqual(
           'You can only perform this operation for yourself'
         );
@@ -432,7 +434,6 @@ describe(`${model} controller`, () => {
           `${model} with id ${nonExistingId} not found.`
         );
       });
-
     });
     describe('Valid', () => {
       let deletedAdopterId = '';

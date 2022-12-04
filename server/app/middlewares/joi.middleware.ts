@@ -1,14 +1,17 @@
 import Joi from 'joi';
-import { NextFunction, Request, Response } from "express";
-import { InputTypes } from "../enums";
-import constants from "../utils/constants";
+import { NextFunction, Request, Response } from 'express';
+import { InputTypes } from '../enums';
+import constants from '../utils/constants';
 
-export default function joiMiddleware (schema: Joi.ObjectSchema, where: InputTypes) {
+export default function joiMiddleware(
+  schema: Joi.ObjectSchema,
+  where: InputTypes
+) {
   return (req: Request, res: Response, next: NextFunction) => {
     const typeToObjToValidate = {
       body: req.body,
       params: req.params,
-      query: req.query,
+      query: req.query
     };
 
     const objToValidate = typeToObjToValidate[where];
@@ -25,5 +28,5 @@ export default function joiMiddleware (schema: Joi.ObjectSchema, where: InputTyp
     } else {
       next();
     }
-  }
+  };
 }

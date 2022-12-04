@@ -83,7 +83,7 @@ describe(`${model} controller`, () => {
   describe('Retrieve one', () => {
     let animalId = '';
     let animalOwnerToken = '';
-    beforeAll( async () => {
+    beforeAll(async () => {
       const loginResponse = await request(server)
         .post('/api/v1/auth/login')
         .send(animalMocks.validShelterLogin);
@@ -96,22 +96,27 @@ describe(`${model} controller`, () => {
       const createAnimalResponse = await request(server)
         .post(`/api/v1/${model.toLowerCase()}`)
         .set('Authorization', 'Bearer ' + animalOwnerToken)
-        .send({...animalMocks.validCreateObject, shelterId: loginResponse.body.data});
+        .send({
+          ...animalMocks.validCreateObject,
+          shelterId: loginResponse.body.data
+        });
 
-      expect(createAnimalResponse.status).toEqual(constants.statusCodes.created);
+      expect(createAnimalResponse.status).toEqual(
+        constants.statusCodes.created
+      );
       expect(createAnimalResponse.body).toHaveProperty('data');
       animalId = createAnimalResponse.body.data.animal.id;
     });
 
     afterAll(async () => {
-      const response = await request(server).delete(
-        `/api/v1/${model.toLowerCase()}/` + animalId)
+      const response = await request(server)
+        .delete(`/api/v1/${model.toLowerCase()}/` + animalId)
         .set('Authorization', 'Bearer ' + animalOwnerToken);
       const { status, body } = response;
 
       expect(status).toEqual(constants.statusCodes.ok);
       expect(body.message).toEqual(`${model} deleted succesfully!`);
-    })
+    });
 
     describe('Invalid', () => {
       it('Should give you unauthorized when you are not logged in', async () => {
@@ -199,8 +204,8 @@ describe(`${model} controller`, () => {
 
     beforeAll(async () => {
       const loginResponse = await request(server)
-      .post('/api/v1/auth/login')
-      .send(animalMocks.validShelterLogin);
+        .post('/api/v1/auth/login')
+        .send(animalMocks.validShelterLogin);
 
       expect(loginResponse.status).toEqual(constants.statusCodes.ok);
       expect(loginResponse.body).toHaveProperty('token');
@@ -238,8 +243,7 @@ describe(`${model} controller`, () => {
           expect(body.message[0].toLowerCase()).toContain(
             key.toLowerCase().split('_')[0]
           );
-          if (key !== 'weight')
-            obj[key] = animalMocks.validCreateObject[key];
+          if (key !== 'weight') obj[key] = animalMocks.validCreateObject[key];
         }
 
         const response = await request(server)
@@ -253,7 +257,7 @@ describe(`${model} controller`, () => {
       it(`Should not create an ${model.toLowerCase()} if valid attributes are provided but no authorization`, async () => {
         const response = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
-          .send({...animalMocks.validCreateObject, shelterId});
+          .send({ ...animalMocks.validCreateObject, shelterId });
 
         expect(response.status).toEqual(constants.statusCodes.unAuthorized);
       });
@@ -264,7 +268,7 @@ describe(`${model} controller`, () => {
         const response = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
           .set('Authorization', 'Bearer ' + shelterToken)
-          .send({...animalMocks.validCreateObject, shelterId});
+          .send({ ...animalMocks.validCreateObject, shelterId });
 
         expect(response.status).toEqual(constants.statusCodes.created);
         expect(response.body).toHaveProperty('data');
@@ -284,7 +288,7 @@ describe(`${model} controller`, () => {
         const response = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
           .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
-          .send({...animalMocks.validCreateObject, shelterId});
+          .send({ ...animalMocks.validCreateObject, shelterId });
 
         expect(response.status).toEqual(constants.statusCodes.created);
         expect(response.body).toHaveProperty('data');
@@ -321,7 +325,7 @@ describe(`${model} controller`, () => {
       const createdAnimal = await request(server)
         .post(`/api/v1/${model.toLowerCase()}`)
         .set('Authorization', 'Bearer ' + shelterToken)
-        .send({...animalMocks.validCreateObject, shelterId});
+        .send({ ...animalMocks.validCreateObject, shelterId });
 
       expect(createdAnimal.status).toEqual(constants.statusCodes.created);
       expect(createdAnimal.body).toHaveProperty('data');
@@ -468,22 +472,22 @@ describe(`${model} controller`, () => {
     let shelterToken = '';
     describe('Invalid', () => {
       let animalId = '';
-  
+
       beforeAll(async () => {
         const loginResponse = await request(server)
           .post('/api/v1/auth/login')
           .send(animalMocks.validShelterLogin);
-  
+
         expect(loginResponse.status).toEqual(constants.statusCodes.ok);
         expect(loginResponse.body).toHaveProperty('token');
         shelterToken = loginResponse.body.token;
         shelterId = loginResponse.body.data;
-  
+
         const createdAnimal = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
           .set('Authorization', 'Bearer ' + shelterToken)
-          .send({...animalMocks.validCreateObject, shelterId});
-  
+          .send({ ...animalMocks.validCreateObject, shelterId });
+
         expect(createdAnimal.status).toEqual(constants.statusCodes.created);
         expect(createdAnimal.body).toHaveProperty('data');
         animalId = createdAnimal.body.data.animal.id;
@@ -548,7 +552,7 @@ describe(`${model} controller`, () => {
         const createResponse = await request(server)
           .post(`/api/v1/${model.toLowerCase()}`)
           .set('Authorization', 'Bearer ' + shelterToken)
-          .send({...animalMocks.validCreateObject, shelterId});
+          .send({ ...animalMocks.validCreateObject, shelterId });
 
         expect(createResponse.status).toEqual(constants.statusCodes.created);
         expect(createResponse.body).toHaveProperty('data');

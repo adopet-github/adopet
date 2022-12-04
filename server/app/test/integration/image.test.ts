@@ -43,7 +43,7 @@ describe('Images', () => {
           .put(`/api/v1/adopter/${adopter1Id}/${model.toLowerCase()}s`)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
         expect(body.message).toEqual('Unauthorized');
       });
@@ -53,9 +53,11 @@ describe('Images', () => {
           .set('Authorization', 'Bearer ' + adopter1Token)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
-        expect(body.message).toEqual('You can only perform this operation for yourself');
+        expect(body.message).toEqual(
+          'You can only perform this operation for yourself'
+        );
       });
       it(`Should not be able to upload ${model.toLowerCase()}s if is a shelter`, async () => {
         const loginResponse = await request(server)
@@ -71,11 +73,15 @@ describe('Images', () => {
           .set('Authorization', 'Bearer ' + shelterToken)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
-        expect(body.message).toEqual('You have to be a adopter to perform this operation');
+        expect(body.message).toEqual(
+          'You have to be a adopter to perform this operation'
+        );
       });
-      it(`Should not be able to upload ${model.toLowerCase()}s if the ${model.toLowerCase}s are not valid`, async () => {
+      it(`Should not be able to upload ${model.toLowerCase()}s if the ${
+        model.toLowerCase
+      }s are not valid`, async () => {
         const response1 = await request(server)
           .put(`/api/v1/adopter/${adopter1Id}/${model.toLowerCase()}s`)
           .set('Authorization', 'Bearer ' + adopter1Token)
@@ -102,7 +108,9 @@ describe('Images', () => {
           .send(imageMocks.validCreateArray5);
 
         expect(response.status).toEqual(constants.statusCodes.badRequest);
-        expect(response.body.message[0]).toEqual(`"${model.toLowerCase()}s" must contain less than or equal to 4 items`);
+        expect(response.body.message[0]).toEqual(
+          `"${model.toLowerCase()}s" must contain less than or equal to 4 items`
+        );
       });
 
       it(`Should not be able to add ${model.toLowerCase()}s if adopter not found`, async () => {
@@ -112,32 +120,34 @@ describe('Images', () => {
           .send(imageMocks.validCreateArray3);
 
         expect(response.status).toEqual(constants.statusCodes.notFound);
-        expect(response.body.message).toEqual(`Adopter with id ${notFoundId} not found.`);
+        expect(response.body.message).toEqual(
+          `Adopter with id ${notFoundId} not found.`
+        );
       });
     });
 
     describe('Valid', () => {
-      let addedImages: ({id: string, caption: string, url: string})[] = [];
-    
+      let addedImages: { id: string; caption: string; url: string }[] = [];
+
       afterEach(async () => {
         for (const image of addedImages) {
           const response = await request(server)
             .delete(`/api/v1/${model.toLowerCase()}/${image.id}`)
             .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
-    
-          const {status, body} = response;
-          
+
+          const { status, body } = response;
+
           expect(status).toEqual(constants.statusCodes.ok);
-          expect(body.message).toEqual(
-            `${model} deleted succesfully!`
-          );
+          expect(body.message).toEqual(`${model} deleted succesfully!`);
         }
 
         addedImages = [];
       });
 
       for (let i = 1; i <= 4; i++) {
-        it(`Should be able to add ${i} ${model.toLowerCase()}${i === 1 ? '' : 's'}`, async () => {
+        it(`Should be able to add ${i} ${model.toLowerCase()}${
+          i === 1 ? '' : 's'
+        }`, async () => {
           const response = await request(server)
             .put(`/api/v1/adopter/${adopter1Id}/${model.toLowerCase()}s`)
             .set('Authorization', 'Bearer ' + adopter1Token)
@@ -146,17 +156,20 @@ describe('Images', () => {
           const { status, body } = response;
 
           expect(status).toEqual(constants.statusCodes.ok);
-          expect(body.message).toEqual(`${model}s added to adopter succesfully!`);
+          expect(body.message).toEqual(
+            `${model}s added to adopter succesfully!`
+          );
           expect(body).toHaveProperty('data');
 
-          for (const image of body.data) addedImages.push({
-            id: image.id as string,
-            url: image.url as string,
-            caption: image.caption as string
-          });
+          for (const image of body.data)
+            addedImages.push({
+              id: image.id as string,
+              url: image.url as string,
+              caption: image.caption as string
+            });
         });
       }
-    })
+    });
   });
 
   describe('Shelter', () => {
@@ -189,7 +202,7 @@ describe('Images', () => {
           .put(`/api/v1/shelter/${shelter1Id}/${model.toLowerCase()}s`)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
         expect(body.message).toEqual('Unauthorized');
       });
@@ -199,9 +212,11 @@ describe('Images', () => {
           .set('Authorization', 'Bearer ' + shelter1Token)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
-        expect(body.message).toEqual('You can only perform this operation for yourself');
+        expect(body.message).toEqual(
+          'You can only perform this operation for yourself'
+        );
       });
       it(`Should not be able to upload ${model.toLowerCase()}s if is an adopter`, async () => {
         const loginResponse = await request(server)
@@ -217,11 +232,15 @@ describe('Images', () => {
           .set('Authorization', 'Bearer ' + adopterToken)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
-        expect(body.message).toEqual('You have to be a shelter to perform this operation');
+        expect(body.message).toEqual(
+          'You have to be a shelter to perform this operation'
+        );
       });
-      it(`Should not be able to upload ${model.toLowerCase()}s if the ${model.toLowerCase}s are not valid`, async () => {
+      it(`Should not be able to upload ${model.toLowerCase()}s if the ${
+        model.toLowerCase
+      }s are not valid`, async () => {
         const response1 = await request(server)
           .put(`/api/v1/shelter/${shelter1Id}/${model.toLowerCase()}s`)
           .set('Authorization', 'Bearer ' + shelter1Token)
@@ -248,7 +267,9 @@ describe('Images', () => {
           .send(imageMocks.validCreateArray5);
 
         expect(response.status).toEqual(constants.statusCodes.badRequest);
-        expect(response.body.message[0]).toEqual(`"${model.toLowerCase()}s" must contain less than or equal to 4 items`);
+        expect(response.body.message[0]).toEqual(
+          `"${model.toLowerCase()}s" must contain less than or equal to 4 items`
+        );
       });
       it(`Should not be able to add ${model.toLowerCase()}s if shelter not found`, async () => {
         const response = await request(server)
@@ -257,32 +278,34 @@ describe('Images', () => {
           .send(imageMocks.validCreateArray3);
 
         expect(response.status).toEqual(constants.statusCodes.notFound);
-        expect(response.body.message).toEqual(`Shelter with id ${notFoundId} not found.`);
+        expect(response.body.message).toEqual(
+          `Shelter with id ${notFoundId} not found.`
+        );
       });
     });
 
     describe('Valid', () => {
-      let addedImages: ({id: string, caption: string, url: string})[] = [];
-    
+      let addedImages: { id: string; caption: string; url: string }[] = [];
+
       afterEach(async () => {
         for (const image of addedImages) {
           const response = await request(server)
             .delete(`/api/v1/${model.toLowerCase()}/${image.id}`)
             .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
-    
-          const {status, body} = response;
-          
+
+          const { status, body } = response;
+
           expect(status).toEqual(constants.statusCodes.ok);
-          expect(body.message).toEqual(
-            `${model} deleted succesfully!`
-          );
+          expect(body.message).toEqual(`${model} deleted succesfully!`);
         }
 
         addedImages = [];
       });
 
       for (let i = 1; i <= 4; i++) {
-        it(`Should be able to add ${i} ${model.toLowerCase()}${i === 1 ? '' : 's'}`, async () => {
+        it(`Should be able to add ${i} ${model.toLowerCase()}${
+          i === 1 ? '' : 's'
+        }`, async () => {
           const response = await request(server)
             .put(`/api/v1/shelter/${shelter1Id}/${model.toLowerCase()}s`)
             .set('Authorization', 'Bearer ' + shelter1Token)
@@ -291,17 +314,20 @@ describe('Images', () => {
           const { status, body } = response;
 
           expect(status).toEqual(constants.statusCodes.ok);
-          expect(body.message).toEqual(`${model}s added to shelter succesfully!`);
+          expect(body.message).toEqual(
+            `${model}s added to shelter succesfully!`
+          );
           expect(body).toHaveProperty('data');
 
-          for (const image of body.data) addedImages.push({
-            id: image.id as string,
-            url: image.url as string,
-            caption: image.caption as string
-          });
+          for (const image of body.data)
+            addedImages.push({
+              id: image.id as string,
+              url: image.url as string,
+              caption: image.caption as string
+            });
         });
       }
-    })
+    });
   });
 
   describe('Animal', () => {
@@ -324,11 +350,13 @@ describe('Images', () => {
       const createAnimalResponse = await request(server)
         .post('/api/v1/animal')
         .set('Authorization', 'Bearer ' + shelter1Token)
-        .send({...imageMocks.validAnimal, shelterId: shelter1Id});
+        .send({ ...imageMocks.validAnimal, shelterId: shelter1Id });
 
-        expect(createAnimalResponse.status).toEqual(constants.statusCodes.created);
-        expect(createAnimalResponse.body).toHaveProperty('data');
-        animalId = createAnimalResponse.body.data.animal.id;
+      expect(createAnimalResponse.status).toEqual(
+        constants.statusCodes.created
+      );
+      expect(createAnimalResponse.body).toHaveProperty('data');
+      animalId = createAnimalResponse.body.data.animal.id;
 
       const loginResponse2 = await request(server)
         .post('/api/v1/auth/login')
@@ -344,11 +372,13 @@ describe('Images', () => {
       const deleteAnimalResponse = await request(server)
         .delete('/api/v1/animal/' + animalId)
         .set('Authorization', 'Bearer ' + shelter1Token)
-        .send({...imageMocks.validAnimal, shelterId: shelter1Id});
+        .send({ ...imageMocks.validAnimal, shelterId: shelter1Id });
 
       expect(deleteAnimalResponse.status).toEqual(constants.statusCodes.ok);
-      expect(deleteAnimalResponse.body.message).toEqual('Animal deleted succesfully!');
-    })
+      expect(deleteAnimalResponse.body.message).toEqual(
+        'Animal deleted succesfully!'
+      );
+    });
 
     describe('Invalid', () => {
       it(`Should not be able to upload ${model.toLowerCase()}s if not authenticated`, async () => {
@@ -356,7 +386,7 @@ describe('Images', () => {
           .put(`/api/v1/animal/${animalId}/${model.toLowerCase()}s`)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
         expect(body.message).toEqual('Unauthorized');
       });
@@ -366,9 +396,11 @@ describe('Images', () => {
           .set('Authorization', 'Bearer ' + shelter2Token)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
-        expect(body.message).toEqual('You can only perform this operation for your own shelter animals');
+        expect(body.message).toEqual(
+          'You can only perform this operation for your own shelter animals'
+        );
       });
       it(`Should not be able to upload ${model.toLowerCase()}s if is an adopter`, async () => {
         const loginResponse = await request(server)
@@ -384,11 +416,15 @@ describe('Images', () => {
           .set('Authorization', 'Bearer ' + adopterToken)
           .send(imageMocks.validCreateArray1);
 
-        const {status, body} = response;
+        const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.unAuthorized);
-        expect(body.message).toEqual('You have to be a shelter to perform this operation');
+        expect(body.message).toEqual(
+          'You have to be a shelter to perform this operation'
+        );
       });
-      it(`Should not be able to upload ${model.toLowerCase()}s if the ${model.toLowerCase}s are not valid`, async () => {
+      it(`Should not be able to upload ${model.toLowerCase()}s if the ${
+        model.toLowerCase
+      }s are not valid`, async () => {
         const response1 = await request(server)
           .put(`/api/v1/animal/${animalId}/${model.toLowerCase()}s`)
           .set('Authorization', 'Bearer ' + shelter1Token)
@@ -415,7 +451,9 @@ describe('Images', () => {
           .send(imageMocks.validCreateArray5);
 
         expect(response.status).toEqual(constants.statusCodes.badRequest);
-        expect(response.body.message[0]).toEqual(`"${model.toLowerCase()}s" must contain less than or equal to 4 items`);
+        expect(response.body.message[0]).toEqual(
+          `"${model.toLowerCase()}s" must contain less than or equal to 4 items`
+        );
       });
 
       it(`Should not be able to add ${model.toLowerCase()}s if animal not found`, async () => {
@@ -425,32 +463,34 @@ describe('Images', () => {
           .send(imageMocks.validCreateArray3);
 
         expect(response.status).toEqual(constants.statusCodes.notFound);
-        expect(response.body.message).toEqual(`Animal with id ${notFoundId} not found.`);
+        expect(response.body.message).toEqual(
+          `Animal with id ${notFoundId} not found.`
+        );
       });
     });
 
     describe('Valid', () => {
-      let addedImages: ({id: string, caption: string, url: string})[] = [];
-    
+      let addedImages: { id: string; caption: string; url: string }[] = [];
+
       afterEach(async () => {
         for (const image of addedImages) {
           const response = await request(server)
             .delete(`/api/v1/${model.toLowerCase()}/${image.id}`)
             .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
-    
-          const {status, body} = response;
-          
+
+          const { status, body } = response;
+
           expect(status).toEqual(constants.statusCodes.ok);
-          expect(body.message).toEqual(
-            `${model} deleted succesfully!`
-          );
+          expect(body.message).toEqual(`${model} deleted succesfully!`);
         }
 
         addedImages = [];
       });
 
       for (let i = 1; i <= 4; i++) {
-        it(`Should be able to add ${i} ${model.toLowerCase()}${i === 1 ? '' : 's'}`, async () => {
+        it(`Should be able to add ${i} ${model.toLowerCase()}${
+          i === 1 ? '' : 's'
+        }`, async () => {
           const response = await request(server)
             .put(`/api/v1/animal/${animalId}/${model.toLowerCase()}s`)
             .set('Authorization', 'Bearer ' + shelter1Token)
@@ -459,17 +499,20 @@ describe('Images', () => {
           const { status, body } = response;
 
           expect(status).toEqual(constants.statusCodes.ok);
-          expect(body.message).toEqual(`${model}s added to animal succesfully!`);
+          expect(body.message).toEqual(
+            `${model}s added to animal succesfully!`
+          );
           expect(body).toHaveProperty('data');
 
-          for (const image of body.data) addedImages.push({
-            id: image.id as string,
-            url: image.url as string,
-            caption: image.caption as string
-          });
+          for (const image of body.data)
+            addedImages.push({
+              id: image.id as string,
+              url: image.url as string,
+              caption: image.caption as string
+            });
         });
       }
-    })
+    });
   });
 
   describe('Retrieve all', () => {
@@ -493,7 +536,9 @@ describe('Images', () => {
 
         const { status, body } = response;
         expect(status).toEqual(constants.statusCodes.notFound);
-        expect(body.message).toEqual(`${model} with id ${notFoundId} not found.`);
+        expect(body.message).toEqual(
+          `${model} with id ${notFoundId} not found.`
+        );
       });
     });
   });
