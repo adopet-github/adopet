@@ -68,7 +68,7 @@ const dataParser = {
   animalLike: (data: AdopterFromDb) => {
     const res: Adopter = {
       ...dataParser.adopter(data),
-      like_date: data.adopter_animal?.createdAt
+      like_date: (data.adopter_animal as {createdAt: string}).createdAt
     };
 
     return res;
@@ -84,7 +84,7 @@ const dataParser = {
         images: data.general.images,
         id: data.id
       },
-      date: adopter.adopter_animal?.updatedAt
+      date: (adopter.adopter_animal as {updatedAt: string}).updatedAt
     };
 
     return res;

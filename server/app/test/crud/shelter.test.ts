@@ -58,6 +58,16 @@ describe(`${model} controller`, () => {
         expect(Array.isArray(body.data)).toBeTruthy();
       });
     });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in retrieveAll', async () => {
+        const response = await request(server)
+          .get('/api/v1/shelter?ise=yes')
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(response.status).toEqual(500);
+      });
+    })
   });
 
   describe('Retrieve one', () => {
@@ -210,6 +220,17 @@ describe(`${model} controller`, () => {
         );
       });
     });
+
+    describe('Internal server errror', () => {
+      it('Should throw internal server error in create', async () => {
+        const response = await request(server)
+          .post('/api/v1/shelter?ise=yes')
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
+          .send(shelterMocks.validCreateObject);
+
+        expect(response.status).toEqual(500);
+      });
+    })
   });
 
   describe('Update', () => {

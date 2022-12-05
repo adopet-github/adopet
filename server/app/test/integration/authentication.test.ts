@@ -15,6 +15,7 @@ describe('Authentication', () => {
   let googleAdopterToken = '';
   let googleAdopterId = '';
   let shelterToken = '';
+  let shelterIdGoogle = '';
 
   beforeAll(async () => {
     const nonGoogleAdopterResponse = await request(server)
@@ -39,6 +40,13 @@ describe('Authentication', () => {
 
     expect(shelterResponse.status).toEqual(constants.statusCodes.ok);
     shelterToken = shelterResponse.body.token;
+
+    const createShelterResponse = await request(server)
+      .post('/api/v1/shelter')
+      .send(shelterMocks.validCreateObject2);
+
+    expect(createShelterResponse.status).toEqual(constants.statusCodes.created);
+    shelterIdGoogle = createShelterResponse.body.data;
   });
 
   afterAll(async () => {
@@ -47,6 +55,12 @@ describe('Authentication', () => {
       .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
 
       expect(response.status).toEqual(constants.statusCodes.ok);
+
+    const responseSheter = await request(server)
+      .delete('/api/v1/shelter/' + shelterIdGoogle)
+      .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+      expect(responseSheter.status).toEqual(constants.statusCodes.ok);
 
     server.close();
   });
@@ -267,6 +281,16 @@ describe('Authentication', () => {
 
         expect(logout2.status).toEqual(constants.statusCodes.unAuthorized);
         expect(logout2.body.message).toEqual('Unauthorized');
+      });
+    });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in logout', async () => {
+        const response = await request(server)
+          .post('/api/v1/auth/logout?ise=yes')
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(response.status).toEqual(500);
       });
     });
   });

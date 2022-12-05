@@ -16,6 +16,7 @@ describe('Likes and dislikes', () => {
   describe('Likes', () => {
     let adopterId = '';
     let adopterToken = '';
+    let shelterId = '';
     let shelterToken = '';
     let animalId = '';
     let adopter2Token = '';
@@ -37,6 +38,7 @@ describe('Likes and dislikes', () => {
           .send(adopterMocks.validNonModelLogin);
 
         expect(loginResponse.status).toEqual(constants.statusCodes.ok);
+        shelterId = loginResponse.body.data;
         shelterToken = loginResponse.body.token;
 
         const createAnimalResponse = await request(server)
@@ -197,6 +199,10 @@ describe('Likes and dislikes', () => {
         expect(response.status).toEqual(constants.statusCodes.ok);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toEqual('Animal liked successfully!');
+
+        await request(server)
+          .get(`/api/v1/shelter/${shelterId}/likes`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
       });
       it('Should like the animal if the user is admin', async () => {
         const response = await request(server)
@@ -211,7 +217,21 @@ describe('Likes and dislikes', () => {
           .get(`/api/v1/animal/${animalId}/likes`)
           .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
 
+        await request(server)
+          .put(`/api/v1/adopter/${adopterId}/like/${animalId}`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
         expect(coveragePurposedRetrieve.status).toEqual(constants.statusCodes.ok);
+      });
+    });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in like animal', async () => {
+        const response = await request(server)
+          .put(`/api/v1/adopter/${adopterId}/like/${animalId}?ise=yes`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(response.status).toEqual(500);
       });
     });
   });
@@ -399,6 +419,10 @@ describe('Likes and dislikes', () => {
         expect(response.status).toEqual(constants.statusCodes.ok);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toEqual('Animal disliked successfully!');
+
+        await request(server)
+          .put(`/api/v1/adopter/${adopterId}/dislike/${animalId}`)
+          .set('Authorization', 'Bearer ' + adopterToken);
       });
       it('Should dislike the animal if the user is admin', async () => {
         const response = await request(server)
@@ -410,6 +434,16 @@ describe('Likes and dislikes', () => {
         expect(response.body.message).toEqual('Animal disliked successfully!');
       });
     });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in dislike animal', async () => {
+        const response = await request(server)
+          .put(`/api/v1/adopter/${adopterId}/dislike/${animalId}?ise=yes`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(response.status).toEqual(500);
+      });
+    })
   });
   describe('Getters', () => {
     let adopterToken = '';

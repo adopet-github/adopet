@@ -9,18 +9,18 @@ const http = require('http');
 const { Server } = require('socket.io');
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
+  windowMs: 60 * 1000,
+  max: 10000,
   standardHeaders: true,
   legacyHeaders: false
 });
 
 dotenv.config();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 
 export const app = express();
 
-if (process.env.ENVIRONMENT === 'production') app.use(limiter);
+app.use(limiter);
 
 app.use(cors()).use(express.json());
 

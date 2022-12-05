@@ -14,6 +14,7 @@ import { AdopterFromDb, MatchFromDb, ShelterFromDb } from '../types/dboutputs';
 import { generateToken } from '../utils/jwt';
 import { genPasswordAndSalt } from '../utils/password';
 import { v4 as uuidv4 } from 'uuid';
+import triggerInternalServerError from '../utils/coverage';
 
 const { General, Shelter, User, Image, Token } = models;
 
@@ -22,6 +23,7 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
+      triggerInternalServerError(req);
       const modelResponse = await Shelter.findAll({
         include: includes.shelter
       });
@@ -74,6 +76,7 @@ const controller = {
 
     const transaction = await sequelize.transaction();
     try {
+      triggerInternalServerError(req);
       const shelter = await General.create(
         {
           id: uuidv4(),
@@ -181,7 +184,7 @@ const controller = {
       await (shelter as Model).update(
         {
           name: safeBody.name
-        } || {},
+        },
         {
           transaction
         }
@@ -191,7 +194,7 @@ const controller = {
         {
           email: safeBody.email,
           password: safeBody.password
-        } || {},
+        },
         {
           transaction
         }
@@ -200,7 +203,7 @@ const controller = {
       await (general as Model).update(
         {
           description: safeBody.description
-        } || {},
+        },
         {
           transaction
         }
@@ -211,7 +214,7 @@ const controller = {
           latitude: safeBody.latitude,
           longitude: safeBody.longitude,
           address: safeBody.address
-        } || {},
+        },
         {
           transaction
         }
@@ -273,6 +276,7 @@ const controller = {
     const { sanitizeCreate } = imageSanitize;
 
     try {
+      triggerInternalServerError(req);
       const { id } = req.params;
 
       const shelter = await Shelter.findByPk(id, {

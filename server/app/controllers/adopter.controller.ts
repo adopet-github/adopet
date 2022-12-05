@@ -14,14 +14,16 @@ import { AdopterFromDb, AnimalFromDb } from '../types/dboutputs';
 import { generateToken } from '../utils/jwt';
 import { genPasswordAndSalt } from '../utils/password';
 import { v4 as uuidv4 } from 'uuid';
+import triggerInternalServerError from '../utils/coverage';
 
 const { General, Adopter, User, Image, Animal, Adopter_Animal, Token } = models;
 
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
+    
     try {
+      triggerInternalServerError(req);
       const modelResponse = await Adopter.findAll({
         include: includes.adopter
       });
@@ -62,11 +64,11 @@ const controller = {
   create: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
     const { sanitizeCreate } = adopterSanitize;
-
+    
     const unsafeBody = req.body;
-
+    
     const safeBody = sanitizeCreate(unsafeBody);
-
+    
     const adopterPassword = safeBody.password;
     if (adopterPassword) {
       const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
@@ -75,6 +77,7 @@ const controller = {
     }
     const transaction = await sequelize.transaction();
     try {
+      triggerInternalServerError(req);
       const adopter = await General.create(
         {
           id: uuidv4(),
@@ -195,7 +198,7 @@ const controller = {
           has_pets: safeBody.has_pets,
           has_children: safeBody.has_children,
           time_at_home: safeBody.time_at_home
-        } || {},
+        },
         {
           transaction
         }
@@ -205,7 +208,7 @@ const controller = {
         {
           email: safeBody.email,
           password: safeBody.password
-        } || {},
+        },
         {
           transaction
         }
@@ -214,7 +217,7 @@ const controller = {
       await (general as Model).update(
         {
           description: safeBody.description
-        } || {},
+        },
         {
           transaction
         }
@@ -225,7 +228,7 @@ const controller = {
           latitude: safeBody.latitude,
           longitude: safeBody.longitude,
           address: safeBody.address
-        } || {},
+        },
         {
           transaction
         }
@@ -284,10 +287,11 @@ const controller = {
   },
   addManyImages: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
+    
     const { sanitizeCreate } = imageSanitize;
-
+    
     try {
+      triggerInternalServerError(req);
       const { id } = req.params;
 
       const adopter = await Adopter.findByPk(id, {
@@ -320,8 +324,9 @@ const controller = {
 
   likeAnimal: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
+    
     try {
+      triggerInternalServerError(req);
       const { adopterId, animalId } = req.params;
 
       const adopter = await Adopter.findByPk(adopterId);
@@ -362,8 +367,9 @@ const controller = {
 
   dislikeAnimal: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
+    
     try {
+      triggerInternalServerError(req);
       const { adopterId, animalId } = req.params;
 
       const adopter = await Adopter.findByPk(adopterId);

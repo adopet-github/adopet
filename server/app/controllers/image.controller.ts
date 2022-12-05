@@ -3,6 +3,7 @@ import { MyResponse } from '../types/server';
 import constants from '../utils/constants';
 import models from '../models';
 import { notFoundChecker } from '../utils/db';
+import triggerInternalServerError from '../utils/coverage';
 
 const { Image } = models;
 
@@ -11,6 +12,7 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
+      triggerInternalServerError(req);
       const modelResponse = await Image.findAll();
 
       response.status = constants.statusCodes.ok;
