@@ -13,6 +13,7 @@
     "@sveltejs/vite-plugin-svelte": "^1.1.0",
     "@tsconfig/svelte": "^3.0.0",
     "@zerodevx/svelte-toast": "^0.8.2",
+    "cypress": "^11.2.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-svelte3": "^4.0.0",
     "prettier-plugin-svelte": "^2.8.1",
