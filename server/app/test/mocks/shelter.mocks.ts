@@ -1,5 +1,6 @@
 const shelterMocks: {
   validCreateObject: { [key: string]: unknown };
+  validCreateObject2: { [key: string]: unknown };
   invalidObject: { [key: string]: unknown };
   validLogin: object;
   validLogin2: object;
@@ -9,6 +10,15 @@ const shelterMocks: {
   validCreateObject: {
     description: 'lol',
     email: 'shelter11@test.com',
+    password: 'Sheltersecurepassword12',
+    name: 'shelterify',
+    latitude: 2,
+    longitude: 4,
+    address: 'lol'
+  },
+  validCreateObject2: {
+    description: 'lol',
+    email: 'csuarezkeo@gmail.com',
     password: 'Sheltersecurepassword12',
     name: 'shelterify',
     latitude: 2,

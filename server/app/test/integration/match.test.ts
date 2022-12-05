@@ -205,83 +205,165 @@ describe('Matches', () => {
           expect(deleteAnimalResponse.status).toEqual(constants.statusCodes.ok);
         });
   
-        it('Should not be able to match an adopter if the user is not logged in', async () => {
-          const response = await request(server).put(
-            `/api/v1/animal/${animalId}/match/${adopterId}`
-          );
-  
-          expect(response.status).toEqual(constants.statusCodes.unAuthorized);
-          expect(response.body.message).toEqual('Unauthorized');
+        describe('Like', () => {
+          it('Should not be able to match an adopter if the user is not logged in', async () => {
+            const response = await request(server).put(
+              `/api/v1/animal/${animalId}/match/${adopterId}`
+            );
+    
+            expect(response.status).toEqual(constants.statusCodes.unAuthorized);
+            expect(response.body.message).toEqual('Unauthorized');
+          });
+          it('Should not be able to match an adopter if the user logged in is an adopter', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
+              .set('Authorization', 'Bearer ' + adopterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.unAuthorized);
+            expect(response.body.message).toEqual(
+              'You have to be a shelter to perform this operation'
+            );
+          });
+          it('Should not be able to match an adopter if the user logged in is his own shelter', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
+              .set('Authorization', 'Bearer ' + shelterToken2);
+    
+            expect(response.status).toEqual(constants.statusCodes.unAuthorized);
+            expect(response.body.message).toEqual(
+              'You can only perform this operation for your own shelter animals'
+            );
+          });
+          it('Should not be able to match an adopter if the animal does not exist', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${notFoundId}/match/${adopterId}`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.notFound);
+            expect(response.body.message).toEqual(
+              `Animal with id ${notFoundId} not found.`
+            );
+          });
+          it('Should not be able to match an adopter if the adopter does not exist', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/match/${notFoundId}`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.notFound);
+            expect(response.body.message).toEqual(
+              `Adopter with id ${notFoundId} not found.`
+            );
+          });
+          it('Should not be able to match an adopter if the animal id is not valid', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}1/match/${adopterId}`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.badRequest);
+            expect(response.body.message[0]).toEqual(
+              '"animalId" must be a valid GUID'
+            );
+          });
+          it('Should not be able to match an adopter if the adopter id is not valid', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/match/${adopterId}1`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.badRequest);
+            expect(response.body.message[0]).toEqual(
+              '"adopterId" must be a valid GUID'
+            );
+          });
+          it('Should not be able to match an adopter if the adopter does not like the animal', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.notFound);
+            expect(response.body.message).toEqual(
+              `The adopter with id ${adopterId} does not like animal with id ${animalId}`
+            );
+          });
         });
-        it('Should not be able to match an adopter if the user logged in is an adopter', async () => {
-          const response = await request(server)
-            .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
-            .set('Authorization', 'Bearer ' + adopterToken);
-  
-          expect(response.status).toEqual(constants.statusCodes.unAuthorized);
-          expect(response.body.message).toEqual(
-            'You have to be a shelter to perform this operation'
-          );
-        });
-        it('Should not be able to match an adopter if the user logged in is his own shelter', async () => {
-          const response = await request(server)
-            .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
-            .set('Authorization', 'Bearer ' + shelterToken2);
-  
-          expect(response.status).toEqual(constants.statusCodes.unAuthorized);
-          expect(response.body.message).toEqual(
-            'You can only perform this operation for your own shelter animals'
-          );
-        });
-        it('Should not be able to match an adopter if the animal does not exist', async () => {
-          const response = await request(server)
-            .put(`/api/v1/animal/${notFoundId}/match/${adopterId}`)
-            .set('Authorization', 'Bearer ' + shelterToken);
-  
-          expect(response.status).toEqual(constants.statusCodes.notFound);
-          expect(response.body.message).toEqual(
-            `Animal with id ${notFoundId} not found.`
-          );
-        });
-        it('Should not be able to match an adopter if the adopter does not exist', async () => {
-          const response = await request(server)
-            .put(`/api/v1/animal/${animalId}/match/${notFoundId}`)
-            .set('Authorization', 'Bearer ' + shelterToken);
-  
-          expect(response.status).toEqual(constants.statusCodes.notFound);
-          expect(response.body.message).toEqual(
-            `Adopter with id ${notFoundId} not found.`
-          );
-        });
-        it('Should not be able to match an adopter if the animal id is not valid', async () => {
-          const response = await request(server)
-            .put(`/api/v1/animal/${animalId}1/match/${adopterId}`)
-            .set('Authorization', 'Bearer ' + shelterToken);
-  
-          expect(response.status).toEqual(constants.statusCodes.badRequest);
-          expect(response.body.message[0]).toEqual(
-            '"animalId" must be a valid GUID'
-          );
-        });
-        it('Should not be able to match an adopter if the adopter id is not valid', async () => {
-          const response = await request(server)
-            .put(`/api/v1/animal/${animalId}/match/${adopterId}1`)
-            .set('Authorization', 'Bearer ' + shelterToken);
-  
-          expect(response.status).toEqual(constants.statusCodes.badRequest);
-          expect(response.body.message[0]).toEqual(
-            '"adopterId" must be a valid GUID'
-          );
-        });
-        it('Should not be able to match an adopter if the adopter does not like the animal', async () => {
-          const response = await request(server)
-            .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
-            .set('Authorization', 'Bearer ' + shelterToken);
-  
-          expect(response.status).toEqual(constants.statusCodes.notFound);
-          expect(response.body.message).toEqual(
-            `The adopter with id ${adopterId} does not like animal with id ${animalId}`
-          );
+        describe('Dislike', () => {
+          it('Should not be able to dislike an adopter if the user is not logged in', async () => {
+            const response = await request(server).put(
+              `/api/v1/animal/${animalId}/dislike/${adopterId}`
+            );
+    
+            expect(response.status).toEqual(constants.statusCodes.unAuthorized);
+            expect(response.body.message).toEqual('Unauthorized');
+          });
+          it('Should not be able to dislike an adopter if the user logged in is an adopter', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/dislike/${adopterId}`)
+              .set('Authorization', 'Bearer ' + adopterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.unAuthorized);
+            expect(response.body.message).toEqual(
+              'You have to be a shelter to perform this operation'
+            );
+          });
+          it('Should not be able to dislike an adopter if the user logged in is his own shelter', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/dislike/${adopterId}`)
+              .set('Authorization', 'Bearer ' + shelterToken2);
+    
+            expect(response.status).toEqual(constants.statusCodes.unAuthorized);
+            expect(response.body.message).toEqual(
+              'You can only perform this operation for your own shelter animals'
+            );
+          });
+          it('Should not be able to dislike an adopter if the animal does not exist', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${notFoundId}/dislike/${adopterId}`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.notFound);
+            expect(response.body.message).toEqual(
+              `Animal with id ${notFoundId} not found.`
+            );
+          });
+          it('Should not be able to dislike an adopter if the adopter does not exist', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/dislike/${notFoundId}`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.notFound);
+            expect(response.body.message).toEqual(
+              `Adopter with id ${notFoundId} not found.`
+            );
+          });
+          it('Should not be able to dislike an adopter if the animal id is not valid', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}1/dislike/${adopterId}`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.badRequest);
+            expect(response.body.message[0]).toEqual(
+              '"animalId" must be a valid GUID'
+            );
+          });
+          it('Should not be able to dislike an adopter if the adopter id is not valid', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/dislike/${adopterId}1`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.badRequest);
+            expect(response.body.message[0]).toEqual(
+              '"adopterId" must be a valid GUID'
+            );
+          });
+          it('Should not be able to dislike an adopter if the adopter does not like the animal', async () => {
+            const response = await request(server)
+              .put(`/api/v1/animal/${animalId}/dislike/${adopterId}`)
+              .set('Authorization', 'Bearer ' + shelterToken);
+    
+            expect(response.status).toEqual(constants.statusCodes.notFound);
+            expect(response.body.message).toEqual(
+              `The adopter with id ${adopterId} does not like animal with id ${animalId}`
+            );
+          });
         });
       });
     });
@@ -345,31 +427,56 @@ describe('Matches', () => {
         expect(deleteAnimalResponse.status).toEqual(constants.statusCodes.ok);
       });
 
-      it('Should match an adopter if the logged in user is his own shelter', async () => {
-        const response = await request(server)
-          .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
-          .set('Authorization', 'Bearer ' + shelterToken);
-
-        expect(response.status).toEqual(constants.statusCodes.ok);
-        expect(response.body.message).toEqual(
-          'Adopter matched successfully!'
-        );
+      describe('Like', () => {
+        it('Should match an adopter if the logged in user is his own shelter', async () => {
+          const response = await request(server)
+            .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
+            .set('Authorization', 'Bearer ' + shelterToken);
+  
+          expect(response.status).toEqual(constants.statusCodes.ok);
+          expect(response.body.message).toEqual(
+            'Adopter matched successfully!'
+          );
+        });
+        it('Should match an adopter if the logged in user is an admin', async () => {
+          const response = await request(server)
+            .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
+            .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+  
+          expect(response.status).toEqual(constants.statusCodes.ok);
+          expect(response.body.message).toEqual(
+            'Adopter matched successfully!'
+          );
+  
+          const coveragePurposedRetrieve = await request(server)
+            .get(`/api/v1/shelter/${shelterId}/matches`)
+            .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+  
+          expect(coveragePurposedRetrieve.status).toEqual(constants.statusCodes.ok);
+        });
       });
-      it('Should match an adopter if the logged in user is an admin', async () => {
-        const response = await request(server)
-          .put(`/api/v1/animal/${animalId}/match/${adopterId}`)
-          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
 
-        expect(response.status).toEqual(constants.statusCodes.ok);
-        expect(response.body.message).toEqual(
-          'Adopter matched successfully!'
-        );
-
-        const coveragePurposedRetrieve = await request(server)
-          .get(`/api/v1/shelter/${shelterId}/matches`)
-          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
-
-        expect(coveragePurposedRetrieve.status).toEqual(constants.statusCodes.ok);
+      describe('Dislike', () => {
+        it('Should dislike an adopter if the logged in user is his own shelter', async () => {
+          const response = await request(server)
+            .put(`/api/v1/animal/${animalId}/dislike/${adopterId}`)
+            .set('Authorization', 'Bearer ' + shelterToken);
+  
+          expect(response.status).toEqual(constants.statusCodes.ok);
+          expect(response.body.message).toEqual(
+            'Adopter disliked successfully!'
+          );
+        });
+        it('Should dislike an adopter if the logged in user is an admin', async () => {
+          const response = await request(server)
+            .put(`/api/v1/animal/${animalId}/dislike/${adopterId}`)
+            .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+  
+          expect(response.status).toEqual(constants.statusCodes.ok);
+          expect(response.body.message).toEqual(
+            'Adopter disliked successfully!'
+          );
+        });
       });
     });
   });

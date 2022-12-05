@@ -13,6 +13,7 @@ import dataParser from '../utils/dataparser';
 import { v4 as uuidv4 } from 'uuid';
 import { decryptToken } from '../utils/jwt';
 import { getDistance } from 'geolib';
+import triggerInternalServerError from '../utils/coverage';
 
 const { General, Animal, Image, Shelter, Adopter, Adopter_Animal } = models;
 
@@ -20,6 +21,7 @@ const controller = {
   retrieveAll: async (req: MyRequest, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
     try {
+      triggerInternalServerError(req);
       if (req.query.distance === undefined) {
         const modelResponse = await Animal.findAll({
           include: includes.animal
@@ -117,14 +119,15 @@ const controller = {
   create: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
     const { sanitizeCreate } = animalSanitize;
-
+    
     const unsafeBody = req.body;
-
+    
     const safeBody = sanitizeCreate(unsafeBody);
-
+    
     const transaction = await sequelize.transaction();
-
+    
     try {
+      triggerInternalServerError(req);
       const shelter = await Shelter.findByPk(safeBody.shelterId);
 
       notFoundChecker(
@@ -195,7 +198,7 @@ const controller = {
           name: safeBody.name,
           age: safeBody.age,
           weight: safeBody.weight
-        } || {},
+        },
         {
           transaction
         }
@@ -204,7 +207,7 @@ const controller = {
       await (general as Model).update(
         {
           description: safeBody.description
-        } || {},
+        },
         {
           transaction
         }
@@ -256,10 +259,11 @@ const controller = {
   },
   addManyImages: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
+    
     const { sanitizeCreate } = imageSanitize;
-
+    
     try {
+      triggerInternalServerError(req);
       const { id } = req.params;
 
       const animal = await Animal.findByPk(id, {

@@ -77,7 +77,37 @@ describe(`${model} controller`, () => {
         expect(body.message).toEqual(`${model}s retrieved successfully!`);
         expect(Array.isArray(body.data)).toBeTruthy();
       });
+
+      it(`Should be able to retrieve all ${model.toLowerCase()}s by distance if adopter`, async () => {
+        const loginResponse = await request(server)
+          .post('/api/v1/auth/login')
+          .send(animalMocks.validAdopterLogin);
+
+        expect(loginResponse.status).toEqual(constants.statusCodes.ok);
+        expect(loginResponse.body).toHaveProperty('token');
+
+        const userToken = loginResponse.body.token;
+
+        const response = await request(server)
+          .get(`/api/v1/${model.toLowerCase()}?distance=5`)
+          .set('Authorization', 'Bearer ' + userToken);
+        const { status, body } = response;
+
+        expect(status).toEqual(constants.statusCodes.ok);
+        expect(body.message).toEqual(`${model}s retrieved successfully!`);
+        expect(Array.isArray(body.data)).toBeTruthy();
+      });
     });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in retrieveAll', async () => {
+        const response = await request(server)
+          .get('/api/v1/animal?ise=yes')
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(response.status).toEqual(500);
+      });
+    })
   });
 
   describe('Retrieve one', () => {
@@ -323,6 +353,17 @@ describe(`${model} controller`, () => {
         expect(responseDelete.body.message).toEqual(
           `${model} deleted succesfully!`
         );
+      });
+    });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in create', async () => {
+        const response = await request(server)
+          .post('/api/v1/animal?ise=yes')
+          .send({...animalMocks.validCreateObject, shelterId})
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(response.status).toEqual(500);
       });
     });
   });

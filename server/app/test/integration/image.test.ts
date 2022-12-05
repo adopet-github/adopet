@@ -231,6 +231,17 @@ describe('Images', () => {
         });
       }
     });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in add many images', async () => {
+        const response = await request(server)
+          .put(`/api/v1/adopter/${adopter1Id}/images?ise=yes`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
+          .send(imageMocks.validCreateArray1);
+
+        expect(response.status).toEqual(500);
+      });
+    })
   });
 
   describe('Shelter', () => {
@@ -388,6 +399,17 @@ describe('Images', () => {
             });
         });
       }
+    });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in add many images', async () => {
+        const response = await request(server)
+          .put(`/api/v1/shelter/${shelter1Id}/images?ise=yes`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
+          .send(imageMocks.validCreateArray1);
+
+        expect(response.status).toEqual(500);
+      });
     });
   });
 
@@ -574,6 +596,17 @@ describe('Images', () => {
         });
       }
     });
+
+    describe('Internal server error', () => {
+      it('Should throw internal server error in add many images', async () => {
+        const response = await request(server)
+          .put(`/api/v1/animal/${animalId}/images?ise=yes`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
+          .send(imageMocks.validCreateArray1);
+
+        expect(response.status).toEqual(500);
+      });
+    });
   });
 
   describe('Retrieve all', () => {
@@ -585,6 +618,14 @@ describe('Images', () => {
       const { status, body } = response;
       expect(status).toEqual(constants.statusCodes.ok);
       expect(body.message).toEqual(`${model}s retrieved successfully!`);
+    });
+
+    it('Should throw internal server error in retrieveAll', async () => {
+      const response = await request(server)
+        .get('/api/v1/image?ise=yes')
+        .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+      expect(response.status).toEqual(500);
     });
   });
 

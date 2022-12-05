@@ -10,6 +10,7 @@ import includes from '../utils/includes';
 import { AdopterFromDb, ShelterFromDb } from '../types/dboutputs';
 import { v4 as uuidv4 } from 'uuid';
 import { Adopter, Shelter } from '../types/models';
+import triggerInternalServerError from '../utils/coverage';
 
 const { User, Adopter, Shelter, Token } = models;
 
@@ -23,10 +24,13 @@ const controller = {
         include: [relationships.user.adopter, relationships.user.shelter]
       });
 
-      const adopter =
-        user !== null ? (user as unknown as { adopter: string }).adopter : null;
-      const shelter =
-        user !== null ? (user as unknown as { shelter: string }).shelter : null;
+      let adopter: string | null = null;
+      let shelter: string | null = null;
+
+      if (user !== null) {
+        adopter = (user as unknown as { adopter: string }).adopter;
+        shelter = (user as unknown as { shelter: string }).shelter;
+      }
 
       const type = adopter === null && shelter !== null ? 'shelter' : 'adopter';
 
@@ -110,12 +114,12 @@ const controller = {
 
   logout: async (req: MyRequest, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-
+    
     try {
-      const rowsDeleted = await Token.destroy({
+      triggerInternalServerError(req);
+      await Token.destroy({
         where: { content: req.token }
       });
-      if (rowsDeleted === 0) throw new Error('No tokens were deleted');
 
       response.status = constants.statusCodes.ok;
       response.message = 'User logged out successfully!';
@@ -169,10 +173,6 @@ const controller = {
           });
           
           response.token = (token as unknown as { content: string }).content;
-        } else {
-          response.status = constants.statusCodes.badRequest;
-          response.message = 'Shelters can not log in with Google';
-          throw new Error('Adopter is null');
         }
 
         response.status = constants.statusCodes.ok;
