@@ -4,6 +4,8 @@ import { server } from '../../app';
 dotenv.config();
 import imageMocks from '../mocks/image.mocks';
 import constants from '../../utils/constants';
+import adopterMocks from '../mocks/adopter.mocks';
+import shelterMocks from '../mocks/shelter.mocks';
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN as string;
 
 const model = 'Image';
@@ -123,6 +125,65 @@ describe('Images', () => {
         expect(response.body.message).toEqual(
           `Adopter with id ${notFoundId} not found.`
         );
+      });
+
+      it(`Should not be able to add ${model.toLowerCase()}s if the ones added plus the ones the entity has are more than 4`, async () => {
+        const adopterCreateReponse = await request(server)
+          .post('/api/v1/adopter')
+          .send(adopterMocks.validCreateObject);
+
+        expect(adopterCreateReponse.status).toEqual(constants.statusCodes.created);
+        const adopterId = adopterCreateReponse.body.data;
+
+        const addImages1 = await request(server)
+          .put(`/api/v1/adopter/${adopterId}/images`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
+          .send(imageMocks.validCreateArray2);
+
+        expect(addImages1.status).toEqual(constants.statusCodes.ok);
+
+        const addImages2 = await request(server)
+          .put(`/api/v1/adopter/${adopterId}/images`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
+          .send(imageMocks.validCreateArray3);
+
+        expect(addImages2.status).toEqual(constants.statusCodes.badRequest);
+        expect(addImages2.body.message).toEqual('A Adopter can not have more than 4 images');
+
+        const deleteAdopterResponse = await request(server)
+          .delete('/api/v1/adopter/' + adopterId)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(deleteAdopterResponse.status).toEqual(constants.statusCodes.ok);
+      });
+      it(`Should not be able to add ${model.toLowerCase()}s if the ones added plus the ones the entity has are more than 4`, async () => {
+        const shelterCreateReponse = await request(server)
+          .post('/api/v1/shelter')
+          .send(shelterMocks.validCreateObject);
+
+        expect(shelterCreateReponse.status).toEqual(constants.statusCodes.created);
+        const shelterId = shelterCreateReponse.body.data;
+
+        const addImages1 = await request(server)
+          .put(`/api/v1/shelter/${shelterId}/images`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
+          .send(imageMocks.validCreateArray2);
+
+        expect(addImages1.status).toEqual(constants.statusCodes.ok);
+
+        const addImages2 = await request(server)
+          .put(`/api/v1/shelter/${shelterId}/images`)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN)
+          .send(imageMocks.validCreateArray3);
+
+        expect(addImages2.status).toEqual(constants.statusCodes.badRequest);
+        expect(addImages2.body.message).toEqual('A Shelter can not have more than 4 images');
+
+        const deleteAdopterResponse = await request(server)
+          .delete('/api/v1/shelter/' + shelterId)
+          .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
+
+        expect(deleteAdopterResponse.status).toEqual(constants.statusCodes.ok);
       });
     });
 

@@ -167,9 +167,11 @@ const controller = {
             id: uuidv4(),
             content: generateToken({ id: adopter.id, type: 'adopter' })
           });
-
+          
           response.token = (token as unknown as { content: string }).content;
         } else {
+          response.status = constants.statusCodes.badRequest;
+          response.message = 'Shelters can not log in with Google';
           throw new Error('Adopter is null');
         }
 
