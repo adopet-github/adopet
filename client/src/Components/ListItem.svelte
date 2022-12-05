@@ -60,7 +60,9 @@
   </div>
 {/if}
 <div class="list-item glass">
-  <ProfilePic img={animal.images[0] ? animal.images[0].url : ''} />
+  <div class="img-container">
+    <ProfilePic img={animal.images[0] ? animal.images[0].url : ''} />
+  </div>
   <div class="name-id-cont">
     <p class="animal-name">{animal.name}</p>
     <p class="animal-id">{animal.id}</p>
@@ -130,6 +132,13 @@
     text-align: center;
     color: var(--red);
     font-weight: 900;
+  }
+
+  .img-container {
+    display: flex;
+    height: 60px;
+    width: 60px;
+    border-radius: 25px;
   }
 
   .name-id-cont {

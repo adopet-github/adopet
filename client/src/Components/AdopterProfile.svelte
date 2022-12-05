@@ -5,6 +5,7 @@
   import { acceptLike, rejectLike } from '../Services/animal';
   import { animalLikes } from '../Stores/animalLikes';
   import { dashView } from '../Stores/dashView';
+  import ProfilePic from './ProfilePic.svelte';
 
   const handleAcceptLike = async () => {
     const res = await acceptLike(
@@ -41,13 +42,6 @@
   };
 </script>
 
-<svelte:head>
-  <link
-    rel="stylesheet"
-    href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
-  />
-</svelte:head>
-
 <div class="card glass glass1">
   {#if $viewAdopterProfile.adopter_animal}
     <div class="pet-match-banner">
@@ -66,13 +60,13 @@
   <div class="imgs-cont">
     {#if $viewAdopterProfile.images.length}
       {#each $viewAdopterProfile.images as image}
-        <img class="img" src={image.url} alt={image.caption} />
+        <div class="img"><img src={image.url} alt={image.caption} /></div>
       {/each}
     {:else}
       <div class="no-images">
-        <i class="uil uil-user-circle" />
+        <div class="no-img"><ProfilePic img={''} /></div>
+        <p>{$viewAdopterProfile.first_name} doesn't have any photos yet...</p>
       </div>
-      <p>{$viewAdopterProfile.first_name} doesn't have any photos yet...</p>
     {/if}
   </div>
   <div class="stat-cont">
@@ -123,6 +117,11 @@
     overflow: hidden;
   }
 
+  h2,
+  p {
+    color: var(--lavender);
+  }
+
   .heading-cont {
     display: flex;
     flex-direction: column;
@@ -130,34 +129,39 @@
   }
 
   .imgs-cont {
+    max-width: 80%;
+    border-radius: 1rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
-    overflow-x: auto;
-    width: 80%;
-    color: #9897a0;
-  }
-  .img,
-  .no-images {
-    height: 10rem;
-    width: 10rem;
-    background-color: var(--grey);
-    border-radius: 20px;
-    display: grid;
-    place-items: center;
   }
 
-  .no-images i {
-    color: white;
-    font-size: 7.5rem;
+  .no-images {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
   }
+
+  .no-images p {
+    font-size: 0.8rem;
+    color: var(--lavender);
+  }
+
+  .no-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+  }
+
   .stat-cont {
     display: flex;
     width: 80%;
     align-items: flex-start;
     color: var(--lavender);
     justify-content: space-between;
+    gap: 1rem;
   }
   .btns-cont {
     display: flex;
@@ -166,11 +170,24 @@
     gap: 1rem;
   }
   .description {
-    max-width: 20rem;
+    max-width: 50%;
   }
 
   p span {
     font-weight: 900;
     color: var(--red);
+  }
+
+  .img {
+    /* flex: 1; */
+    border-radius: 1rem;
+  }
+
+  img {
+    max-height: 10rem;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    aspect-ratio: 1;
   }
 </style>

@@ -17,13 +17,6 @@
 
   let fileInput;
 
-  // const dispatch = createEventDispatcher();
-
-  // const handleDelete = (e) => {
-  //   dispatch('deleteImage', {
-  //     id: e.detail.id
-  //   });
-  // };
   export let button = true;
   export let images = [];
   export let type = 'animal';
@@ -50,28 +43,27 @@
     let serverRes;
     if (type === 'profile') {
       if (accountType === 'adopter') {
+        // ADOPTER
         serverRes = await addAdopterImage(image, $userCredentials.id);
-        console.log(serverRes);
       } else {
+        // SHELTER
         serverRes = await addShelterImage(image, $userCredentials.id);
-        console.log(serverRes);
       }
-
       userCredentials.update((prev) => ({
         ...prev,
-        images: [...prev.images, { ...image, id: serverRes.data.id }]
+        images: [...prev.images, { ...image, id: serverRes.data[0].id }]
       }));
     } else {
       if ($selectedAnimal.id) {
+        // EXISITNG ANIMAL
         const serverRes = await addAnimalImage(image, $selectedAnimal.id);
-        console.log(serverRes);
         selectedAnimal.update((prev) => ({
           ...prev,
-          images: [...prev.images, { ...image, id: serverRes.data.id }]
+          images: [...prev.images, { ...image, id: serverRes.data[0].id }]
         }));
       } else {
+        // ADDING ANIMAL
         images = [...images, image];
-        console.log(images);
       }
     }
     showAddImage = false;
@@ -80,17 +72,21 @@
 
   let imageIdToDelete;
   let imageUrlToDelete;
+  let imageIdIfNotSaved;
   let showDeleteImage = false;
 
   const handleDeleteImageOpen = (e) => {
     showDeleteImage = true;
     imageIdToDelete = e.detail.id;
     imageUrlToDelete = e.detail.url;
+    console.log(imageIdToDelete);
     console.log(imageUrlToDelete);
+    console.log('first', images);
   };
 
   const handleImageDelete = async () => {
     if (type === 'animal') {
+      // EXISTING ANIMAL
       if (imageIdToDelete) {
         const res = await deleteImage(imageIdToDelete);
         console.log(res);
@@ -99,15 +95,23 @@
           images: prev.images.filter((image) => image.id !== imageIdToDelete)
         }));
       } else {
+        // DELETES IF DELETE PRESSED BEFORE UPLOAD IS SAVE
         images = images.filter((element) => element.url != imageUrlToDelete);
       }
     } else {
-      const res = await deleteImage(imageIdToDelete);
-      console.log(res);
-      userCredentials.update((prev) => ({
-        ...prev,
-        images: prev.images.filter((image) => image.id !== imageIdToDelete)
-      }));
+      // SHELTER & ADOPTER AFTER SAVE
+      if (imageIdToDelete) {
+        const res = await deleteImage(imageIdToDelete);
+        console.log(res);
+        userCredentials.update((prev) => ({
+          ...prev,
+          images: prev.images.filter((image) => image.id !== imageIdToDelete)
+        }));
+      } else {
+        // NEED TO DEAL WITH SHELTER & ADOPTER BEFORE SAVE
+        console.log('final', images);
+        images = images.filter((element) => element.url != imageUrlToDelete);
+      }
     }
     showDeleteImage = false;
   };

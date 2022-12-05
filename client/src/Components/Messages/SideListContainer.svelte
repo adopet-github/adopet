@@ -31,9 +31,15 @@
 
 <div class="sidebar-list">
   {#if $dashView[0] === 'matches'}
-    {#each $shelterMatches as match}
-      <MsgListItem {match} />
-    {/each}
+    {#if $shelterMatches.length}
+      {#each $shelterMatches as match}
+        <MsgListItem {match} />
+      {/each}
+    {:else}
+      <div class="no-likes">
+        <p>No matches at the moment 🐈🐕</p>
+      </div>
+    {/if}
   {:else if $animalLikes.length}
     {#each $animalLikes as like}
       <LikeListItem {like} />

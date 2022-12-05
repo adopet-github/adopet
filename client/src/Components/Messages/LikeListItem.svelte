@@ -14,21 +14,21 @@
 
 <button on:click={handleAdopterProfileView}>
   <div class="list-item">
-    <span
-      ><ProfilePic
+    <div class="img-container">
+      <ProfilePic
         img={like.adopter.images[0] ? like.adopter.images[0].url : ''}
-      /></span
-    >
+      />
+    </div>
     <div class="match-details">
       <p class="pet-name">{like.animal.name} was liked by</p>
       <p class="match-username">{like.adopter.first_name}</p>
       <p class="match-date"><Time timestamp={like.date} relative /></p>
     </div>
-    <span
-      ><ProfilePic
+    <div class="img-container img-animal">
+      <ProfilePic
         img={like.animal.images[0] ? like.animal.images[0].url : ''}
-      /></span
-    >
+      />
+    </div>
   </div>
 </button>
 
@@ -51,6 +51,13 @@
   .list-item:hover {
     background-color: rgba(0, 0, 0, 0.2);
     mix-blend-mode: multiply;
+  }
+
+  .img-container {
+    display: flex;
+    height: 60px;
+    width: 60px;
+    border-radius: 25px;
   }
 
   .match-details {
@@ -86,6 +93,13 @@
     color: var(--lavender);
   }
 
+  @media only screen and (max-width: 1280px) {
+    .img-container {
+      height: 40px;
+      width: 40px;
+    }
+  }
+
   @media only screen and (max-width: 992px) {
     p {
       font-size: 0.8rem;
@@ -101,7 +115,7 @@
       color: var(--lavender);
     }
 
-    span {
+    .img-animal {
       display: none;
     }
   }

@@ -2,15 +2,11 @@
   // COMPONENTS
   import CloseButton from './CloseButton.svelte';
   import Button from './Button.svelte';
-  import ImagesList from './Images/ImagesList.svelte';
-  import Image from './Images/Image.svelte';
 
   // UTILS
   import { selectedAnimal } from '../Stores/selectedAnimal';
   import { toast, SvelteToast } from '@zerodevx/svelte-toast';
   import AnimalProfileEdit from './AnimalProfileEdit.svelte';
-
-  let { name, description, age, weight } = $selectedAnimal;
 
   let editMode = false;
   console.log($selectedAnimal.images);
@@ -91,7 +87,6 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    flex-wrap: wrap;
   }
 
   .stat-cont {
@@ -113,6 +108,12 @@
   .img {
     /* flex: 1; */
     border-radius: 1rem;
+  }
+
+  h1,
+  h2,
+  p {
+    color: var(--lavender);
   }
 
   img {

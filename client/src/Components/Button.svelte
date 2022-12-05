@@ -38,7 +38,7 @@
   button.secondary {
     background: #e7e7e7;
     background: linear-gradient(180deg, #e7e7e7 0%, #afafaf 100%);
-    color: var(--black);
+    color: var(--lavender);
   }
   button.secondary:hover {
     background: #afafaf;

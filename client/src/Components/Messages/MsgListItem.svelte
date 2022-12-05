@@ -47,11 +47,11 @@
 {#if match}
   <button on:click={handleGoToChatView}>
     <div class="list-item">
-      <span
-        ><ProfilePic
+      <div class="img-container">
+        <ProfilePic
           img={match.adopter.images[0] ? match.adopter.images[0].url : ''}
-        /></span
-      >
+        />
+      </div>
       <div class="msg-details">
         <p class="msg-username">
           {match.adopter.first_name} → {match.animal.name}
@@ -61,11 +61,11 @@
         </p>
         <p class="msg-date"><Time timestamp={msgDate} relative /></p>
       </div>
-      <span
-        ><ProfilePic
+      <div class="img-container img-animal">
+        <ProfilePic
           img={match.animal.images[0] ? match.animal.images[0].url : ''}
-        /></span
-      >
+        />
+      </div>
     </div>
   </button>
 {/if}
@@ -89,6 +89,13 @@
   .list-item:hover {
     background-color: rgba(0, 0, 0, 0.2);
     mix-blend-mode: multiply;
+  }
+
+  .img-container {
+    display: flex;
+    height: 60px;
+    width: 60px;
+    border-radius: 25px;
   }
 
   .msg-details {
@@ -122,6 +129,10 @@
       font-size: 0.8rem;
       text-align: left;
     }
+    .img-container {
+      height: 40px;
+      width: 40px;
+    }
   }
 
   @media only screen and (max-width: 992px) {
@@ -138,7 +149,7 @@
       color: var(--lavender);
     }
 
-    span {
+    .img-animal {
       display: none;
     }
   }
