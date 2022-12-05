@@ -6,6 +6,7 @@
   import { animalLikes } from '../Stores/animalLikes';
   import { dashView } from '../Stores/dashView';
   import ProfilePic from './ProfilePic.svelte';
+  import { shelterMatches } from '../Stores/shelterMatches';
 
   const handleAcceptLike = async () => {
     const res = await acceptLike(
@@ -20,6 +21,14 @@
             obj.animal.id !== $viewAdopterProfile.adopter_animal.id
         );
       });
+      const animal = { ...$viewAdopterProfile.adopter_animal };
+      const adopter = { ...$viewAdopterProfile };
+      delete adopter.adopter_animal;
+      const newMatch = {
+        adopter,
+        animal
+      };
+      shelterMatches.update((prev) => [...prev, newMatch]);
     }
     dashView.set(['likes', 'allAnimals']);
   };
