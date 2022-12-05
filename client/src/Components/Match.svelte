@@ -1,15 +1,44 @@
 <script lang="ts">
+  import { retrieveByMatch } from '../Services/message';
+  import { dashView } from '../Stores/dashView';
+  import { messagesByMatch } from '../Stores/messagesByMatch';
+  import { userCredentials } from '../Stores/userCredentials';
+  import { viewMatchChat } from '../Stores/viewMatchChat';
+
   let newMessage = Math.random() > 0.5;
 
-  const handleChatChange = () => {
-    console.log('chat changed');
-  };
+  // const handleChatChange = () => {
+  //   console.log('chat changed');
+  // };
 
   export let match;
+
+  const handleGoToChatView = async () => {
+    let matchToSave = {
+      adopter: $userCredentials,
+      animal: match,
+      date: new Date()
+    };
+    viewMatchChat.set(matchToSave);
+    console.log(matchToSave);
+    // dashView.set(['matches', 'chat']);
+    let adopter = $userCredentials;
+    let adopterId = $userCredentials.id;
+    let animalId = match.id;
+    console.log('console', adopterId, animalId);
+    const res = await retrieveByMatch({ adopterId, animalId });
+    if (res.status === 200) {
+      messagesByMatch.set({
+        animalId,
+        adopterId,
+        messages: res.data
+      });
+    }
+  };
 </script>
 
 {#if match}
-  <button class="match" on:click={handleChatChange}>
+  <button class="match" on:click={handleGoToChatView}>
     <div class="img-cont">
       <img src={match.images[0].url} alt="animal" />
       <div class="overlay" />

@@ -7,29 +7,16 @@
   import { userCredentials } from '../Stores/userCredentials';
   import { shelterMatches } from '../Stores/shelterMatches';
   import { animalLikes } from '../Stores/animalLikes';
-
   import ProfilePic from './ProfilePic.svelte';
 
   export let animal: ShelterAnimal;
 
-  console.log('animal id', animal.name, animal.id);
-
-  let totalMatches;
-  let totalLikes;
-
-  const calculatePetMatches = () => {
-    totalMatches = $shelterMatches.filter((match) => {
-      return match.animal.id === animal.id;
-    });
-  };
-  const calculatePetLikes = () => {
-    totalLikes = $animalLikes.filter((match) => {
-      return match.animal.id === animal.id;
-    });
-  };
-
-  calculatePetMatches();
-  calculatePetLikes();
+  $: totalMatches = $shelterMatches.filter((match) => {
+    return match.animal.id === animal.id;
+  });
+  $: totalLikes = $animalLikes.filter((match) => {
+    return match.animal.id === animal.id;
+  });
 
   let showDeleteWarning = false;
 

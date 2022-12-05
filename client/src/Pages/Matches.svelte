@@ -4,6 +4,10 @@
   import Match from '../Components/Match.svelte';
   import { getAdopterMatches } from '../Services/adopter';
   import { userCredentials } from '../Stores/userCredentials';
+  import { dashView } from '../Stores/dashView';
+  import { viewMatchChat } from '../Stores/viewMatchChat';
+  import { retrieveByMatch } from '../Services/message';
+  import { messagesByMatch } from '../Stores/messagesByMatch';
 
   let matches = [];
 
@@ -13,6 +17,7 @@
     if (res.status === 200) {
       matches = res.data;
     }
+    console.log(matches);
   });
 </script>
 
@@ -50,7 +55,7 @@
   .matches-container {
     display: flex;
     gap: 1rem;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 
   .chat {

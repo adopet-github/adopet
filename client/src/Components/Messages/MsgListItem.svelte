@@ -15,8 +15,6 @@
 
   export let match;
 
-  // console.log('match: ', match);
-
   const handleGoToChatView = async () => {
     viewMatchChat.set(match);
     dashView.set(['matches', 'chat']);
@@ -24,7 +22,11 @@
     let animalId = $viewMatchChat.animal.id;
     const res = await retrieveByMatch({ adopterId, animalId });
     if (res.status === 200) {
-      messagesByMatch.set(res.data);
+      messagesByMatch.set({
+        adopterId,
+        animalId,
+        messages: res.data
+      });
     }
   };
 </script>

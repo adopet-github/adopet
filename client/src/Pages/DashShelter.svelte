@@ -12,6 +12,7 @@
   import { animalLikes } from '../Stores/animalLikes';
   import { shelterMatches } from '../Stores/shelterMatches';
   import AddPet from './AddPet.svelte';
+  import { onMount } from 'svelte';
 
   const navigate = useNavigate();
 
@@ -24,6 +25,10 @@
   const handleAddPet = () => {
     $dashView[1] = 'addPet';
   };
+
+  onMount(() => {
+    console.log('here', $animalLikes);
+  });
 </script>
 
 <div class="main-container">

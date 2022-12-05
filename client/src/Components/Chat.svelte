@@ -12,10 +12,12 @@
   import { dashView } from '../Stores/dashView';
   import { viewAdopterProfile } from '../Stores/viewAdopterProfile';
   import ProfilePic from './ProfilePic.svelte';
+  import { userCredentials } from '../Stores/userCredentials';
 
   let chat;
   let autoscroll;
   let value = '';
+  let accountType = $userCredentials.house_type ? 'adopter' : 'shelter';
 
   const socket = io('http://localhost:4000');
 
@@ -23,7 +25,19 @@
 
   socket.on('message', (msg) => {
     console.log('from socket:  ', msg);
-    messagesByMatch.set($messagesByMatch.concat(msg));
+
+    if (
+      msg.adopterId !== $messagesByMatch.adopterId ||
+      msg.animalId !== $messagesByMatch.animalId
+    )
+      return;
+    messagesByMatch.update((prev) => {
+      return {
+        ...prev,
+        messages: [...prev.messages, msg]
+      };
+    });
+    console.log($messagesByMatch);
   });
 
   beforeUpdate(() => {
@@ -40,7 +54,7 @@
       const content = event.target.value;
       if (!content) return;
       let message: Message = {
-        author: 'shelter',
+        author: accountType,
         content,
         adopterId: $viewMatchChat.adopter.id,
         animalId: $viewMatchChat.animal.id
@@ -53,7 +67,7 @@
       const content = value;
       if (!content) return;
       let message: Message = {
-        author: 'shelter',
+        author: accountType,
         content,
         adopterId: $viewMatchChat.adopter.id,
         animalId: $viewMatchChat.animal.id
@@ -79,7 +93,6 @@
               : ''}
           /></button
         >
-        <!-- <div class="dummy-img" /> -->
       </div>
       <p class="chat-title">
         {$viewMatchChat.adopter.first_name}
@@ -89,9 +102,9 @@
       <span><CloseButton closeTo={'animalList'} /></span>
     </div>
     <div class="chat-content" bind:this={chat}>
-      {#each $messagesByMatch as message}
-        {#if message.author === 'shelter'}
-          <div class="shelter-msg">
+      {#each $messagesByMatch.messages as message}
+        {#if message.author === accountType}
+          <div class="account-msg">
             <p>{message.content}</p>
             <p class="timestamp">
               <Time
@@ -103,7 +116,7 @@
             </p>
           </div>
         {:else}
-          <div class="adopter-msg">
+          <div class="other-msg">
             <p>{message.content}</p>
             <p class="timestamp">
               <Time
@@ -177,8 +190,8 @@
     padding: 0.5rem 0;
   }
 
-  .adopter-msg,
-  .shelter-msg {
+  .other-msg,
+  .account-msg {
     background-color: var(--lightgrey);
     max-width: 50%;
     min-width: 15%;
@@ -187,7 +200,7 @@
     align-self: flex-start;
   }
 
-  .shelter-msg {
+  .account-msg {
     align-self: flex-end;
     background-color: var(--red);
     color: var(--white);
@@ -223,6 +236,9 @@
   button {
     background: none;
     width: 100%;
+    display: flex;
     height: 100%;
+    justify-content: center;
+    align-items: center;
   }
 </style>

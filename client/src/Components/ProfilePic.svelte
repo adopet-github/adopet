@@ -20,6 +20,8 @@
   .img-container {
     min-height: 4rem;
     min-width: 4rem;
+    height: 4rem;
+    width: 4rem;
     border-radius: 50%;
     background-size: cover;
   }
@@ -28,6 +30,8 @@
     .img-container {
       min-height: 2.5rem;
       min-width: 2.5rem;
+      height: 2.5rem;
+      width: 2.5rem;
       /* border-radius: 25px; */
     }
   }
