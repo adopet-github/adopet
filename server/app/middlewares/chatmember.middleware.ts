@@ -19,6 +19,7 @@ export default async function chatMemberMiddleware(
     id: string;
     type: AccountTypes;
   };
+
   try {
     const { adopterId, animalId } = req.params;
 
@@ -27,6 +28,7 @@ export default async function chatMemberMiddleware(
     notFoundChecker(animal, animalId, response, 'Animal');
 
     if (
+      decryptedToken.type === AccountTypes.ADMIN ||
       decryptedToken.id === adopterId ||
       decryptedToken.id ===
         (animal as unknown as { shelterId: string }).shelterId
@@ -34,12 +36,11 @@ export default async function chatMemberMiddleware(
       next();
       return;
     }
+    response.status = constants.statusCodes.unAuthorized;
+    response.message = 'You should be in the chat to send or get chat messages';
   } catch (err) {
     console.warn('ERROR AT CHATMEMBER-MIDDLEWARE-chatMemberMiddleware ', err);
   }
-
-  response.status = constants.statusCodes.unAuthorized;
-  response.message = 'You should be in the chat to send or get chat messages';
 
   res.status(response.status).send(response);
 }

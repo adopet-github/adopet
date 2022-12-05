@@ -89,6 +89,46 @@ const controller = {
     }
 
     res.status(response.status).send(response);
+  },
+
+  deleteAllByMatch: async (req: Request, res: Response) => {
+    const response = { ...constants.fallbackResponse } as MyResponse;
+
+    try {
+      const { adopterId, animalId } = req.params;
+
+      const adopter = await Adopter.findByPk(adopterId);
+      notFoundChecker(adopter, adopterId, response, 'Adopter');
+
+      const animal = await Animal.findByPk(animalId);
+      notFoundChecker(animal, animalId, response, 'Animal');
+
+      const relationship = await Adopter_Animal.findOne({
+        where: {
+          adopterId,
+          animalId,
+          is_matched: true
+        }
+      });
+      if (relationship === null) {
+        response.status = constants.statusCodes.notFound;
+        response.message = `The adopter with id ${adopterId} is not matched with animal with id ${animalId}`;
+        throw new Error(response.message);
+      }
+
+      await Message.destroy({
+        where: {
+          adopterId,
+          animalId
+      }});
+
+      response.status = constants.statusCodes.ok;
+      response.message = 'Messages deleted successfully!';
+    } catch (err) {
+      console.warn('ERROR AT MESSAGE-CONTROLLER-deleteAllByMatch: ', err);
+    }
+
+    res.status(response.status).send(response);
   }
 };
 
