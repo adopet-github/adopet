@@ -6,14 +6,27 @@
   import { viewMatchChat } from '../../Stores/viewMatchChat';
   import ProfilePic from '../ProfilePic.svelte';
 
-  let text = 'this should be a message preview';
+  let msgPreview = '';
 
-  let message = text.substring(0, 25) + '...'; // preview of last message
   let msgDate: Date = new Date(); // needs to be time of last sent message
 
   // bold if not read
 
   export let match;
+
+  const getFirstMatchMessage = async () => {
+    let adopterId = match.adopter.id;
+    let animalId = match.animal.id;
+    const res = await retrieveByMatch({ adopterId, animalId });
+    if (res.status === 200) {
+      res.data[0] && res.data[0].content
+        ? (msgPreview = res.data[res.data.length - 1].content)
+        : (msgPreview = 'no messages yet');
+    }
+    msgPreview.length > 20 ? msgPreview.substring(0, 20) + '...' : msgPreview;
+  };
+
+  getFirstMatchMessage();
 
   const handleGoToChatView = async () => {
     viewMatchChat.set(match);
@@ -43,7 +56,9 @@
         <p class="msg-username">
           {match.adopter.first_name} → {match.animal.name}
         </p>
-        <p class="msg-preview">{message}</p>
+        <p class="msg-preview">
+          {msgPreview}
+        </p>
         <p class="msg-date"><Time timestamp={msgDate} relative /></p>
       </div>
       <span

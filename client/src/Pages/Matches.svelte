@@ -4,10 +4,6 @@
   import Match from '../Components/Match.svelte';
   import { getAdopterMatches } from '../Services/adopter';
   import { userCredentials } from '../Stores/userCredentials';
-  import { dashView } from '../Stores/dashView';
-  import { viewMatchChat } from '../Stores/viewMatchChat';
-  import { retrieveByMatch } from '../Services/message';
-  import { messagesByMatch } from '../Stores/messagesByMatch';
 
   let matches = [];
 

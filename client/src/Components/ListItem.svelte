@@ -100,7 +100,6 @@
   .warning {
     display: flex;
     flex-direction: column;
-
     padding: 10rem;
     margin: auto;
     border-radius: 20px;
