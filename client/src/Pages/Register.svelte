@@ -9,6 +9,7 @@
   import { Link, useNavigate } from 'svelte-navigator';
   import { userCredentials } from '../Stores/userCredentials';
   import Button from '../Components/Button.svelte';
+  // @ts-ignore
   import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
   import TextArea from '../Components/Inputs/TextArea.svelte';
   import { createShelter } from '../Services/shelter';
@@ -16,6 +17,8 @@
   import DogLoader from '../Components/Loaders/DogLoader.svelte';
   import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
   import { verifyRegisterCredentials } from '../Services/auth';
+  // @ts-ignore
+  import GoogleAuth from '../Components/Inputs/GoogleAuth.svelte';
 
   const navigate = useNavigate();
 
@@ -187,6 +190,7 @@
             <img src={GoogleIcon} alt="google icon" />
             <span>Register with Google </span>
           </button>
+          <GoogleAuth />
           <div class="or">
             <hr />
             <h2>OR</h2>

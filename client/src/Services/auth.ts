@@ -55,3 +55,15 @@ export const verifyRegisterCredentials = async (
 
   return await res.json();
 };
+
+export const googleLogIn = async (token: string) => {
+  const res = await fetch(`${baseUrl}/google`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ token })
+  });
+
+  return await res.json();
+};
