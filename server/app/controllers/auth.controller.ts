@@ -122,12 +122,6 @@ const controller = {
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-logout: ', err);
     }
-    
-    if (response.status === constants.statusCodes.ok) {
-      return res
-        .clearCookie('access_token')
-        .status(response.status).send(response);
-    }
 
     res.status(response.status).send(response);
   },
@@ -173,9 +167,11 @@ const controller = {
             id: uuidv4(),
             content: generateToken({ id: adopter.id, type: 'adopter' })
           });
-
+          
           response.token = (token as unknown as { content: string }).content;
         } else {
+          response.status = constants.statusCodes.badRequest;
+          response.message = 'Shelters can not log in with Google';
           throw new Error('Adopter is null');
         }
 
@@ -197,16 +193,6 @@ const controller = {
       console.warn('ERROR AT AUTH-CONTROLLER-google: ', err);
     }
 
-    if (response.status === constants.statusCodes.ok) {
-      const responseToken = response.token;
-      delete response.token;
-      return res
-        .cookie('access_token', responseToken, {
-          httpOnly: true,
-          secure: process.env.ENVIRONMENT === 'production'
-        })
-        .status(response.status).send(response);
-    }
     res.status(response.status).send(response);
   },
 

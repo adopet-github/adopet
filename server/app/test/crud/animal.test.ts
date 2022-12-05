@@ -196,6 +196,7 @@ describe(`${model} controller`, () => {
   describe('Create', () => {
     let shelterId = '';
     let shelterToken = '';
+    let notOwnShelterToken = '';
 
     beforeAll(async () => {
       const loginResponse = await request(server)
@@ -207,6 +208,15 @@ describe(`${model} controller`, () => {
 
       shelterToken = loginResponse.body.token;
       shelterId = loginResponse.body.data;
+
+      const loginResponse2 = await request(server)
+        .post('/api/v1/auth/login')
+        .send(animalMocks.validShelterLogin2);
+
+      expect(loginResponse2.status).toEqual(constants.statusCodes.ok);
+      expect(loginResponse2.body).toHaveProperty('token');
+
+      notOwnShelterToken = loginResponse2.body.token;
     });
 
     describe('Invalid', () => {
@@ -257,6 +267,16 @@ describe(`${model} controller`, () => {
 
         expect(response.status).toEqual(constants.statusCodes.unAuthorized);
       });
+
+      it(`Should not create a ${model.toLowerCase()} if it's not for the shelter logged in`, async () => {
+        const response = await request(server)
+          .post(`/api/v1/${model.toLowerCase()}`)
+          .set('Authorization', 'Bearer ' + notOwnShelterToken)
+          .send({...animalMocks.validCreateObject, shelterId});
+
+        expect(response.status).toEqual(constants.statusCodes.unAuthorized);
+        expect(response.body.message).toEqual(`You are only allowed to create ${model.toLowerCase()}s for your own shelter`);
+      })
     });
 
     describe('Valid', () => {

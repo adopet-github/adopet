@@ -29,7 +29,7 @@ export default async function isGoogleMiddleware (req: Request, res: Response, n
   } catch (err) {
     if (response.status === constants.statusCodes.notFound) {
       response.status = constants.statusCodes.badRequest;
-      response.message = 'Username or password not correct';
+      response.message = 'Email or password not correct';
     }
 
     console.warn('ERROR AT ISGOOGLE-MIDDLEWARE-isGoogleMiddleware: ', err);
