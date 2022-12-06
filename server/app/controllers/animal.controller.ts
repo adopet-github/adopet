@@ -95,7 +95,7 @@ const controller = {
               general: animal.general,
               shelter: animal.shelter,
               adopters: animal.adopters,
-              distance
+              distance: distance / 1000
             })));
           }
         }
