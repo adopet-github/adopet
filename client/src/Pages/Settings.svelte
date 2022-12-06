@@ -200,7 +200,15 @@
               bind:error={hasChildrenError}
             />
           </div>
-          <button on:click={handleAdopterUpdate}><Button text="save" /></button>
+          <button on:click={handleAdopterUpdate}
+            ><Button
+              text="save"
+              on:click={() => {
+                $dashView[1] = 'animalList';
+                navigate(-1);
+              }}
+            /></button
+          >
         </div>
       </div>
     {/if}

@@ -7,6 +7,13 @@
   import { dashView } from '../Stores/dashView';
   import ProfilePic from './ProfilePic.svelte';
   import { shelterMatches } from '../Stores/shelterMatches';
+  import { viewMatchChat } from '../Stores/viewMatchChat';
+
+  console.log($viewAdopterProfile);
+  let animal = $viewAdopterProfile.adopter_animal;
+  let adopter = $viewAdopterProfile;
+  let date = new Date();
+  let match = { adopter, animal, date };
 
   const handleAcceptLike = async () => {
     const res = await acceptLike(
@@ -30,7 +37,8 @@
       };
       shelterMatches.update((prev) => [...prev, newMatch]);
     }
-    dashView.set(['likes', 'allAnimals']);
+    dashView.set(['matches', 'chat']);
+    viewMatchChat.set(match);
   };
 
   const handleRejectLike = async () => {
@@ -47,7 +55,7 @@
         );
       });
     }
-    dashView.set(['likes', 'allAnimals']);
+    dashView.set(['likes', 'animalList']);
   };
 </script>
 
