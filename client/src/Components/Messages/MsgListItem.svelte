@@ -8,7 +8,7 @@
 
   let msgPreview = '';
 
-  let msgDate: Date = new Date(); // needs to be time of last sent message
+  let msgDate: Date;
 
   // bold if not read
 
@@ -20,10 +20,12 @@
     const res = await retrieveByMatch({ adopterId, animalId });
     if (res.status === 200) {
       res.data[0] && res.data[0].content
-        ? (msgPreview = res.data[res.data.length - 1].content)
+        ? ((msgPreview = res.data[res.data.length - 1].content),
+          (msgDate = res.data[res.data.length - 1].createdAt))
         : (msgPreview = 'no messages yet');
     }
     msgPreview.length > 20 ? msgPreview.substring(0, 20) + '...' : msgPreview;
+    console.log(res.data);
   };
 
   getFirstMatchMessage();
@@ -59,7 +61,9 @@
         <p class="msg-preview">
           {msgPreview}
         </p>
-        <p class="msg-date"><Time timestamp={msgDate} relative /></p>
+        {#if msgPreview !== 'no messages yet'}
+          <p class="msg-date"><Time timestamp={msgDate} relative /></p>
+        {/if}
       </div>
       <div class="img-container img-animal">
         <ProfilePic
