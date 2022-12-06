@@ -8,7 +8,7 @@ import shelterMocks from '../mocks/shelter.mocks';
 import authenticationMocks from '../mocks/authentication.mocks';
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN as string;
 const GOOGLE_TOKEN = process.env.GOOGLE_TOKEN as string;
-const GOOGLE_ID = process.env.TEST_GOOGLE_ID as string;
+const GOOGLE_ID = process.env.GOOGLE_USER_ID as string;
 const NON_EXISTING_USER_GOOGLE_TOKEN = process.env.GOOGLE_TOKEN_NON_EXISTING as string;
 
 describe('Authentication', () => {
@@ -132,7 +132,7 @@ describe('Authentication', () => {
         expect(googleResponse.status).toEqual(constants.statusCodes.unAuthorized);
         expect(googleResponse.body.message).toEqual('Google token not valid or not provided');
       });
-      it('Should not log in with Google when an no Google token is passed', async () => {
+      it('Should not log in with Google when no Google token is passed', async () => {
         const googleResponse = await request(server)
           .post('/api/v1/auth/google');
 
