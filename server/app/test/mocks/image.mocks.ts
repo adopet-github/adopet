@@ -100,7 +100,7 @@ const imageMocks: {
     images: [
       {
         caption: ['lol'],
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol']
       }
     ]
   },
@@ -120,7 +120,7 @@ const imageMocks: {
     images: [
       {
         caption: 'lol',
-        url: 'https://regexr.com/'
+        url: ['https://regexr.com/']
       },
       {
         caption: 'lol',
@@ -128,7 +128,7 @@ const imageMocks: {
       },
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/uploads/xdlol'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/uploads/xdlol']
       }
     ]
   },
@@ -136,19 +136,19 @@ const imageMocks: {
     images: [
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/']
       },
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/']
       },
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/']
       },
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/']
       }
     ]
   },
@@ -156,23 +156,23 @@ const imageMocks: {
     images: [
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol&&&'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol&&&']
       },
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol%%'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol%%']
       },
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol···'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol···']
       },
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol"""'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol"""']
       },
       {
         caption: 'lol',
-        url: 'https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol!!!!'
+        url: ['https://res.cloudinary.com/dyi6bn4vh/image/upload/xdlol!!!!']
       }
     ]
   },
