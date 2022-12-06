@@ -24,7 +24,7 @@ const controller = {
     try {
       triggerInternalServerError(req);
       if (req.query.distance === undefined) {
-        const modelResponse = await Animal.findAll({
+        let modelResponse = await Animal.findAll({
           include: includes.animal
         }) as unknown as AnimalFromDb[];
 
@@ -34,7 +34,7 @@ const controller = {
           for (const animal of modelResponse) {
             const adopterInAnimal = animal.adopters.find(adopter => adopter.id === decryptedToken.id);
 
-            if (adopterInAnimal !== undefined) modelResponse.filter(element => animal.id !== element.id);
+            if (adopterInAnimal !== undefined) modelResponse = modelResponse.filter(element => animal.id !== element.id);
           }
         }
 
@@ -61,7 +61,7 @@ const controller = {
         const adopter = await Adopter.findByPk(decryptedToken.id, {
           include: includes.adopter
         });
-        const unparsedAnimals = [];
+        let unparsedAnimals = [];
         const adopterLocation = (
           adopter as unknown as {
             user: { location: { latitude: number; longitude: number } };
@@ -85,24 +85,29 @@ const controller = {
             100
           );
           if (distance / 1000 <= Number(req.query.distance)) {
-            unparsedAnimals.push(
-              ...(
-                shelter as unknown as { animals: AnimalFromDb[] }
-              ).animals.map((animal) => ({
-                ...animal,
-                distance: distance / 1000
-              }))
-            );
+            const animalsFromShelter = (shelter as unknown as { animals: AnimalFromDb[] }).animals;
+            unparsedAnimals.push(...animalsFromShelter.map((animal) => ({
+              id: animal.id,
+              age: animal.age,
+              weight: animal.weight,
+              shelterId: animal.shelterId,
+              name: animal.name,
+              general: animal.general,
+              shelter: animal.shelter,
+              adopters: animal.adopters,
+              distance
+            })));
           }
         }
         
         if (decryptedToken.type === AccountTypes.ADOPTER) {
           for (const animal of unparsedAnimals) {
-            const adopterInAnimal = animal.adopters.find(adopter => adopter.id === decryptedToken.id);
+            const adopterInAnimal = (animal as unknown as AnimalFromDb).adopters.find(adopter => adopter.id === decryptedToken.id);
 
-            if (adopterInAnimal !== undefined) unparsedAnimals.filter(element => animal.id !== element.id);
+            if (adopterInAnimal !== undefined) unparsedAnimals = unparsedAnimals.filter(element => animal.id !== element.id);
           }
         }
+        
         response.data = (unparsedAnimals as unknown as AnimalFromDb[]).map(
           dataParser.animal
         );
