@@ -13,7 +13,7 @@ const schema = {
             url: Joi.string()
               .uri()
               .regex(
-                /^(https:\/\/res.cloudinary.com\/dyi6bn4vh\/image\/upload\/)[a-z0-9/.]+$/
+                /^[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/
               )
               .messages({
                 'string.pattern.base': 'Url origin not valid'

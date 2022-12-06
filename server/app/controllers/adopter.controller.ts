@@ -21,7 +21,7 @@ const { General, Adopter, User, Image, Animal, Adopter_Animal, Token } = models;
 const controller = {
   retrieveAll: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-    
+
     try {
       triggerInternalServerError(req);
       const modelResponse = await Adopter.findAll({
@@ -64,11 +64,11 @@ const controller = {
   create: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
     const { sanitizeCreate } = adopterSanitize;
-    
+
     const unsafeBody = req.body;
-    
+
     const safeBody = sanitizeCreate(unsafeBody);
-    
+
     const adopterPassword = safeBody.password;
     if (adopterPassword) {
       const passSaltObj = await genPasswordAndSalt(adopterPassword as string);
@@ -287,9 +287,9 @@ const controller = {
   },
   addManyImages: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-    
+
     const { sanitizeCreate } = imageSanitize;
-    
+
     try {
       triggerInternalServerError(req);
       const { id } = req.params;
@@ -324,7 +324,7 @@ const controller = {
 
   likeAnimal: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-    
+
     try {
       triggerInternalServerError(req);
       const { adopterId, animalId } = req.params;
@@ -367,7 +367,7 @@ const controller = {
 
   dislikeAnimal: async (req: Request, res: Response) => {
     const response = { ...constants.fallbackResponse } as MyResponse;
-    
+
     try {
       triggerInternalServerError(req);
       const { adopterId, animalId } = req.params;
@@ -432,13 +432,6 @@ const controller = {
       const parsedMatches = (
         nonParsedMatches as unknown as { animals: AnimalFromDb[] }
       ).animals.map(dataParser.animal);
-
-      /* for (const animal of (
-        nonParsedMatches as unknown as { animals: MatchFromDb[] }
-      ).animals) {
-        for (const adopter of animal.adopters as AdopterFromDb[])
-          parsedMatches.push(dataParser.shelterMatch(animal, adopter));
-      } */
 
       response.status = constants.statusCodes.ok;
       response.message = 'Matches retrieved successfully!';
