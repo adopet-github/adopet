@@ -16,8 +16,11 @@
 
   onMount(async () => {
     const res = await getAllAnimals();
-    console.log(res);
     animals = res.data.filter((animal) => animal.images.length === 4);
+    for (let i = 0; i < animals.length; i++) {
+      animals.sort(() => Math.random() - 0.5);
+    }
+    console.log('animals', animals);
   });
   let activeIndex = 0;
 
@@ -27,7 +30,6 @@
       $userCredentials.id,
       animals[activeIndex].id
     );
-    console.log(res);
 
     const nextIndex = activeIndex + 1;
 
@@ -70,7 +72,6 @@
     if (!infoOpen) toggleInfoOpen();
 
     const res = await likeAnimal($userCredentials.id, animals[activeIndex].id);
-    console.log(res);
 
     const nextIndex = activeIndex + 1;
 
@@ -188,6 +189,12 @@
     gap: 2rem;
     justify-content: center;
     align-items: center;
+  }
+
+  @media only screen and (max-width: 500px) and (max-height: 900px) {
+    .container {
+      padding-bottom: 1rem;
+    }
   }
 
   button {
