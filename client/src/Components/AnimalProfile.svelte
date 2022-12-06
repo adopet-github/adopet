@@ -136,4 +136,10 @@
       max-height: 9rem;
     }
   }
+
+  @media only screen and (max-width: 688px) {
+    .card {
+      border-radius: 0px;
+    }
+  }
 </style>

@@ -329,4 +329,12 @@
       gap: 1rem;
     }
   }
+
+  @media only screen and (max-width: 688px) {
+    .card {
+      width: 100%;
+      margin: 0;
+      border-radius: 0px;
+    }
+  }
 </style>

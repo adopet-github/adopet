@@ -207,4 +207,10 @@
     border-radius: inherit;
     aspect-ratio: 1;
   }
+
+  @media only screen and (max-width: 688px) {
+    .card {
+      border-radius: 0px;
+    }
+  }
 </style>

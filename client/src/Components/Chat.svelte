@@ -76,6 +76,8 @@
       value = '';
     }
   };
+
+  $: console.log(document.getElementsByClassName('div1'));
 </script>
 
 {#if $viewMatchChat}
@@ -145,6 +147,7 @@
 <style>
   .chat-container {
     height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     border-radius: 30px;
@@ -249,6 +252,10 @@
     .other-msg,
     .account-msg {
       padding: 0.8rem;
+    }
+
+    .chat-container {
+      border-radius: 0px;
     }
   }
 </style>

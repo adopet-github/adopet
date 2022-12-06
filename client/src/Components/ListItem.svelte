@@ -68,11 +68,11 @@
     <p class="animal-id">{animal.id}</p>
   </div>
   <div class="likes-matches-cont">
-    <p class="likes-matches">
+    <p class="likes">
       {totalLikes.length}
       {totalLikes.length !== 1 ? 'likes' : 'like'}
     </p>
-    <p class="likes-matches">
+    <p class="matches">
       {totalMatches.length}
       {totalMatches.length !== 1 ? 'matches' : 'match'}
     </p>
@@ -112,28 +112,6 @@
     gap: 1rem;
   }
 
-  .list-item {
-    width: 100%;
-    padding: 1rem 3rem;
-    margin-bottom: 1rem;
-    border-radius: 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .likes-matches-cont {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .btns-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-  }
-
   .smallprint {
     font-size: 1rem;
     text-align: center;
@@ -141,16 +119,34 @@
     font-weight: 900;
   }
 
+  .list-item {
+    width: 100%;
+    padding: 1rem 3rem;
+    margin-bottom: 1rem;
+    border-radius: 30px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 1rem;
+  }
+  .list-item:last-child {
+    margin-bottom: 0rem;
+  }
+
   .img-container {
     display: flex;
+    grid-column: auto;
     height: 60px;
     width: 60px;
     border-radius: 25px;
   }
 
   .name-id-cont {
+    grid-column: 2 / 5;
+    display: flex;
     position: relative;
-    width: 20%;
+    align-items: center;
+    justify-content: flex-start;
   }
 
   .animal-name {
@@ -163,9 +159,25 @@
     font-size: 0.5rem;
     position: absolute;
     width: 100%;
-    top: 100%;
+    top: 90%;
     left: 0;
     opacity: 0.2;
+  }
+  .likes-matches-cont {
+    grid-column: 5 / 8;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .btns-container {
+    grid-column: 8 / 8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
   }
 
   @media only screen and (max-width: 1280px) {
@@ -178,14 +190,47 @@
   }
 
   @media only screen and (max-width: 992px) {
+    .name-id-cont {
+      grid-column: 2 / 4;
+    }
+    .likes-matches-cont {
+      grid-column: 4 / 8;
+      /* display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      align-items: flex-start;
+      justify-content: center; */
+    }
+
+    .likes {
+      margin-left: 2rem;
+    }
     .btns-container {
       gap: 0.5rem;
     }
     .animal-id {
       display: none;
     }
-    .likes-matches {
+    .likes,
+    .matches {
       font-size: 0.8rem;
+    }
+  }
+
+  @media only screen and (max-width: 688px) {
+    .likes-matches-cont {
+      grid-column: 5 / 8;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .likes {
+      margin-left: 0rem;
+    }
+    .list-item:last-child {
+      margin-bottom: 1rem;
     }
   }
 
@@ -197,11 +242,8 @@
     .animal-name {
       font-size: 1rem;
     }
-    .likes-matches-cont {
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-    .likes-matches {
+    .likes,
+    .matches {
       display: none;
     }
   }
