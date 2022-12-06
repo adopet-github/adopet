@@ -201,6 +201,14 @@ describe('Likes and dislikes', () => {
         expect(response.body.message).toEqual('Animal liked successfully!');
 
         await request(server)
+          .get('/api/v1/animal')
+          .set('Authorization', 'Bearer ' + adopterToken);
+
+        await request(server)
+          .get('/api/v1/animal?distance=10000000')
+          .set('Authorization', 'Bearer ' + adopterToken);
+
+        await request(server)
           .get(`/api/v1/shelter/${shelterId}/likes`)
           .set('Authorization', 'Bearer ' + ADMIN_TOKEN);
       });

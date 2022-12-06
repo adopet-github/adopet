@@ -27,7 +27,8 @@ const includes: { [key: string]: Includeable[] } = {
           include: [relationships.user.general]
         }
       ]
-    }
+    },
+    relationships.animal.adopters
   ],
   shelter: [
     {

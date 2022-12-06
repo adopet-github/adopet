@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { decryptToken } from '../utils/jwt';
 import { getDistance } from 'geolib';
 import triggerInternalServerError from '../utils/coverage';
+import { AccountTypes } from '../enums';
 
 const { General, Animal, Image, Shelter, Adopter, Adopter_Animal } = models;
 
@@ -25,9 +26,19 @@ const controller = {
       if (req.query.distance === undefined) {
         const modelResponse = await Animal.findAll({
           include: includes.animal
-        });
+        }) as unknown as AnimalFromDb[];
 
-        response.data = (modelResponse as unknown as AnimalFromDb[]).map(
+        const decryptedToken = decryptToken(req.token as string) as unknown as {id: string, type: string};
+        
+        if (decryptedToken.type === AccountTypes.ADOPTER) {
+          for (const animal of modelResponse) {
+            const adopterInAnimal = animal.adopters.find(adopter => adopter.id === decryptedToken.id);
+
+            if (adopterInAnimal !== undefined) modelResponse.filter(element => animal.id !== element.id);
+          }
+        }
+
+        response.data = modelResponse.map(
           dataParser.animal
         );
       } else {
@@ -45,6 +56,7 @@ const controller = {
         });
         const decryptedToken = decryptToken(req.token as string) as unknown as {
           id: string;
+          type: string;
         };
         const adopter = await Adopter.findByPk(decryptedToken.id, {
           include: includes.adopter
@@ -81,6 +93,14 @@ const controller = {
                 distance: distance / 1000
               }))
             );
+          }
+        }
+        
+        if (decryptedToken.type === AccountTypes.ADOPTER) {
+          for (const animal of unparsedAnimals) {
+            const adopterInAnimal = animal.adopters.find(adopter => adopter.id === decryptedToken.id);
+
+            if (adopterInAnimal !== undefined) unparsedAnimals.filter(element => animal.id !== element.id);
           }
         }
         response.data = (unparsedAnimals as unknown as AnimalFromDb[]).map(
