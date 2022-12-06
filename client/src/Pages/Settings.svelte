@@ -218,7 +218,7 @@
 
 <style>
   .container {
-    height: 100%;
+    height: 92vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -320,6 +320,7 @@
     .content-left,
     .content-right {
       width: 100%;
+      justify-content: center;
     }
 
     .content-left .details {
@@ -332,6 +333,7 @@
 
   @media only screen and (max-width: 688px) {
     .card {
+      height: 100%;
       width: 100%;
       margin: 0;
       border-radius: 0px;

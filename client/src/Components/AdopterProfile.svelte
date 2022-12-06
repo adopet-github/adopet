@@ -66,7 +66,12 @@
         Interested in: <span>{$viewAdopterProfile.adopter_animal.name}</span>
       </p>
     </div>
-    <CloseButton closeTo={'animalList'} />
+    <span
+      ><CloseButton
+        sideCloseTo={window.innerWidth > 688 ? 'likes' : ''}
+        closeTo={window.innerWidth > 688 ? 'animalList' : 'mobileLikeMatchList'}
+      /></span
+    >
   {:else}
     <CloseButton text={'back'} closeTo={'chat'} />
   {/if}

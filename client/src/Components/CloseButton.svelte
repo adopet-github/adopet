@@ -3,10 +3,12 @@
 
   export let text: string = 'close';
   export let closeTo: string = '';
+  export let sideCloseTo: string = '';
 </script>
 
 <button
   on:click={() => {
+    $dashView[0] = sideCloseTo;
     $dashView[1] = closeTo;
   }}>{text}</button
 >

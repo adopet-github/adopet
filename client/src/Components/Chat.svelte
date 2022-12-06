@@ -101,7 +101,14 @@
         <span>matched with</span>
         {$viewMatchChat.animal.name}
       </p>
-      <span><CloseButton closeTo={'animalList'} /></span>
+      <span
+        ><CloseButton
+          sideCloseTo={'matches'}
+          closeTo={window.innerWidth > 688
+            ? 'animalList'
+            : 'mobileLikeMatchList'}
+        /></span
+      >
     </div>
     <div class="chat-content" bind:this={chat}>
       {#each $messagesByMatch.messages as message}

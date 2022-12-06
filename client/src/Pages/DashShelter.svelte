@@ -259,7 +259,7 @@
 
     .main-container {
       padding: 0rem;
-      height: 84vh;
+      height: 85.5vh;
     }
 
     .grid-container {
