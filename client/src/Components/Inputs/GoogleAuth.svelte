@@ -1,10 +1,24 @@
 <script lang="ts">
-    import { googleLogIn } from "../../Services/auth";
+  import { useNavigate } from "svelte-navigator";
+  import { getProfile, googleLogIn } from "../../Services/auth";
+  import { userCredentials } from "../../Stores/userCredentials";
+
+  const navigate = useNavigate();
 
   const handleCredentialResponse = async (response) => {
-    console.log("Encoded JWT ID token: " + response.credential);
     const res = await googleLogIn(response.credential);
-    console.log(res);
+    if (res.data) {
+      userCredentials.set(res.data);
+      navigate('/onboarding');
+    } else {
+      localStorage.setItem('jwt', res.token);
+      const profileRes = await getProfile();
+      if (profileRes.status === 200) {
+        console.log('user', profileRes.data);
+        userCredentials.set(profileRes.data);
+      }
+      navigate('/user/swipe');
+    }
   };
 </script>
 
