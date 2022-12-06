@@ -115,6 +115,7 @@
     color: var(--red);
     font-size: 0.8rem;
     text-align: left;
+    font-weight: 800;
   }
 
   .msg-preview {
@@ -155,6 +156,26 @@
 
     .img-animal {
       display: none;
+    }
+  }
+  @media only screen and (max-width: 688px) {
+    .msg-username {
+      font-size: 1rem;
+    }
+    .msg-preview {
+      font-size: 1rem;
+    }
+    .msg-date {
+      font-size: 0.6rem;
+    }
+
+    .img-container {
+      height: 60px;
+      width: 60px;
+    }
+
+    .img-animal {
+      display: flex;
     }
   }
 </style>

@@ -13,6 +13,8 @@
   import { shelterMatches } from '../Stores/shelterMatches';
   import AddPet from './AddPet.svelte';
   import { onMount } from 'svelte';
+  import LikeListItem from '../Components/Messages/LikeListItem.svelte';
+  import MsgListItem from '../Components/Messages/MsgListItem.svelte';
 
   const navigate = useNavigate();
 
@@ -76,8 +78,20 @@
     <div class="div5">
       <DashStats desc={'matches'} stat={$shelterMatches.length} />
     </div>
+
     <div class="div6">
       {#if $dashView[1] === 'animalList'}
+        <div class="mobile-btn-container">
+          <h2>Animals</h2>
+          <span class="btn"
+            ><Button
+              text={'Add animal'}
+              on:click={() => {
+                $dashView[1] = 'addPet';
+              }}
+            /></span
+          >
+        </div>
         <ListCont />
       {:else if $dashView[1] === 'animal'}
         <AnimalProfile />
@@ -85,10 +99,37 @@
         <AdopterProfile />
       {:else if $dashView[1] === 'addPet'}
         <AddPet />
+      {:else if $dashView[1] === 'mobileLikeMatchList'}
+        <div class="mobile-btn-container">
+          {#if $dashView[0] == 'matches'}
+            <h2>Matches</h2>
+          {:else}
+            <h2>Pending Likes</h2>
+          {/if}
+          <span class="btn"
+            ><Button
+              text={$dashView[0] === 'matches' ? 'View Likes' : 'View Matches'}
+              on:click={handleDashViewToggle}
+            /></span
+          >
+        </div>
+        <SideListContainer />
       {:else}
         <Chat />
       {/if}
     </div>
+  </div>
+</div>
+<div class="mobile-nav">
+  <div class="mobile-nav-item">
+    <button type="text" on:click={() => ($dashView[1] = 'animalList')}
+      >ANIMALS</button
+    >
+  </div>
+  <div class="mobile-nav-item">
+    <button type="text" on:click={() => ($dashView[1] = 'mobileLikeMatchList')}
+      >LIKES/MATCHES</button
+    >
   </div>
 </div>
 
@@ -114,6 +155,10 @@
     color: var(--black);
   }
 
+  .mobile-nav {
+    display: none;
+  }
+
   h1 {
     margin: 1rem 0;
   }
@@ -132,6 +177,10 @@
     border-radius: 1.5rem;
     display: flex;
     flex-direction: column;
+  }
+
+  .mobile-btn-container {
+    display: none;
   }
 
   .dash-headings {
@@ -187,6 +236,82 @@
 
     h2 {
       font-size: 1rem;
+    }
+  }
+
+  @media only screen and (max-width: 688px) {
+    h2 {
+      margin-top: 0;
+      font-size: 2rem;
+      color: var(--black);
+    }
+    .mobile-btn-container {
+      display: flex;
+      width: 90vw;
+      margin: auto;
+      margin-bottom: 1rem;
+      justify-content: space-between;
+    }
+
+    .main-container {
+      padding: 1rem;
+      height: 84vh;
+    }
+
+    .grid-container {
+      flex-grow: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      color: var(--black);
+    }
+
+    .mobile-nav {
+      height: 4rem;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 1rem;
+      background-color: var(--red);
+    }
+
+    .mobile-nav-item {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mobile-nav-item button {
+      display: block;
+      background: none;
+      height: 100%;
+      width: 100%;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .div1,
+    .div2,
+    .div3,
+    .div4,
+    .div5 {
+      display: none;
+    }
+    .div6 {
+      width: 100%;
+      height: 100%;
+      overflow-x: scroll;
+    }
+
+    .btn {
+      display: flex;
+      width: 150px;
     }
   }
 </style>

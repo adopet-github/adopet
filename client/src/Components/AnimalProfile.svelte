@@ -87,6 +87,7 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .stat-cont {
@@ -122,5 +123,17 @@
     object-fit: cover;
     border-radius: inherit;
     aspect-ratio: 1;
+  }
+
+  @media only screen and (max-width: 1280px) {
+    .imgs-cont {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    img {
+      max-height: 9rem;
+    }
   }
 </style>

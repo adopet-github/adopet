@@ -76,16 +76,13 @@
 
   .match-username {
     font-size: 1rem;
+    color: var(--red);
     font-weight: 700;
   }
 
   .pet-name {
-    font-size: 1rem;
-    text-align: left;
-  }
-
-  .pet-name {
     font-size: 0.8rem;
+    text-align: left;
   }
 
   .match-date {
@@ -106,17 +103,33 @@
     }
 
     .match-username {
-      color: var(--red);
       font-size: 0.8rem;
     }
 
     .match-date {
       font-size: 0.5rem;
-      color: var(--lavender);
     }
 
     .img-animal {
       display: none;
+    }
+  }
+
+  @media only screen and (max-width: 688px) {
+    .match-username {
+      font-size: 1.2rem;
+    }
+
+    .match-date {
+      font-size: 0.6rem;
+    }
+    .img-container {
+      height: 60px;
+      width: 60px;
+    }
+
+    .img-animal {
+      display: flex;
     }
   }
 </style>

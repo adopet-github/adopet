@@ -153,6 +153,7 @@
 
   span {
     color: var(--red);
+    height: 100%;
   }
 
   .chat-title {
@@ -214,10 +215,12 @@
     align-items: center;
     margin-top: 1rem;
     gap: 1rem;
+    align-items: stretch;
   }
 
   .chat-input-container > span {
     flex: 1;
+    display: flex;
   }
 
   .chat-input {
@@ -240,5 +243,12 @@
     height: 100%;
     justify-content: center;
     align-items: center;
+  }
+
+  @media only screen and (max-width: 688px) {
+    .other-msg,
+    .account-msg {
+      padding: 0.8rem;
+    }
   }
 </style>

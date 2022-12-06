@@ -19,4 +19,11 @@
     outline: none;
     padding: 15px;
   }
+
+  @media only screen and (max-width: 688px) {
+    button {
+      padding: 10px;
+      font-size: 0.8rem;
+    }
+  }
 </style>

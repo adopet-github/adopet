@@ -47,6 +47,7 @@
 
   .red {
     font-size: 2rem;
+    align-items: stretch;
   }
 
   @media only screen and (max-width: 1280px) {
@@ -62,6 +63,18 @@
     }
     .red {
       font-size: 1.5rem;
+    }
+  }
+
+  @media only screen and (max-width: 992px) {
+    .stat-container {
+      gap: 0.5rem;
+    }
+    h3 {
+      font-size: 1.2rem;
+    }
+    p {
+      font-size: 0.8rem;
     }
   }
 </style>

@@ -65,4 +65,14 @@
   span {
     padding: 15px;
   }
+
+  @media only screen and (max-width: 688px) {
+    .logoText {
+      display: none;
+    }
+    span {
+      padding: 10px;
+      font-size: 0.8rem;
+    }
+  }
 </style>

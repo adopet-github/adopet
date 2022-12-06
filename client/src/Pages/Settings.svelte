@@ -218,17 +218,19 @@
 
 <style>
   .container {
-    height: 92vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow-x: auto;
   }
   .card {
     height: fit-content;
     position: relative;
     width: 1000px;
     border-radius: 20px;
+    margin: 1rem;
     padding: 1rem;
     padding-bottom: 2.5rem;
     display: flex;
@@ -298,5 +300,33 @@
     margin-top: 1rem;
     background-color: transparent;
     outline: none;
+    display: flex;
+    height: 3rem;
+    align-items: stretch;
+  }
+
+  @media only screen and (max-width: 1280px) {
+    .card {
+      width: 90%;
+    }
+  }
+
+  @media only screen and (max-width: 992px) {
+    .card {
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .content-left,
+    .content-right {
+      width: 100%;
+    }
+
+    .content-left .details {
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 1rem;
+    }
   }
 </style>

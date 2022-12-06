@@ -99,7 +99,7 @@
           : `❌ No children`}
       </p>
       <p>
-        🕐 At home <span>~{$viewAdopterProfile.time_at_home}</span> hours a day
+        🕐 Home <span>~{$viewAdopterProfile.time_at_home}</span>hrs a day
       </p>
       <p>
         🏠 Lives in {$viewAdopterProfile.house_type === 'apartment'

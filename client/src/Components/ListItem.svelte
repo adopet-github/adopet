@@ -67,14 +67,16 @@
     <p class="animal-name">{animal.name}</p>
     <p class="animal-id">{animal.id}</p>
   </div>
-  <p class="likes-matches">
-    {totalLikes.length}
-    {totalLikes.length !== 1 ? 'likes' : 'like'}
-  </p>
-  <p class="likes-matches">
-    {totalMatches.length}
-    {totalMatches.length !== 1 ? 'matches' : 'match'}
-  </p>
+  <div class="likes-matches-cont">
+    <p class="likes-matches">
+      {totalLikes.length}
+      {totalLikes.length !== 1 ? 'likes' : 'like'}
+    </p>
+    <p class="likes-matches">
+      {totalMatches.length}
+      {totalMatches.length !== 1 ? 'matches' : 'match'}
+    </p>
+  </div>
   <div class="btns-container">
     <Button
       text="view"
@@ -118,6 +120,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .likes-matches-cont {
+    display: flex;
+    gap: 1rem;
   }
 
   .btns-container {
@@ -179,6 +186,23 @@
     }
     .likes-matches {
       font-size: 0.8rem;
+    }
+  }
+
+  @media only screen and (max-width: 450px) {
+    .img-container {
+      height: 50px;
+      width: 50px;
+    }
+    .animal-name {
+      font-size: 1rem;
+    }
+    .likes-matches-cont {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .likes-matches {
+      display: none;
     }
   }
 </style>
