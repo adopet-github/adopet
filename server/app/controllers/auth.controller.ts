@@ -11,6 +11,7 @@ import { AdopterFromDb, ShelterFromDb } from '../types/dboutputs';
 import { v4 as uuidv4 } from 'uuid';
 import { Adopter, Shelter } from '../types/models';
 import triggerInternalServerError from '../utils/coverage';
+import getUserInfoFromToken from '../utils/google';
 
 const { User, Adopter, Shelter, Token } = models;
 
@@ -134,21 +135,8 @@ const controller = {
     const response = { ...constants.fallbackResponse } as MyResponse;
 
     try {
-      const responseFromGoogle = await fetch(
-        'https://www.googleapis.com/userinfo/v2/me',
-        {
-          headers: {
-            Authorization: 'Bearer ' + req.body.token
-          }
-        }
-      );
-
-      const json = await responseFromGoogle.json();
-
-      if (
-        json.error &&
-        json.error.code === constants.statusCodes.unAuthorized
-      ) {
+      const userInfo = await getUserInfoFromToken(req.body.token);
+      if (userInfo === null) {
         response.status = constants.statusCodes.unAuthorized;
         response.message = 'Google token not valid or not provided';
         throw new Error(response.message);
@@ -158,7 +146,7 @@ const controller = {
         include: [
           {
             association: relationships.user.adopter,
-            where: { google_id: json.id }
+            where: { google_id: userInfo.google_id }
           }
         ]
       });
@@ -178,16 +166,9 @@ const controller = {
         response.status = constants.statusCodes.ok;
         response.message = 'User logged in successfully with google';
       } else {
-        const infoFromGoogle = {
-          email: json.email,
-          first_name: json.given_name,
-          last_name: json.family_name,
-          google_id: json.id
-        };
-
         response.status = constants.statusCodes.ok;
         response.message = 'User registered with google';
-        response.data = infoFromGoogle;
+        response.data = userInfo;
       }
     } catch (err) {
       console.warn('ERROR AT AUTH-CONTROLLER-google: ', err);
