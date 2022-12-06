@@ -4,22 +4,13 @@
   export let value = '';
   export let location = [];
   export let error = false;
+  export let id: string;
   let autocomplete;
 
-  const validateAddy = () => {
-    if (error && value) {
-      error = false;
-    }
-  };
-</script>
-
-<!-- svelte-ignore missing-declaration -->
-<svelte:head>
-  <script
-    src={`https://maps.googleapis.com/maps/api/js?key=${
-      import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-    }&libraries=places`}
-    on:load={() => {
+  onMount(() => {
+    // @ts-ignore
+    if (window.google) {
+      console.log('hi');
       const onPlaceChanged = () => {
         const place = autocomplete.getPlace();
         value = place.formatted_address;
@@ -30,16 +21,26 @@
           ];
         }
       };
+      // @ts-ignore
       autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById('autocomplete'),
+        document.getElementById(id),
         {
           types: ['address']
         }
       );
 
       autocomplete.addListener('place_changed', onPlaceChanged);
-    }}
-  ></script>
+    }
+  });
+
+  const validateAddy = () => {
+    if (error && value) {
+      error = false;
+    }
+  };
+</script>
+
+<svelte:head>
   <link
     rel="stylesheet"
     href="https://unpkg.com/mono-icons@1.0.5/iconfont/icons.css"
@@ -49,7 +50,7 @@
 <div class="auth-input-container">
   <input
     class="auth-input {error && 'error'}"
-    id="autocomplete"
+    {id}
     type="text"
     placeholder="Address"
     bind:value

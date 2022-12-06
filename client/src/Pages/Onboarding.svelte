@@ -6,6 +6,8 @@
   import TypingLoader from '../Components/Loaders/TypingLoader.svelte';
   import Button from '../Components/Button.svelte';
   import TextArea from '../Components/Inputs/TextArea.svelte';
+  // @ts-ignore
+  import AddressAutocomplete from '../Components/Inputs/AddressAutocomplete.svelte';
 
   // UTILS
   import { useNavigate } from 'svelte-navigator';
@@ -13,8 +15,11 @@
   import { createUser } from '../Services/adopter';
   import type { Adopter } from '../types/adopter';
   import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
+  import type { OnboardingType } from '../types/auth';
 
   const navigate = useNavigate();
+
+  console.log($userCredentials);
 
   if ($userCredentials?.house_type || $userCredentials?.name) navigate('/');
 
@@ -37,6 +42,10 @@
   let description: string = '';
   let descriptionError: boolean;
   $: charsLeft = 255 - description.length;
+
+  let address = '';
+  let location = [];
+  let addressError: boolean;
 
   const handleOnboarding = async () => {
     if (!age || age > 99) {
@@ -67,7 +76,14 @@
       !descriptionError
     ) {
       // send to backend
-      const onboardingCredentials = {
+      if ($userCredentials.google_id) {
+        if (!address || !location) {
+          addressError = true;
+          address = '';
+          return;
+        }
+      }
+      const onboardingCredentials: OnboardingType = {
         age: age,
         house_type: houseType,
         has_pets: hasPets,
@@ -75,7 +91,14 @@
         time_at_home: timeAtHome,
         description: description
       };
+
+      if ($userCredentials.google_id) {
+        onboardingCredentials.address = address;
+        onboardingCredentials.latitude = location[0];
+        onboardingCredentials.longitude = location[1];
+      }
       userCredentials.update((prev) => ({ ...prev, ...onboardingCredentials }));
+      console.log('credentials', $userCredentials);
       // make create adopter request
       isLoading = true;
       const res = await createUser($userCredentials as Adopter);
@@ -143,6 +166,14 @@
               bind:error={hasChildrenError}
             />
           </div>
+          {#if $userCredentials?.google_id}
+            <AddressAutocomplete
+              bind:value={address}
+              bind:location
+              bind:error={addressError}
+              id="onboarding-complete"
+            />
+          {/if}
           <div class="description">
             <p>Add a description of yourself:</p>
             <TextArea bind:value={description} bind:error={descriptionError} />
@@ -160,6 +191,9 @@
 {/if}
 
 <style>
+  h1 {
+    font-size: 1.75rem;
+  }
   .container {
     display: flex;
     flex-direction: column;

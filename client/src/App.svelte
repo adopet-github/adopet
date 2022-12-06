@@ -27,7 +27,6 @@
   import { getProfile } from './Services/auth';
   import { userCredentials } from './Stores/userCredentials';
   import { Router, Route } from 'svelte-navigator';
-  import PawsLoader from './Components/Loaders/PawsLoader.svelte';
 
   let isLoading = true;
 
@@ -42,6 +41,18 @@
     }, 1000);
   });
 </script>
+
+<svelte:head>
+  {#if !window.google}
+    <script
+      src={`https://maps.googleapis.com/maps/api/js?key=${
+        import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+      }&libraries=places`}
+      async
+      defer
+    ></script>
+  {/if}
+</svelte:head>
 
 <main>
   {#if isLoading}

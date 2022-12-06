@@ -4,6 +4,8 @@
   import Password from '../Components/Inputs/Password.svelte';
   import Button from '../Components/Button.svelte';
   import GoogleIcon from '../assets/icons/google-icon.svg';
+  // @ts-ignore
+  import GoogleAuth from '../Components/Inputs/GoogleAuth.svelte';
 
   // ANIMATION
   import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
@@ -67,10 +69,7 @@
     <div class="container">
       <div class="form-container glass">
         <h1>Login</h1>
-        <button id="google" on:click={handleGoogleLogin}>
-          <img src={GoogleIcon} alt="google icon" />
-          <span>Login with Google </span>
-        </button>
+        <GoogleAuth />
         <div class="or">
           <hr />
           <h2>OR</h2>
@@ -147,7 +146,7 @@
     gap: 15px;
     width: 70%;
   }
-
+  /* 
   button#google {
     width: 70%;
     padding: 0.75rem 1rem;
@@ -164,7 +163,7 @@
     backdrop-filter: blur(15.2px);
     -webkit-backdrop-filter: blur(15.2px);
     border: 1px solid rgba(255, 255, 255, 0.19);
-  }
+  } */
 
   button#normal-register-btn {
     border-style: none;
@@ -172,14 +171,14 @@
     width: 100%;
   }
 
-  button#google:focus {
+  /* button#google:focus {
     outline: solid 1px rgba(30, 144, 255, 0.5);
   }
 
   img {
     width: 20px;
     height: 20px;
-  }
+  } */
 
   span:hover {
     color: var(--red);
