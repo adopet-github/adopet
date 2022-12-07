@@ -310,6 +310,9 @@
   }
 
   @media only screen and (max-width: 992px) {
+    .container {
+      height: unset;
+    }
     .card {
       flex-direction: column;
       justify-content: center;
