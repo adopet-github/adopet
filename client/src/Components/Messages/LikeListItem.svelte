@@ -7,7 +7,8 @@
   export let like;
 
   const handleAdopterProfileView = () => {
-    viewAdopterProfile.set({ ...like.adopter, adopter_animal: like.animal });
+    viewAdopterProfile.set(like);
+    console.log('adopter', $viewAdopterProfile);
     dashView.set(['likes', 'adopter']);
   };
 </script>

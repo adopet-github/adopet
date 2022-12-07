@@ -9,7 +9,7 @@
   import { viewMatchChat } from '../../Stores/viewMatchChat';
   import { shelterMatches } from '../../Stores/shelterMatches';
 
-  export let matches = [];
+  export const matches = [];
 
   onMount(async () => {
     const res = await getShelterLikes($userCredentials.id);

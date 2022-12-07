@@ -9,27 +9,28 @@
   import { shelterMatches } from '../Stores/shelterMatches';
   import { viewMatchChat } from '../Stores/viewMatchChat';
 
-  let animal = $viewAdopterProfile.adopter_animal;
-  let adopter = $viewAdopterProfile;
+  let animal = $viewAdopterProfile.animal;
+  let adopter = $viewAdopterProfile.adopter;
   let date = new Date();
   let match = { adopter, animal, date };
 
   const handleAcceptLike = async () => {
     const res = await acceptLike(
-      $viewAdopterProfile.adopter_animal.id,
-      $viewAdopterProfile.id
+      $viewAdopterProfile.animal.id,
+      $viewAdopterProfile.adopter.id
     );
     if (res.status === 200) {
       animalLikes.update((prev) => {
         return prev.filter(
           (obj) =>
-            obj.adopter.id !== $viewAdopterProfile.id &&
-            obj.animal.id !== $viewAdopterProfile.adopter_animal.id
+            !(
+              obj.adopter.id === $viewAdopterProfile.adopter.id &&
+              obj.animal.id === $viewAdopterProfile.animal.id
+            )
         );
       });
-      const animal = { ...$viewAdopterProfile.adopter_animal };
-      const adopter = { ...$viewAdopterProfile };
-      delete adopter.adopter_animal;
+      const animal = { ...$viewAdopterProfile.animal };
+      const adopter = { ...$viewAdopterProfile.adopter };
       const newMatch = {
         adopter,
         animal
@@ -42,15 +43,18 @@
 
   const handleRejectLike = async () => {
     const res = await rejectLike(
-      $viewAdopterProfile.adopter_animal.id,
-      $viewAdopterProfile.id
+      $viewAdopterProfile.animal.id,
+      $viewAdopterProfile.adopter.id
     );
     if (res.status === 200) {
       animalLikes.update((prev) => {
+        console.log(prev);
         return prev.filter(
           (obj) =>
-            obj.adopter.id !== $viewAdopterProfile.id &&
-            obj.animal.id !== $viewAdopterProfile.adopter_animal.id
+            !(
+              obj.adopter.id === $viewAdopterProfile.adopter.id &&
+              obj.animal.id === $viewAdopterProfile.animal.id
+            )
         );
       });
     }
@@ -59,10 +63,10 @@
 </script>
 
 <div class="card glass glass1">
-  {#if $viewAdopterProfile.adopter_animal}
+  {#if $viewAdopterProfile.animal}
     <div class="pet-match-banner">
       <p>
-        Interested in: <span>{$viewAdopterProfile.adopter_animal.name}</span>
+        Interested in: <span>{$viewAdopterProfile.animal.name}</span>
       </p>
     </div>
     <span
@@ -75,45 +79,53 @@
     <CloseButton text={'back'} closeTo={'chat'} />
   {/if}
   <div class="heading-cont">
-    <h2>{$viewAdopterProfile.first_name} {$viewAdopterProfile.last_name}</h2>
-    <p>{$viewAdopterProfile.address}</p>
+    <h2>
+      {$viewAdopterProfile.adopter.first_name}
+      {$viewAdopterProfile.adopter.last_name}
+    </h2>
+    <p>{$viewAdopterProfile.adopter.address}</p>
   </div>
   <div class="imgs-cont">
-    {#if $viewAdopterProfile.images.length}
-      {#each $viewAdopterProfile.images as image}
+    {#if $viewAdopterProfile.adopter.images.length}
+      {#each $viewAdopterProfile.adopter.images as image}
         <div class="img"><img src={image.url} alt={image.caption} /></div>
       {/each}
     {:else}
       <div class="no-images">
         <div class="no-img"><ProfilePic img={''} /></div>
-        <p>{$viewAdopterProfile.first_name} doesn't have any photos yet...</p>
+        <p>
+          {$viewAdopterProfile.adopter.first_name} doesn't have any photos yet...
+        </p>
       </div>
     {/if}
   </div>
   <div class="stat-cont">
     <div class="description">
-      <p>{$viewAdopterProfile.description}</p>
+      <p>{$viewAdopterProfile.adopter.description}</p>
     </div>
     <div class="pets-cont">
-      <p>🎂 <span>{$viewAdopterProfile.age}</span> years old</p>
-      <p>{$viewAdopterProfile.has_pets ? '✅ Has pets' : `❌ No pets`}</p>
+      <p>🎂 <span>{$viewAdopterProfile.adopter.age}</span> years old</p>
       <p>
-        {$viewAdopterProfile.has_children
+        {$viewAdopterProfile.adopter.has_pets ? '✅ Has pets' : `❌ No pets`}
+      </p>
+      <p>
+        {$viewAdopterProfile.adopter.has_children
           ? '✅ Has children'
           : `❌ No children`}
       </p>
       <p>
-        🕐 Home <span>~{$viewAdopterProfile.time_at_home}</span>hrs a day
+        🕐 Home <span>~{$viewAdopterProfile.adopter.time_at_home}</span>hrs a
+        day
       </p>
       <p>
-        🏠 Lives in {$viewAdopterProfile.house_type === 'apartment'
+        🏠 Lives in {$viewAdopterProfile.adopter.house_type === 'apartment'
           ? 'an'
           : 'a'}
-        <span>{$viewAdopterProfile.house_type}</span>
+        <span>{$viewAdopterProfile.adopter.house_type}</span>
       </p>
     </div>
   </div>
-  {#if $viewAdopterProfile.adopter_animal}
+  {#if $viewAdopterProfile.animal}
     <div class="btns-cont">
       <Button text={'accept'} on:click={handleAcceptLike} />
       <Button text={'decline'} colour={'white'} on:click={handleRejectLike} />
