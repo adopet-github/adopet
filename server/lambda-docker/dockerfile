@@ -1,0 +1,15 @@
+FROM amazon/aws-lambda-nodejs:latest
+
+WORKDIR /
+
+COPY package*.json ./
+
+COPY .env ./
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 6000
+
+CMD lamda.handler
