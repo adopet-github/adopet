@@ -25,7 +25,6 @@
         : (msgPreview = 'no messages yet');
     }
     msgPreview.length > 20 ? msgPreview.substring(0, 20) + '...' : msgPreview;
-    console.log(res.data);
   };
 
   getFirstMatchMessage();

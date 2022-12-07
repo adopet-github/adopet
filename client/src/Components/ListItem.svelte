@@ -35,7 +35,6 @@
       };
     });
     const res = await deleteAnimal(animal.id);
-    console.log(res);
     showDeleteWarning = false;
   };
 </script>
@@ -82,7 +81,6 @@
       text="view"
       on:click={() => {
         $dashView[1] = 'animal';
-        console.log('animal', animal);
         selectedAnimal.set(animal);
       }}
     />

@@ -3,7 +3,6 @@
   import Email from '../Components/Inputs/Email.svelte';
   import Password from '../Components/Inputs/Password.svelte';
   import Button from '../Components/Button.svelte';
-  import GoogleIcon from '../assets/icons/google-icon.svg';
   // @ts-ignore
   import GoogleAuth from '../Components/Inputs/GoogleAuth.svelte';
 
@@ -53,10 +52,6 @@
     }
     email = '';
     password = '';
-  };
-
-  const handleGoogleLogin = () => {
-    console.log('login with google');
   };
 </script>
 

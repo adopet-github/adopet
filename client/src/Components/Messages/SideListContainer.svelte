@@ -11,8 +11,6 @@
 
   export let matches = [];
 
-  console.log('matches: ', matches);
-
   onMount(async () => {
     const res = await getShelterLikes($userCredentials.id);
     if (res.status === 200) {

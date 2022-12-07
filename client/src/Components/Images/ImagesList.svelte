@@ -79,9 +79,6 @@
     showDeleteImage = true;
     imageIdToDelete = e.detail.id;
     imageUrlToDelete = e.detail.url;
-    console.log(imageIdToDelete);
-    console.log(imageUrlToDelete);
-    console.log('first', images);
   };
 
   const handleImageDelete = async () => {
@@ -89,7 +86,6 @@
       // EXISTING ANIMAL
       if (imageIdToDelete) {
         const res = await deleteImage(imageIdToDelete);
-        console.log(res);
         selectedAnimal.update((prev) => ({
           ...prev,
           images: prev.images.filter((image) => image.id !== imageIdToDelete)
@@ -102,14 +98,12 @@
       // SHELTER & ADOPTER AFTER SAVE
       if (imageIdToDelete) {
         const res = await deleteImage(imageIdToDelete);
-        console.log(res);
         userCredentials.update((prev) => ({
           ...prev,
           images: prev.images.filter((image) => image.id !== imageIdToDelete)
         }));
       } else {
         // NEED TO DEAL WITH SHELTER & ADOPTER BEFORE SAVE
-        console.log('final', images);
         images = images.filter((element) => element.url != imageUrlToDelete);
       }
     }
