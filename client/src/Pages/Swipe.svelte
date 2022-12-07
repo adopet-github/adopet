@@ -20,7 +20,6 @@
     for (let i = 0; i < animals.length; i++) {
       animals.sort(() => Math.random() - 0.5);
     }
-    console.log('animals', animals);
   });
   let activeIndex = 0;
 
@@ -94,7 +93,6 @@
     setTimeout(() => {
       next.dataset.status = 'active';
       activeIndex = nextIndex;
-      console.log('index', activeIndex, 'len', animals.length);
     }, 300);
 
     removeIds();

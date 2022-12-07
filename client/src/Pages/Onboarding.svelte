@@ -19,8 +19,6 @@
 
   const navigate = useNavigate();
 
-  console.log($userCredentials);
-
   if ($userCredentials?.house_type || $userCredentials?.name) navigate('/');
 
   let isLoading = false;
@@ -98,8 +96,6 @@
         onboardingCredentials.longitude = location[1];
       }
       userCredentials.update((prev) => ({ ...prev, ...onboardingCredentials }));
-      console.log('credentials', $userCredentials);
-      // make create adopter request
       isLoading = true;
       const res = await createUser($userCredentials as Adopter);
       if (res.status === 201) {
@@ -111,7 +107,6 @@
         }, 2000);
       } else {
         isLoading = false;
-        console.log(res);
       }
     }
   };

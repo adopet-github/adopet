@@ -33,7 +33,6 @@
   onMount(async () => {
     const res = await getProfile();
     if (res.status === 200) {
-      console.log('user', res.data);
       userCredentials.set(res.data);
     }
     setTimeout(() => {

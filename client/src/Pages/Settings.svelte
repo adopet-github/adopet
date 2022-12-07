@@ -32,8 +32,6 @@
   let hasPets = $userCredentials.has_pets?.toString();
   let hasChildren = $userCredentials.has_children?.toString();
 
-  $: console.log('settings', $userCredentials);
-
   const handleShelterUpdate = async () => {
     if (location.length === 2) {
       userCredentials.update((prev) => ({

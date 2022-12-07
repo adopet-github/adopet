@@ -150,10 +150,6 @@
       }
     }
   };
-
-  const handleGoogleRegister = () => {
-    console.log('register with google');
-  };
 </script>
 
 {#if isLoading}

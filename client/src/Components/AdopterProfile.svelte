@@ -9,7 +9,6 @@
   import { shelterMatches } from '../Stores/shelterMatches';
   import { viewMatchChat } from '../Stores/viewMatchChat';
 
-  console.log($viewAdopterProfile);
   let animal = $viewAdopterProfile.adopter_animal;
   let adopter = $viewAdopterProfile;
   let date = new Date();

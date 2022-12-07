@@ -14,7 +14,6 @@
       localStorage.setItem('jwt', res.token);
       const profileRes = await getProfile();
       if (profileRes.status === 200) {
-        console.log('user', profileRes.data);
         userCredentials.set(profileRes.data);
       }
       navigate('/user/swipe');
