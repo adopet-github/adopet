@@ -213,6 +213,23 @@
     aspect-ratio: 1;
   }
 
+  @media only screen and (max-height: 750px) {
+    .imgs-cont {
+      max-width: 80%;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
+      max-height: 10rem;
+      max-width: 80%;
+      object-fit: cover;
+      border-radius: inherit;
+      aspect-ratio: 1;
+    }
+  }
+
   @media only screen and (max-width: 688px) {
     .card {
       border-radius: 0px;
