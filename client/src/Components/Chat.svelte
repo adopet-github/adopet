@@ -19,7 +19,7 @@
   let value = '';
   let accountType = $userCredentials.house_type ? 'adopter' : 'shelter';
 
-  const socket = io('http://localhost:4000');
+  const socket = io(import.meta.env.VITE_API_URL);
 
   socket.on('connect', () => console.log('sockets connected'));
 
