@@ -1,4 +1,6 @@
 export type Adopter = {
+  adopter?: any;
+  animal?: any;
   images?: any[];
   description: string;
   email: string;
