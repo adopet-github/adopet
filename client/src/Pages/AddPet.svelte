@@ -89,7 +89,6 @@
     justify-content: space-around;
     color: var(--black);
     gap: 1rem;
-    overflow: hidden;
   }
 
   .imgs-cont {
@@ -137,5 +136,19 @@
   span {
     width: 100%;
     margin-top: 2rem;
+  }
+
+  @media only screen and (max-width: 688px) {
+    .card {
+      border-radius: 0px;
+    }
+
+    .details {
+      flex-direction: column;
+    }
+    .details-left,
+    .details-right {
+      width: 100%;
+    }
   }
 </style>

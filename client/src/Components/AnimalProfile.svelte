@@ -47,10 +47,6 @@
         </div>
       </div>
     </div>
-    <div class="enquiries">
-      <h2>Current enquiries</h2>
-      <p>List of people here</p>
-    </div>
   </div>
   <SvelteToast />
 {/if}

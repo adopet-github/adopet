@@ -254,7 +254,7 @@
 
     .main-container {
       padding: 0rem;
-      height: 85.5vh;
+      height: 84vh;
     }
 
     .grid-container {
@@ -268,9 +268,7 @@
     }
 
     .mobile-nav {
-      height: 4rem;
-      position: absolute;
-      bottom: 0;
+      height: 8vh;
       width: 100%;
       display: flex;
       justify-content: space-between;
