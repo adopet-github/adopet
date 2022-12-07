@@ -99,7 +99,6 @@
       isLoading = true;
       const res = await createUser($userCredentials as Adopter);
       if (res.status === 201) {
-        // CHANGE TO HTTP ONLY COOKIE FROM SERVER
         userCredentials.update((prev) => ({ ...prev, id: res.data }));
         localStorage.setItem('jwt', res.token);
         setTimeout(() => {

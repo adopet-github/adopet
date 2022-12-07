@@ -56,7 +56,6 @@
     height: 100%;
     flex: 1;
     padding: 2%;
-    /* color: #d33e43; */
     color: var(--lavender);
     display: flex;
     flex-direction: column;

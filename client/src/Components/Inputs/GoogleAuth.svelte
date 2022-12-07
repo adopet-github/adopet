@@ -31,7 +31,7 @@
           });
           google.accounts.id.renderButton(
             document.getElementById("google-auth"),
-            { theme: "outline", size: "large" }  // customization attributes
+            { theme: "outline", size: "large" }
           );
           google.accounts.id.prompt();
     }}

@@ -16,10 +16,4 @@
     justify-content: space-between;
     align-items: center;
   }
-
-  /* h1 {
-    font-size: 1.8rem;
-    line-height: 2;
-    padding: 2rem 0;
-  } */
 </style>

@@ -128,7 +128,6 @@
           newUserCredentials as unknown as CreateShelter
         );
         if (res.status === 201) {
-          // CHANGE TO HTTP ONLY COOKIE FROM SERVER
           userCredentials.set({
             ...newUserCredentials,
             id: res.data,

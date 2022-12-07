@@ -59,16 +59,6 @@
     transition: 1s cubic-bezier(0.07, 0.8, 0.16, 1);
   }
 
-  /* .blob:hover {
-    width: 520px;
-    height: 520px;
-    -webkit-filter: blur(30px);
-    filter: blur(30px);
-    box-shadow: inset 0 0 0 5px rgba(255, 255, 255, 0.6),
-      inset 100px 100px 0 0px #fa709a, inset 200px 200px 0 0px #784ba8,
-      inset 300px 300px 0 0px #2b86c5;
-  } */
-
   @-webkit-keyframes move_red {
     from {
       transform: translate(-100px, -50px) rotate(-90deg);

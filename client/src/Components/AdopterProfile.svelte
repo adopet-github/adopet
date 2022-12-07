@@ -200,7 +200,6 @@
   }
 
   .img {
-    /* flex: 1; */
     border-radius: 1rem;
   }
 

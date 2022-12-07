@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import Image from './Image.svelte';
-  import { toast, SvelteToast } from '@zerodevx/svelte-toast';
+  import { toast } from '@zerodevx/svelte-toast';
   import { cloudinaryUpload } from '../../Services/Cloudinary';
-  import { addAnimalImage, updateAnimal } from '../../Services/animal';
+  import { addAnimalImage } from '../../Services/animal';
   import { deleteImage } from '../../Services/image';
   import { selectedAnimal } from '../../Stores/selectedAnimal';
   import ImageInput from '../Inputs/ImageInput.svelte';
   import { userCredentials } from '../../Stores/userCredentials';
-  import { addShelterImage, updateShelter } from '../../Services/shelter';
-  import { addAdopterImage, updateAdopter } from '../../Services/adopter';
+  import { addShelterImage } from '../../Services/shelter';
+  import { addAdopterImage } from '../../Services/adopter';
   import Button from '../Button.svelte';
 
   let showAddImage = false;

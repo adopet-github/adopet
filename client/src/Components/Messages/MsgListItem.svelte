@@ -79,7 +79,6 @@
   }
   .list-item {
     width: 100%;
-    /* border-radius: 30px; */
     display: flex;
     justify-content: space-around;
     align-items: center;

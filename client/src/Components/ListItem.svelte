@@ -193,11 +193,6 @@
     }
     .likes-matches-cont {
       grid-column: 4 / 8;
-      /* display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-      align-items: flex-start;
-      justify-content: center; */
     }
 
     .likes {

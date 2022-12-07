@@ -16,7 +16,6 @@
       date: new Date()
     };
     viewMatchChat.set(matchToSave);
-    // dashView.set(['matches', 'chat']);
     let adopter = $userCredentials;
     let adopterId = $userCredentials.id;
     let animalId = match.id;
