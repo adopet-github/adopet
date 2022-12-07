@@ -30,3 +30,9 @@
 {#if visible}
   <h1 in:typewriter><slot /></h1>
 {/if}
+
+<style>
+  h1 {
+    text-align: center;
+  }
+</style>
