@@ -1,0 +1,11 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "ericlorite/node-docker-aws"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "4000"
+    }
+  ]
+}
