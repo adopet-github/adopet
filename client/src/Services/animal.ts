@@ -30,7 +30,7 @@ export const deleteAnimal = async (id: string) => {
   }
 };
 
-export const addAnimalImage = async (image, id: string) => {
+export const addAnimalImage = async (images, id: string) => {
   try {
     const token = localStorage.getItem('jwt');
     const res = await fetch(baseUrl + '/' + id + '/images', {
@@ -39,7 +39,7 @@ export const addAnimalImage = async (image, id: string) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ images: [image] })
+      body: JSON.stringify({ images: images })
     });
 
     return await res.json();

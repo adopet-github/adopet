@@ -55,7 +55,7 @@
     } else {
       if ($selectedAnimal.id) {
         // EXISITNG ANIMAL
-        const serverRes = await addAnimalImage(image, $selectedAnimal.id);
+        const serverRes = await addAnimalImage([image], $selectedAnimal.id);
         selectedAnimal.update((prev) => ({
           ...prev,
           images: [...prev.images, { ...image, id: serverRes.data[0].id }]

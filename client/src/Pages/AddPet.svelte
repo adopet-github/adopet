@@ -3,7 +3,7 @@
   import Name from '../Components/Inputs/Name.svelte';
   import Number from '../Components/Inputs/Number.svelte';
   import CloseButton from '../Components/CloseButton.svelte';
-  import { createAnimal } from '../Services/animal';
+  import { addAnimalImage, createAnimal } from '../Services/animal';
   import { userCredentials } from '../Stores/userCredentials';
   import ImagesList from '../Components/Images/ImagesList.svelte';
   import { selectedAnimal } from '../Stores/selectedAnimal';
@@ -26,6 +26,10 @@
       weight: petWeight
     };
     const res = await createAnimal(pet);
+    console.log(res);
+    console.log(images);
+    const imagesRes = await addAnimalImage(images, res.data.animal.id);
+    console.log('res', imagesRes);
     userCredentials.update((previous) => {
       const newAnimal = {
         ...res.data.animal,
