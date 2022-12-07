@@ -24,7 +24,6 @@
 
   const handleImageClick = (index: string) => {
     const card = document.getElementById(index);
-    console.log('card', card);
     const parent = card.parentElement;
     const cards = parent.children as HTMLCollectionOf<HTMLElement>;
     for (let c of cards) {

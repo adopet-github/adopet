@@ -10,7 +10,6 @@
   onMount(() => {
     // @ts-ignore
     if (window.google) {
-      console.log('hi');
       const onPlaceChanged = () => {
         const place = autocomplete.getPlace();
         value = place.formatted_address;

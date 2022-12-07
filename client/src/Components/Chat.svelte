@@ -24,8 +24,6 @@
   socket.on('connect', () => console.log('sockets connected'));
 
   socket.on('message', (msg) => {
-    console.log('from socket:  ', msg);
-
     if (
       msg.adopterId !== $messagesByMatch.adopterId ||
       msg.animalId !== $messagesByMatch.animalId
@@ -37,7 +35,6 @@
         messages: [...prev.messages, msg]
       };
     });
-    console.log($messagesByMatch);
   });
 
   beforeUpdate(() => {
@@ -76,8 +73,6 @@
       value = '';
     }
   };
-
-  $: console.log(document.getElementsByClassName('div1'));
 </script>
 
 {#if $viewMatchChat}

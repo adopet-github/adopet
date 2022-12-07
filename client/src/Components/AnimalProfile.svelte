@@ -9,7 +9,6 @@
   import AnimalProfileEdit from './AnimalProfileEdit.svelte';
 
   let editMode = false;
-  console.log($selectedAnimal.images);
 </script>
 
 {#if editMode}
@@ -23,8 +22,7 @@
         ><Button
           text={'edit'}
           on:click={() => {
-            editMode ? (editMode = false) : (editMode = true),
-              console.log(editMode);
+            editMode ? (editMode = false) : (editMode = true);
           }}
         /></span
       >
@@ -107,7 +105,6 @@
   }
 
   .img {
-    /* flex: 1; */
     border-radius: 1rem;
   }
 

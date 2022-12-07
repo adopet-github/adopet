@@ -11,14 +11,11 @@
 
   $selectedAnimal.id = '';
 
-  console.log($userCredentials);
-
   let petName: string;
   let petWeight: number;
   let petAge: number;
   let petDescription: string;
   let images = [];
-  $: console.log('images:', images);
 
   const handleAddAnimal = async () => {
     const pet = {
@@ -29,7 +26,6 @@
       weight: petWeight
     };
     const res = await createAnimal(pet);
-    console.log(res);
     userCredentials.update((previous) => {
       const newAnimal = {
         ...res.data.animal,
@@ -43,10 +39,6 @@
         animals: newAnimals
       };
     });
-    console.log(pet);
-    // const profile = await getProfile();
-    // userCredentials.set(profile);
-    console.log(res);
     dashView.set(['likes', 'animalList']);
   };
 </script>

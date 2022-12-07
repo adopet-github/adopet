@@ -13,11 +13,9 @@
 
   onMount(async () => {
     const res = await getAdopterMatches($userCredentials.id);
-    console.log(res);
     if (res.status === 200) {
       matches = res.data;
     }
-    console.log(matches);
   });
 </script>
 

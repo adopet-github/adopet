@@ -35,7 +35,6 @@
       };
     });
     const res = await deleteAnimal(animal.id);
-    console.log(res);
     showDeleteWarning = false;
   };
 </script>
@@ -82,7 +81,6 @@
       text="view"
       on:click={() => {
         $dashView[1] = 'animal';
-        console.log('animal', animal);
         selectedAnimal.set(animal);
       }}
     />
@@ -195,11 +193,6 @@
     }
     .likes-matches-cont {
       grid-column: 4 / 8;
-      /* display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-      align-items: flex-start;
-      justify-content: center; */
     }
 
     .likes {

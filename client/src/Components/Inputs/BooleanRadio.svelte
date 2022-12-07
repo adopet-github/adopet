@@ -40,21 +40,6 @@
     accent-color: var(--black);
   }
 
-  /* label {
-    display: grid;
-    grid-template-columns: 1em auto;
-    gap: 0.5em;
-    border: 1px solid #374151;
-    width: 50%;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(15.2px);
-    -webkit-backdrop-filter: blur(15.2px);
-    border: 1px solid rgba(255, 255, 255, 0.19);
-    cursor: pointer;
-  } */
-
   label {
     display: grid;
     grid-template-columns: 1em auto;

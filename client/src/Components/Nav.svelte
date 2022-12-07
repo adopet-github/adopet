@@ -75,4 +75,23 @@
       font-size: 0.8rem;
     }
   }
+
+  @media only screen and (max-width: 425px) {
+    nav {
+      padding: 0 0.5rem 0 0;
+    }
+  }
+
+  @media only screen and (max-width: 390px) {
+    nav {
+      padding: 0;
+    }
+    span {
+      padding: 5px;
+    }
+
+    .logo-container {
+      padding: 10px 0 10px 10px;
+    }
+  }
 </style>
