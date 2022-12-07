@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
   import Image from './Image.svelte';
-  import { toast, SvelteToast } from '@zerodevx/svelte-toast';
+  import { toast } from '@zerodevx/svelte-toast';
   import { cloudinaryUpload } from '../../Services/Cloudinary';
-  import { addAnimalImage, updateAnimal } from '../../Services/animal';
+  import { addAnimalImage } from '../../Services/animal';
   import { deleteImage } from '../../Services/image';
   import { selectedAnimal } from '../../Stores/selectedAnimal';
   import ImageInput from '../Inputs/ImageInput.svelte';
   import { userCredentials } from '../../Stores/userCredentials';
-  import { addShelterImage, updateShelter } from '../../Services/shelter';
-  import { addAdopterImage, updateAdopter } from '../../Services/adopter';
+  import { addShelterImage } from '../../Services/shelter';
+  import { addAdopterImage } from '../../Services/adopter';
   import Button from '../Button.svelte';
 
   let showAddImage = false;
@@ -79,9 +78,6 @@
     showDeleteImage = true;
     imageIdToDelete = e.detail.id;
     imageUrlToDelete = e.detail.url;
-    console.log(imageIdToDelete);
-    console.log(imageUrlToDelete);
-    console.log('first', images);
   };
 
   const handleImageDelete = async () => {
@@ -89,7 +85,6 @@
       // EXISTING ANIMAL
       if (imageIdToDelete) {
         const res = await deleteImage(imageIdToDelete);
-        console.log(res);
         selectedAnimal.update((prev) => ({
           ...prev,
           images: prev.images.filter((image) => image.id !== imageIdToDelete)
@@ -102,14 +97,12 @@
       // SHELTER & ADOPTER AFTER SAVE
       if (imageIdToDelete) {
         const res = await deleteImage(imageIdToDelete);
-        console.log(res);
         userCredentials.update((prev) => ({
           ...prev,
           images: prev.images.filter((image) => image.id !== imageIdToDelete)
         }));
       } else {
         // NEED TO DEAL WITH SHELTER & ADOPTER BEFORE SAVE
-        console.log('final', images);
         images = images.filter((element) => element.url != imageUrlToDelete);
       }
     }

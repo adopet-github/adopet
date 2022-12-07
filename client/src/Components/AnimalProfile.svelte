@@ -9,7 +9,6 @@
   import AnimalProfileEdit from './AnimalProfileEdit.svelte';
 
   let editMode = false;
-  console.log($selectedAnimal.images);
 </script>
 
 {#if editMode}
@@ -23,8 +22,7 @@
         ><Button
           text={'edit'}
           on:click={() => {
-            editMode ? (editMode = false) : (editMode = true),
-              console.log(editMode);
+            editMode ? (editMode = false) : (editMode = true);
           }}
         /></span
       >
@@ -48,10 +46,6 @@
           <p>⚖️ <span>{$selectedAnimal.weight}</span> kg</p>
         </div>
       </div>
-    </div>
-    <div class="enquiries">
-      <h2>Current enquiries</h2>
-      <p>List of people here</p>
     </div>
   </div>
   <SvelteToast />
@@ -107,7 +101,6 @@
   }
 
   .img {
-    /* flex: 1; */
     border-radius: 1rem;
   }
 
@@ -134,6 +127,12 @@
 
     img {
       max-height: 9rem;
+    }
+  }
+
+  @media only screen and (max-width: 688px) {
+    .card {
+      border-radius: 0px;
     }
   }
 </style>

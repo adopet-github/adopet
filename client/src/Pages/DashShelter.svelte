@@ -12,9 +12,6 @@
   import { animalLikes } from '../Stores/animalLikes';
   import { shelterMatches } from '../Stores/shelterMatches';
   import AddPet from './AddPet.svelte';
-  import { onMount } from 'svelte';
-  import LikeListItem from '../Components/Messages/LikeListItem.svelte';
-  import MsgListItem from '../Components/Messages/MsgListItem.svelte';
 
   const navigate = useNavigate();
 
@@ -27,10 +24,6 @@
   const handleAddPet = () => {
     $dashView[1] = 'addPet';
   };
-
-  onMount(() => {
-    console.log('here', $animalLikes);
-  });
 </script>
 
 <div class="main-container">
@@ -92,7 +85,9 @@
             /></span
           >
         </div>
-        <ListCont />
+        <div class="list-container main">
+          <ListCont />
+        </div>
       {:else if $dashView[1] === 'animal'}
         <AnimalProfile />
       {:else if $dashView[1] === 'adopter'}
@@ -189,10 +184,15 @@
 
   .list-container {
     height: auto;
+    width: 100%;
     overflow-y: auto;
-    /* margin-bottom: 8%; */
     border-bottom: 1px solid var(--lightgrey);
     border-top: 1px solid var(--lightgrey);
+  }
+
+  .main {
+    border-bottom: none;
+    border-top: none;
   }
 
   .div2 {
@@ -209,6 +209,7 @@
   }
   .div6 {
     grid-area: 3 / 4 / 11 / 12;
+    display: flex;
   }
 
   @media only screen and (max-width: 1280px) {
@@ -247,14 +248,12 @@
     }
     .mobile-btn-container {
       display: flex;
-      width: 90vw;
-      margin: auto;
-      margin-bottom: 1rem;
+      margin: 1rem;
       justify-content: space-between;
     }
 
     .main-container {
-      padding: 1rem;
+      padding: 0rem;
       height: 84vh;
     }
 
@@ -269,9 +268,7 @@
     }
 
     .mobile-nav {
-      height: 4rem;
-      position: absolute;
-      bottom: 0;
+      height: 8vh;
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -303,10 +300,16 @@
     .div5 {
       display: none;
     }
+
     .div6 {
       width: 100%;
       height: 100%;
-      overflow-x: scroll;
+      overflow-y: auto;
+      padding: 0.5rem;
+      flex-direction: column;
+    }
+    .main {
+      padding: 1rem;
     }
 
     .btn {

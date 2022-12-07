@@ -49,10 +49,9 @@ export const addAnimalImage = async (image, id: string) => {
 };
 
 export const getAllAnimals = async () => {
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidHlwZSI6ImFkbWluIiwiaWF0IjoxNjY5NjQ1NTk2fQ.yvJclTGWcFt8_RyO8mGzYNR8_gl4eYi6ixWqOQqZikU';
+  const token = localStorage.getItem('jwt');
 
-  const res = await fetch(baseUrl, {
+  const res = await fetch(`${baseUrl}?distance=50`, {
     method: 'GET',
     headers: { Authorization: `Bearer ${token}` }
   });
@@ -60,7 +59,6 @@ export const getAllAnimals = async () => {
 };
 
 export const updateAnimal = async (animal: ShelterAnimal) => {
-  console.log('animal in service', animal);
   const { id } = animal;
   delete animal.id;
   delete animal.shelterName;
@@ -68,9 +66,7 @@ export const updateAnimal = async (animal: ShelterAnimal) => {
   delete animal.images;
   delete animal.adopters;
   delete animal.shelterDescription;
-  console.log('animal in service', animal);
   const token = localStorage.getItem('jwt');
-  console.log('id in service', id);
   const res = await fetch(baseUrl + '/' + id, {
     method: 'PUT',
     headers: {

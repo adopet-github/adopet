@@ -9,7 +9,6 @@
   import { shelterMatches } from '../Stores/shelterMatches';
   import { viewMatchChat } from '../Stores/viewMatchChat';
 
-  console.log($viewAdopterProfile);
   let animal = $viewAdopterProfile.adopter_animal;
   let adopter = $viewAdopterProfile;
   let date = new Date();
@@ -66,7 +65,12 @@
         Interested in: <span>{$viewAdopterProfile.adopter_animal.name}</span>
       </p>
     </div>
-    <CloseButton closeTo={'animalList'} />
+    <span
+      ><CloseButton
+        sideCloseTo={window.innerWidth > 688 ? 'likes' : ''}
+        closeTo={window.innerWidth > 688 ? 'animalList' : 'mobileLikeMatchList'}
+      /></span
+    >
   {:else}
     <CloseButton text={'back'} closeTo={'chat'} />
   {/if}
@@ -196,7 +200,6 @@
   }
 
   .img {
-    /* flex: 1; */
     border-radius: 1rem;
   }
 
@@ -206,5 +209,28 @@
     object-fit: cover;
     border-radius: inherit;
     aspect-ratio: 1;
+  }
+
+  @media only screen and (max-height: 750px) {
+    .imgs-cont {
+      max-width: 80%;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    img {
+      max-height: 10rem;
+      max-width: 80%;
+      object-fit: cover;
+      border-radius: inherit;
+      aspect-ratio: 1;
+    }
+  }
+
+  @media only screen and (max-width: 688px) {
+    .card {
+      border-radius: 0px;
+    }
   }
 </style>

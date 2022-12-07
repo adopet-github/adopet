@@ -25,7 +25,6 @@
         : (msgPreview = 'no messages yet');
     }
     msgPreview.length > 20 ? msgPreview.substring(0, 20) + '...' : msgPreview;
-    console.log(res.data);
   };
 
   getFirstMatchMessage();
@@ -80,7 +79,6 @@
   }
   .list-item {
     width: 100%;
-    /* border-radius: 30px; */
     display: flex;
     justify-content: space-around;
     align-items: center;

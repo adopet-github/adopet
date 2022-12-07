@@ -7,10 +7,6 @@
 
   let newMessage = Math.random() > 0.5;
 
-  // const handleChatChange = () => {
-  //   console.log('chat changed');
-  // };
-
   export let match;
 
   const handleGoToChatView = async () => {
@@ -20,12 +16,9 @@
       date: new Date()
     };
     viewMatchChat.set(matchToSave);
-    console.log(matchToSave);
-    // dashView.set(['matches', 'chat']);
     let adopter = $userCredentials;
     let adopterId = $userCredentials.id;
     let animalId = match.id;
-    console.log('console', adopterId, animalId);
     const res = await retrieveByMatch({ adopterId, animalId });
     if (res.status === 200) {
       messagesByMatch.set({

@@ -15,7 +15,6 @@ export const logIn = async (credentials: Credentials) => {
 };
 
 export const logOut = async () => {
-  // REFACTOR TO SERVER SIDE HTTP ONLY COOKIE
   const token = localStorage.getItem('jwt');
   const res = await fetch(baseUrl + '/logout', {
     method: 'POST',
@@ -31,7 +30,6 @@ export const logOut = async () => {
 };
 
 export const getProfile = async () => {
-  // REFACTOR TO SERVER SIDE HTTP ONLY COOKIE
   const token = localStorage.getItem('jwt');
   const res = await fetch(baseUrl + '/profile', {
     method: 'GET',

@@ -24,8 +24,6 @@
   socket.on('connect', () => console.log('sockets connected'));
 
   socket.on('message', (msg) => {
-    console.log('from socket:  ', msg);
-
     if (
       msg.adopterId !== $messagesByMatch.adopterId ||
       msg.animalId !== $messagesByMatch.animalId
@@ -37,7 +35,6 @@
         messages: [...prev.messages, msg]
       };
     });
-    console.log($messagesByMatch);
   });
 
   beforeUpdate(() => {
@@ -99,7 +96,14 @@
         <span>matched with</span>
         {$viewMatchChat.animal.name}
       </p>
-      <span><CloseButton closeTo={'animalList'} /></span>
+      <span
+        ><CloseButton
+          sideCloseTo={'matches'}
+          closeTo={window.innerWidth > 688
+            ? 'animalList'
+            : 'mobileLikeMatchList'}
+        /></span
+      >
     </div>
     <div class="chat-content" bind:this={chat}>
       {#each $messagesByMatch.messages as message}
@@ -145,6 +149,7 @@
 <style>
   .chat-container {
     height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     border-radius: 30px;
@@ -249,6 +254,10 @@
     .other-msg,
     .account-msg {
       padding: 0.8rem;
+    }
+
+    .chat-container {
+      border-radius: 0px;
     }
   }
 </style>

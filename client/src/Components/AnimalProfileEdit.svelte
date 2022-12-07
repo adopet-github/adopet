@@ -13,7 +13,6 @@
   const handleAnimalProfileUpdate = async () => {
     editMode ? (editMode = false) : (editMode = true);
     const res = await updateAnimal({ ...$selectedAnimal });
-    console.log(res);
     userCredentials.update((prev) => ({
       ...prev,
       animals: prev.animals.map((animal) => {

@@ -32,8 +32,6 @@
   let hasPets = $userCredentials.has_pets?.toString();
   let hasChildren = $userCredentials.has_children?.toString();
 
-  $: console.log('settings', $userCredentials);
-
   const handleShelterUpdate = async () => {
     if (location.length === 2) {
       userCredentials.update((prev) => ({
@@ -218,7 +216,7 @@
 
 <style>
   .container {
-    height: 100%;
+    height: 92vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -312,6 +310,9 @@
   }
 
   @media only screen and (max-width: 992px) {
+    .container {
+      height: unset;
+    }
     .card {
       flex-direction: column;
       justify-content: center;
@@ -320,6 +321,7 @@
     .content-left,
     .content-right {
       width: 100%;
+      justify-content: center;
     }
 
     .content-left .details {
@@ -327,6 +329,15 @@
       align-items: center;
       width: 100%;
       gap: 1rem;
+    }
+  }
+
+  @media only screen and (max-width: 688px) {
+    .card {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      border-radius: 0px;
     }
   }
 </style>

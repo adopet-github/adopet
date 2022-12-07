@@ -3,7 +3,8 @@
   import Email from '../Components/Inputs/Email.svelte';
   import Password from '../Components/Inputs/Password.svelte';
   import Button from '../Components/Button.svelte';
-  import GoogleIcon from '../assets/icons/google-icon.svg';
+  // @ts-ignore
+  import GoogleAuth from '../Components/Inputs/GoogleAuth.svelte';
 
   // ANIMATION
   import RouteTransition from '../Components/Transitions/RouteTransition.svelte';
@@ -52,10 +53,6 @@
     email = '';
     password = '';
   };
-
-  const handleGoogleLogin = () => {
-    console.log('login with google');
-  };
 </script>
 
 {#if isLoading}
@@ -67,10 +64,7 @@
     <div class="container">
       <div class="form-container glass">
         <h1>Login</h1>
-        <button id="google" on:click={handleGoogleLogin}>
-          <img src={GoogleIcon} alt="google icon" />
-          <span>Login with Google </span>
-        </button>
+        <GoogleAuth />
         <div class="or">
           <hr />
           <h2>OR</h2>
@@ -148,37 +142,10 @@
     width: 70%;
   }
 
-  button#google {
-    width: 70%;
-    padding: 0.75rem 1rem;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    background-color: white;
-    color: black;
-    font-weight: bold;
-    font-size: 1;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(15.2px);
-    -webkit-backdrop-filter: blur(15.2px);
-    border: 1px solid rgba(255, 255, 255, 0.19);
-  }
-
   button#normal-register-btn {
     border-style: none;
     background-color: rgba(255, 255, 255, 0);
     width: 100%;
-  }
-
-  button#google:focus {
-    outline: solid 1px rgba(30, 144, 255, 0.5);
-  }
-
-  img {
-    width: 20px;
-    height: 20px;
   }
 
   span:hover {
