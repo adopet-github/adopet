@@ -1,5 +1,7 @@
 # Adopet
 
+![Adopet Home](https://user-images.githubusercontent.com/105861220/206720115-8c86dadf-50d7-4b55-a80e-4b137647d4dc.png)
+
 ## What is adopet?
 
 Adopet is a web app to make easier to animal shelters to find a new home for their animals.
